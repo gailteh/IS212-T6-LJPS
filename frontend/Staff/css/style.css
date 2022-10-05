@@ -1,0 +1,22 @@
+.banner{
+    padding: 50px;
+    padding-left: auto;
+    padding-right: auto;
+    margin-top: 10px;
+    background-color: rgb(165, 215, 247);
+    font-family: 'Times New Roman', Times, serif;
+    position: relative;
+}
+
+img{
+    height: 200px;
+
+}
+button{
+    background-color: azure;
+    border: 1px solid grey;
+    font-family: Arial, Helvetica, sans-serif;
+}
+.row{
+    margin-top: 10px;
+}

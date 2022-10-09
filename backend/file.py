@@ -18,8 +18,46 @@ CORS(app)
 class LearningJourney(db.model):
     __tablename__ = 'LearningJourney'
     LearningJourney_id = db.Column(db.Integer, primary_key = True)
-    course_code = db.Column(db.Integer)
     role_code = db.Column(db.Integer)
+    course_code = db.Column(db.Integer)
+
+    def to_dict(self):
+        """
+        'to_dict' converts the object into a dictionary,
+        in which the keys correspond to database columns
+        """
+        columns = self.__mapper__.column_attrs.keys()
+        result = {}
+        for column in columns:
+            result[column] = getattr(self, column)
+        return result
+
+
+@app.route("/learningjourney", methods=['POST'])
+def add_learningjourney(): #essentially, for every new course that is added to a learning journey, a new row is created
+    data = request.get_json()
+    if not all(key in data.keys() for 
+                key in ('LearningJourney_id', 'course_code', 'role_code')):
+        return  jsonify({
+            'message': "Incorrect JSON object provided"
+        }), 500
+    
+    #create new record in the lj tables
+    new_course = LearningJourney(LearningJourney = data['LearningJourney_id'], role_code = data['role_code'], 
+    course_code = data['course_code'])
+
+    # commit to DB
+    try:
+        db.session.add(new_course)
+        db.session.commit()
+        return jsonify(new_course.to_dict()), 201
+    except Exception:
+        return jsonify({
+            'message': "Unable to commit to database"
+        }), 500
+
+
+
 
 
 #last line of the app

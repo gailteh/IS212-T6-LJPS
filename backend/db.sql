@@ -90,8 +90,9 @@ INSERT INTO `RoleSkillRelation` (`role_code`, `skill_code`) VALUES
 
 CREATE TABLE `Course` (
   `course_name` varchar(100) NOT NULL,
-  `course_code` INT(11) NOT NULL,
+  `course_code` varchar(100) NOT NULL,
   `course_desc` varchar(200) NOT NULL,
+  `course_status` varchar(200) NOT NULL
   PRIMARY KEY (`course_code`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
@@ -99,17 +100,24 @@ CREATE TABLE `Course` (
 -- Dumping data for table `Course`
 --
 
-INSERT INTO `Course` (`course_name`, `course_code`, `course_desc`) VALUES
-("Systems Thinking and Design", 1, "good Design"),
-("Service Excellence", 2, "good Service"),
-("Manage Change", 3, "good Change");
+INSERT INTO `Course` (`course_name`, `course_code`, `course_desc`, `course_status`) VALUES
+("Systems Thinking and Design", "COR001", "good Design", 'active'),
+("Lean Six Sigma Green Belt Certification", "COR002", " Apply Lean Six Sigma methodology and statistical tools such as Minitab to be used in process analytics", 'active'),
+("Service Excellence", "COR004", "The programme provides the learner with the key foundations of what builds customer confidence in the service industry", 'pending'),
+("Manage Change", "COR006", "Identify risks associated with change and develop risk mitigation plans.", 'retired'),
+("Data Collection and Analysis", "FIN001", "Data is meaningless unless insights and analysis can be drawn to provide useful information for business decision-making. It is imperative that data quality, integrity and security", 'active'),
+("Risk and Compliance Reporting", "FIN002", "Regulatory reporting is a requirement for businesses from highly regulated sectors to demonstrate compliance with the necessary regulatory provisions.", 'active'),
+("Business Continuity Planning", "FIN003", "Business continuity planning is essential in any business to minimise loss when faced with potential threats and disruptions.", 'retired'),
+("Leading and Shaping a Culture in Learning", "HRD001", "This training programme, delivered by the National Centre of Excellence (Workplace Learning), aims to equip participants with the skills and knowledge of the National workplace learning certification framework,", 'active'),
+("People Management", "MGT001", "enable learners to manage team performance and development through effective communication, conflict resolution and negotiation skills.", 'active'),
+("Workplace Conflict Management for Professionals", "MGT002", "This course will address the gaps to build consensus and utilise knowledge of conflict management techniques to diffuse tensions and achieve resolutions effectively in the best interests of the organisation.", 'active');
 
 --
 -- Table structure for table `SkillCourseRelation`
 --
 
 CREATE TABLE `SkillCourseRelation` (
-  `course_code` INT(11) NOT NULL ,
+  `course_code` varchar(200) NOT NULL ,
   `skill_code` INT(11) NOT NULL ,
 
   FOREIGN KEY (`course_code`) REFERENCES `Course` (`course_code`),
@@ -132,7 +140,8 @@ INSERT INTO `SkillCourseRelation` (`course_code`, `skill_code`) VALUES
 
 CREATE TABLE `LearningJourney` (
   `LearningJourney_id` INT(11) NOT NULL,
-  `course_code` INT(11) NOT NULL ,
+  `staff_id` INT(11) NOT NULL,
+  `course_code` varchar(200) NOT NULL,
   `role_code` INT(11) NOT NULL,
   FOREIGN KEY (`role_code`) REFERENCES `Role` (`role_code`),
   FOREIGN KEY (`course_code`) REFERENCES `Course` (`course_code`),
@@ -143,10 +152,13 @@ CREATE TABLE `LearningJourney` (
 -- Dumping data for table `LearningJourney`
 --
 
-INSERT INTO `LearningJourney` (`LearningJourney_id`, `course_code`, `role_code`) VALUES
-(1, 1, 1),
-(2, 2, 2),
-(3, 3, 3);
+INSERT INTO `LearningJourney` (`LearningJourney_id`, `staff_id`, `course_code`, `role_code`) VALUES
+(1, 130001, '1', 1),
+(2, 130002, '2', 2),
+(2, 140001, '2', 2),
+(2, 150008, '2', 2),
+(2, 140002, '2', 2),
+(2, 140003, '2', 2);
 
 -- --
 -- -- Constraints for table `RoleSkillRelation`

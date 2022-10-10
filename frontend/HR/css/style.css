@@ -7,11 +7,28 @@
     font-family: 'Times New Roman', Times, serif;
     position: relative;
 }
+.Rolebanner{
+    padding: 50px;
+    padding-left: auto;
+    padding-right: auto;
+    margin-top: 10px;
+    background-color: rgb(165, 247, 198);
+    font-family: 'Times New Roman', Times, serif;
+    position: relative;
+}
 
 img{
     height: 200px;
 
 }
+
+.Roleimg{
+    padding-top: 10px;
+    height: 200px;
+    width: 200px;
+    margin-inline: auto;
+}
+
 button{
     background-color: azure;
     border: 1px solid grey;

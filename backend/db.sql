@@ -92,7 +92,7 @@ CREATE TABLE `Course` (
   `course_name` varchar(100) NOT NULL,
   `course_code` varchar(100) NOT NULL,
   `course_desc` varchar(200) NOT NULL,
-  `course_status` varchar(200) NOT NULL
+  `course_status` varchar(200) NOT NULL,
   PRIMARY KEY (`course_code`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
@@ -130,9 +130,9 @@ CREATE TABLE `SkillCourseRelation` (
 --
 
 INSERT INTO `SkillCourseRelation` (`course_code`, `skill_code`) VALUES
-(1, 1),
-(2, 2),
-(3, 3);
+('COR001', 1),
+('COR002', 2),
+('COR004', 3);
 
 --
 -- Table structure for table `LearningJourney`
@@ -145,7 +145,7 @@ CREATE TABLE `LearningJourney` (
   `role_code` INT(11) NOT NULL,
   FOREIGN KEY (`role_code`) REFERENCES `Role` (`role_code`),
   FOREIGN KEY (`course_code`) REFERENCES `Course` (`course_code`),
-  UNIQUE (`LearningJourney_id`, `course_code`, `role_code`)
+  UNIQUE (`LearningJourney_id`,`staff_id`, `course_code`, `role_code`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 --
@@ -153,12 +153,12 @@ CREATE TABLE `LearningJourney` (
 --
 
 INSERT INTO `LearningJourney` (`LearningJourney_id`, `staff_id`, `course_code`, `role_code`) VALUES
-(1, 130001, '1', 1),
-(2, 130002, '2', 2),
-(2, 140001, '2', 2),
-(2, 150008, '2', 2),
-(2, 140002, '2', 2),
-(2, 140003, '2', 2);
+(1, 130001, 'COR001', 1),
+(2, 130002, 'COR002', 2),
+(2, 140001, 'COR002', 2),
+(2, 150008, 'COR002', 2),
+(2, 140002, 'COR002', 2),
+(2, 140003, 'COR002', 2);
 
 -- --
 -- -- Constraints for table `RoleSkillRelation`

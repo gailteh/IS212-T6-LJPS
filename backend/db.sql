@@ -154,7 +154,6 @@ CREATE TABLE `LearningJourney` (
 INSERT INTO `LearningJourney` (`LearningJourney_id`, `course_code`, `role_code`) VALUES
 (1, 'COR001', 1),
 (2, 'COR002', 2),
-(2, 'COR003', 2),
 (3, 'COR002', 2),
 (3, 'COR004', 2),
 (3, 'COR006', 2);

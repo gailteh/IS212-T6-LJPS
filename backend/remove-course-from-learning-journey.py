@@ -1,17 +1,12 @@
-
-import flask
+from mimetypes import init
+from flask import Flask
 from flask_sqlalchemy import SQLAlchemy
 from flask_cors import CORS
 from sqlalchemy import ForeignKey
 
-'''
-Assumed JSON:
-{"ljID": , "course_ID", "StaffID"}
-'''
-
-app = flask(__name__)
+app = Flask(__name__)
 # initiate database connection
-app.config['SQLALCHEMY_DATABASE_URI'] = "mysql+mysqlconnector://root:root@localhost:8889/<xxx>"
+app.config['SQLALCHEMY_DATABASE_URI'] = "mysql+mysqlconnector://root:root@localhost:8889/learning-journey"
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 
 db = SQLAlchemy(app)
@@ -22,53 +17,72 @@ CORS(app)
 class Courses(db.Model):
     __tablename__ = 'courses'
 
-    CourseID = db.Column(db.String, primary_key=True, nullable=False)
-    Description = db.Column(db.String, nullable=False)
+    course_code = db.Column(db.String, primary_key=True, nullable=False)
+    course_name = db.Column(db.String, nullable=False)
+    course_description = db.Column(db.String, nullable=False)
 
-    def __init__(self, CourseID, Description):
-        self.CourseID = CourseID
-        self.Description = Description
+    def __init__(self, course_code, course_name, course_description):
+        self.course_code = course_code
+        self.course_name = course_name
+        self.course_description = course_description
 
     def json(self):
-        return {"courseID": self.CourseID,"description": self.Description}
+        return {"course_code": self.course_code,"course_name":self.course_name, "course_description": self.course_description}
 
 class Role(db.Model):
     __tablename__ = 'roles'
 
-    roleID = db.Column(db.Integer, primary_key=True, nullable=False)
-    roleName = db.Column(db.String, nullable=False)
+    role_code = db.Column(db.Integer, primary_key=True, nullable=False)
+    role_name = db.Column(db.String, nullable=False)
+    role_desc = db.Column(db.String, nullable=False)
 
-    def __init__(self, roleID, roleName):
-        self.roleID = roleID
-        self.roleName = roleName
+    def __init__(self, role_code, role_name, role_desc):
+        self.role_code = role_code
+        self.role_name = role_name
+        self.role_desc = role_desc
+
 
     def json(self):
-        return {"roleID":self.roleID, "roleName":self.roleName}
+        return {"role_code":self.role_code, "role_name":self.role_name, "role_desc":self.role_desc}
+
+## not needed for now
+# class Staff(db.Model):
+#     __tablename__ = 'staff'
+
+#     staff_id = db.Column(db.Integer, primary_key=True, nullable=False)
+#     staff_name = db.Column(db.String, nullable=False)
+
+#     def __init__(self, staff_id, staff_name):
+#         self.staff_id = staff_id
+#         self.staff_name = staff_name
+
+#     def json(self):
+#         return {"staff_id": self.staff_id, "staff_name": self.staff_name}
+
 
 class Learning_Journey(db.Model):
     __tablename__ = 'learning-journey'
 
-    ljID = db.Column(db.Integer, primary_key=True, nullable=False)
-    StaffID = db.Column(db.String, ForeignKey("Staff.StaffID"))
-    CourseID = db.Column(db.String, ForeignKey("Course.CourseID"))
-    Role = db.Column(db.String, ForeignKey("Role.roleID"))
+    lj_code = db.Column(db.Integer, primary_key=True, nullable=False)
+    course_code = db.Column(db.String, ForeignKey('course.course_code'), nullable = False)
+    role_code = db.Column(db.Integer, ForeignKey('role.role_code'), nullable = False)
 
-    def __init__(self, ljID, StaffID, CourseID):
-        self.StaffID = StaffID
-        self.ljID = ljID
-        self.CourseID = CourseID
+    def __init__(self, lj_code, course_code, role_code):
+        self.lj_code = lj_code
+        self.course_code = course_code
+        self.role_code = role_code
 
 
     def json(self):
-        return {"staffID":self.StaffID, "ljID":self.ljID,"courseID":self.CourseID}
+        return {"lj_code":self.lj_code, "course_code":self.course_code, "role_code": self.role_code}
 
 
-@app.route('/learning_journey/<in>', methods=['DELETE'])
+@app.route('/learning_journey/<int:lj_code>/<string:course_code>', methods=['DELETE'])
 # deleting 1 course from learning journey
-def del_course_from_learning_journey(ljID, courseID):
+def del_course_from_learning_journey(lj_code, course_code):
     
-    #  get learning journey row using ljID and courseID
-    lj_course = Learning_Journey.query.filter_by(ljID=ljID, courseID=courseID).first()
+    #  get learning journey row using lj_code and course_code
+    lj_course = Learning_Journey.query.filter_by(lj_code=lj_code, course_code=course_code).first()
 
     # delete
     try:

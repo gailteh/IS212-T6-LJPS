@@ -63,26 +63,26 @@ class Role(db.Model):
 class Learning_Journey(db.Model):
     __tablename__ = 'learning-journey'
 
-    lj_code = db.Column(db.Integer, primary_key=True, nullable=False)
+    LearningJourney_id = db.Column(db.Integer, primary_key=True, nullable=False)
     course_code = db.Column(db.String, ForeignKey('course.course_code'), nullable = False)
     role_code = db.Column(db.Integer, ForeignKey('role.role_code'), nullable = False)
 
-    def __init__(self, lj_code, course_code, role_code):
-        self.lj_code = lj_code
+    def __init__(self, LearningJourney_id, course_code, role_code):
+        self.LearningJourney_id = LearningJourney_id
         self.course_code = course_code
         self.role_code = role_code
 
 
     def json(self):
-        return {"lj_code":self.lj_code, "course_code":self.course_code, "role_code": self.role_code}
+        return {"LearningJourney_id":self.LearningJourney_id, "course_code":self.course_code, "role_code": self.role_code}
 
 
-@app.route('/learning_journey/<int:lj_code>/<string:course_code>', methods=['DELETE'])
+@app.route('/learning_journey/<int:LearningJourney_id>/<string:course_code>', methods=['DELETE'])
 # deleting 1 course from learning journey
-def del_course_from_learning_journey(lj_code, course_code):
+def del_course_from_learning_journey(LearningJourney_id, course_code):
     
-    #  get learning journey row using lj_code and course_code
-    lj_course = Learning_Journey.query.filter_by(lj_code=lj_code, course_code=course_code).first()
+    #  get learning journey row using LearningJourney_id and course_code
+    lj_course = Learning_Journey.query.filter_by(LearningJourney_id=LearningJourney_id, course_code=course_code).first()
 
     # delete
     try:

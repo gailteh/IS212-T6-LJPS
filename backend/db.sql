@@ -140,25 +140,24 @@ INSERT INTO `SkillCourseRelation` (`course_code`, `skill_code`) VALUES
 
 CREATE TABLE `LearningJourney` (
   `LearningJourney_id` INT(11) NOT NULL,
-  `staff_id` INT(11) NOT NULL,
   `course_code` varchar(200) NOT NULL,
   `role_code` INT(11) NOT NULL,
   FOREIGN KEY (`role_code`) REFERENCES `Role` (`role_code`),
   FOREIGN KEY (`course_code`) REFERENCES `Course` (`course_code`),
-  UNIQUE (`LearningJourney_id`,`staff_id`, `course_code`, `role_code`)
+  UNIQUE (`LearningJourney_id`, `course_code`, `role_code`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 --
 -- Dumping data for table `LearningJourney`
 --
 
-INSERT INTO `LearningJourney` (`LearningJourney_id`, `staff_id`, `course_code`, `role_code`) VALUES
-(1, 130001, 'COR001', 1),
-(2, 130002, 'COR002', 2),
-(2, 140001, 'COR002', 2),
-(2, 150008, 'COR002', 2),
-(2, 140002, 'COR002', 2),
-(2, 140003, 'COR002', 2);
+INSERT INTO `LearningJourney` (`LearningJourney_id`, `course_code`, `role_code`) VALUES
+(1, 'COR001', 1),
+(2, 'COR002', 2),
+(2, 'COR003', 2),
+(3, 'COR002', 2),
+(3, 'COR004', 2),
+(3, 'COR006', 2);
 
 -- --
 -- -- Constraints for table `RoleSkillRelation`

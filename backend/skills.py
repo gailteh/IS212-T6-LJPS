@@ -5,16 +5,16 @@ from sqlalchemy import ForeignKey
 
 app = Flask(__name__)
 # initiate database connection
-app.config['SQLALCHEMY_DATABASE_URI'] = "mysql+mysqlconnector://root:root@localhost:8889/db.sql"
+app.config['SQLALCHEMY_DATABASE_URI'] = "mysql+mysqlconnector://root@localhost:3306/is212_spm"
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 
 db = SQLAlchemy(app)
 
 CORS(app)
 
-# initiate classes: Role, Skills
-class Role(db.Model):
-    __tablename__ = 'roles'
+# initiate classes: Role, Skills, RoleSkillRelation
+class role(db.Model):
+    __tablename__ = 'role'
 
     role_code = db.Column(db.Integer, primary_key=True, nullable=False)
     roleName = db.Column(db.String, nullable=False)
@@ -29,7 +29,7 @@ class Role(db.Model):
         return {"role_code":self.role_code, "roleName":self.roleName, "role_desc":self.role_desc}
 
 
-class Skills(db.Model):
+class skill(db.Model):
     __tablename__ = 'skills'
 
     skills_name = db.Column(db.String, primary_key=True, nullable=False)
@@ -44,38 +44,37 @@ class Skills(db.Model):
     def json(self):
         return {"skills_name": self.skills_name,"skills_code": self.skills_code, "skills_desc":self.skills_desc}
 
-class RoleSkillRelation(db.Model):
+class role_skill_relation(db.Model):
     __tablename__ = 'role_skill_relation'
 
     role_code = db.Column(db.Integer, primary_key=True, nullable=False)
-    skills_code = db.Column(db.Integer, primary_key=True, nullable=False)
+    skill_code = db.Column(db.Integer, primary_key=True, nullable=False)
 
-    def __init__(self, role_code, skills_code):
+    def __init__(self, role_code, skill_code):
         self.role_code = role_code
-        self.skills_code = skills_code
+        self.skill_code = skill_code
 
     def json(self):
-        return {"role_code": self.role_code,"skills_code": self.skills_code}
+        return {"role_code": self.role_code,"skill_code": self.skill_code}
 
 
 
-@app.route('/<string:role_code>/skills', methods=['GET'])
+@app.route('/<string:role_code>/skill', methods=['GET'])
 # display the skills respective to the role selected
-def display_skills(role_code):
+def get_skills_code(role_code):
     
-    skills_name = Skills.query.filter_by(role_code=role_code).first()
-    skills = []    
+    skills = role_skill_relation.query.filter_by(role_code=role_code).all()   
 
-    if (len(skills_name) > 0):
+    if (len(skills) > 0):
         return {
             "code": 200,
             "data": {
-                "skills_name": Skills[skills_name]
+                "skills": [skill.json() for skill in skills]
                 
             },
             "message": "These are the skills for this role."
         }
-    elif (len(skills_name) == 0):
+    elif (len(skills) == 0):
         return {
         "code": 204,
         "message": "There are no skills for this role."

@@ -52,7 +52,7 @@ CREATE TABLE `skill` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 --
--- Dumping data for table `doctor`
+-- Dumping data for table `Skill`
 --
 
 INSERT INTO `skill` (`skill_name`, `skill_code`, `skill_desc`) VALUES
@@ -79,7 +79,7 @@ CREATE TABLE `role_skill_relation` (
 
 INSERT INTO `role_skill_relation` (`role_code`, `skill_code`) VALUES
 (1, 1),
-(2, 2),
+(1, 2),
 (3, 3);
 
 -- --------------------------------------------------------

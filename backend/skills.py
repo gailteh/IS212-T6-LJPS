@@ -30,11 +30,11 @@ class role(db.Model):
 
 
 class skill(db.Model):
-    __tablename__ = 'skills'
+    __tablename__ = 'skill'
 
-    skills_name = db.Column(db.String, primary_key=True, nullable=False)
-    skills_code = db.Column(db.Integer, primary_key=True, nullable=False)
-    skills_desc = db.Column(db.String, nullable=False)
+    skill_name = db.Column(db.String, primary_key=True, nullable=False)
+    skill_code = db.Column(db.Integer, primary_key=True, nullable=False)
+    skill_desc = db.Column(db.String, nullable=False)
 
     def __init__(self, skills_name, skills_code, skills_desc):
         self.skills_name = skills_name
@@ -60,30 +60,70 @@ class role_skill_relation(db.Model):
 
 
 @app.route('/<string:role_code>/skill', methods=['GET'])
-# display the skills respective to the role selected
+# retreieve the skills code respective to the role selected
 def get_skills_code(role_code):
     
-    skills = role_skill_relation.query.filter_by(role_code=role_code).all()   
+    skill_codes = role_skill_relation.query.filter_by(role_code=role_code).all()
 
-    if (len(skills) > 0):
+    # initialise empty list 
+    # skill_codes_list = []
+
+    #append all skills code to list
+    #for skill_code in skill_codes_list:
+    #    skill_codes_list.append(skill_code)
+    
+    
+    #skills = skill.query.filter_by(skill_code=skill_code).all()
+    
+    if (len(skill_codes) > 0):
         return {
             "code": 200,
             "data": {
-                "skills": [skill.json() for skill in skills]
+                "skills": [skill.json() for skill in skill_codes]
                 
             },
             "message": "These are the skills for this role."
         }
-    elif (len(skills) == 0):
+    elif (len(skill_codes) == 0):
         return {
         "code": 204,
         "message": "There are no skills for this role."
         }
-    if skills is None:
+    if skill_codes is None:
         return {
         "code": 404,
         "message": "Error occured while displaying skills for this role."
         }
+
+@app.route('/<string:role_code>/<string:skill_code>/skill', methods=['GET'])
+# display the skills respective to the role selected from the skills code
+def display_skills(role_code, skill_code):
+    
+    skill_code = get_skills_code(role_code=role_code)
+    all_skill = skill.query.filter_by(skill_code=skill_code).all()   
+    
+    skill_codes_list = []
+
+    if (len(all_skill) > 0):
+        return {
+            "code": 200,
+            "data": {
+                "skills": [skill.json() for skill in all_skill]
+                
+            },
+            "message": "These are the skills for this role."
+        }
+    elif (len(all_skill) == 0):
+        return {
+        "code": 204,
+        "message": "There are no skills for this role."
+        }
+    if all_skill is None:
+        return {
+        "code": 404,
+        "message": "Error occured while displaying skills for this role."
+        }
+
 
 if __name__ == '__main__':
     app.run(port=4999, debug=True)

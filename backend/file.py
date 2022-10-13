@@ -75,7 +75,7 @@ class LearningJourney(db.Model):
                 }
 
 
-@app.route("/learningjourney", methods=['POST'])
+@app.route("/learning_journey", methods=['POST'])
 #For every new course that is added to a learning journey, a new record is created
 def add_new_course(): 
     data = request.get_json()

@@ -27,13 +27,13 @@ class role(db.Model):
     role_desc = db.Column(db.String, nullable=False)
     role_skill = db.relationship('skill',secondary=role_skill_relation, backref=db.backref('position'))
 
-    def __init__(self, role_code, roleName, role_desc):
+    def __init__(self, role_code, role_name, role_desc):
         self.role_code = role_code
-        self.roleName = roleName
+        self.role_name = role_name
         self.role_desc = role_desc
 
     def json(self):
-        return {"role_code":self.role_code, "roleName":self.roleName, "role_desc":self.role_desc}
+        return {"role_code":self.role_code, "role_name":self.role_name, "role_desc":self.role_desc}
 
 
 class skill(db.Model):
@@ -66,7 +66,7 @@ class skill(db.Model):
 
 
 
-
+#display skills that respective to the role
 @app.route('/<int:role_code>/skills', methods=['GET'])
 def display_skills(role_code):
     # get skills content from skill

@@ -15,7 +15,7 @@
     <link rel="stylesheet" href="css/style.css">
 </head>
 <body>
-    <div class="container-fluid" style="margin-bottom: 20px;">
+    <div id="hr_skill" class="container-fluid" style="margin-bottom: 20px;">
         <div class="banner text-center">
             <h1>Skills page</h1>
         </div>
@@ -37,9 +37,11 @@
               </ul>
             </div>
             <div class="col-1">
-                <!-- START Add card button -->
-                <button class="add-skill" type="button">+ Skill</button>
-                <!-- END Add card button -->
+                <!-- START Add skill button -->
+                <button class="fw-bold add-skill" type="button">
+                    <a href="create_skill.html">+ Skill</a>
+                </button>
+                <!-- END Add skill button -->
             </div>
       </div>
       <!-- ######## END Navigation bar ######## -->
@@ -68,7 +70,14 @@
                             </li>
                         </ul>
                     </p>
-                    <button class="edit-skill" type="button">Edit</button>
+                    <button class="edit-skill" type="button">
+                        <a href="edit_skill.html">Edit</a>
+                    </button>
+                    <!-- START delete card button -->
+                    <button class="add-skill" type="button">
+                        <a href="remove_skill.html">Delete Skill</a>
+                    </button>   
+                    <!-- END delete skill button -->
                 </div>
             </div>
         </div> <!--1st card END-->
@@ -95,7 +104,14 @@
                     </ul>
 
                     </p>
-                    <button class="edit-skill" type="button">Edit</button>
+                    <button class="edit-skill" type="button">
+                        <a href="edit_skill.html">Edit</a>
+                    </button>
+                    <!-- START delete card button -->
+                    <button class="add-skill" type="button">
+                        <a href="remove_skill.html">Delete Skill</a>
+                    </button>   
+                    <!-- END delete skill button -->
                 </div>
             </div>
         </div><!-- 2nd card END -->
@@ -122,7 +138,14 @@
                     </ul>
 
                     </p>
-                    <button class="edit-skill" type="button">Edit</button>
+                    <button class="edit-skill" type="button">
+                        <a href="edit_skill.html">Edit</a>
+                    </button>
+                    <!-- START delete card button -->
+                    <button class="add-skill" type="button">
+                        <a href="remove_skill.html">Delete Skill</a>
+                    </button>   
+                    <!-- END delete skill button -->
                 </div>
             </div>
         </div><!-- 3rd card END -->
@@ -149,7 +172,14 @@
                     </ul>
 
                     </p>
-                    <button class="edit-skill" type="button">Edit</button>
+                    <button class="edit-skill" type="button">
+                        <a href="edit_skill.html">Edit</a>
+                    </button>
+                    <!-- START delete card button -->
+                    <button class="add-skill" type="button">
+                        <a href="remove_skill.html">Delete Skill</a>
+                    </button>   
+                    <!-- END delete skill button -->
                 </div>
             </div> <!--4th card END-->
         </div>
@@ -164,5 +194,18 @@
     integrity="sha384-A3rJD856KowSb7dwlZdYEkO39Gagi7vIsF0jrRAoQmDKKtQBHUuLZ9AsSv4jD4Xa" 
     crossorigin="anonymous"></script>
     
+    <script>
+        const hr_skill = Vue.createApp({
+            data(){
+                return{
+                    skill_name: "",
+                    skill_code: "",
+                    skill_desc: ""
+                }
+            }
+        })
+        hr_skill.mount('#hr_skill')
+    </script>
+
 </body>
 </html>

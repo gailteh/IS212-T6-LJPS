@@ -16,7 +16,10 @@
     font-family: 'Times New Roman', Times, serif;
     position: relative;
 }
-
+a { 
+    text-decoration: none; 
+    color: inherit; 
+} 
 img{
     height: 200px;
 

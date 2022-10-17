@@ -42,7 +42,7 @@ def display_role():
         return {
             "code": 200,
             "data": {
-                "skills": [r.json() for r in roles]
+                "roles": [r.json() for r in roles]
                 
             },
             "message": "These are the roles available."

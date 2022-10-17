@@ -182,8 +182,8 @@
                 axios.get('http://127.0.0.1:4999/role')
                     .then(response => {
                         
-                        this.roles= response.data.roles;
-                        // console.log(response.data.data)
+                        this.role_details= response.data.data.roles;
+                        // console.log(response.data)
 
                        
                     })

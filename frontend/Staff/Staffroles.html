@@ -12,46 +12,44 @@
     integrity="sha384-gH2yIJqKdNHPEq0n4Mqa/HGKIhSkIHeL5AyhkYV8i59U5AR6csBvApHHNl/vI1Bx" 
     crossorigin="anonymous">
 
-    <!-- Vue.js Version 3 CDN -->
-    <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
-
-    <!--axios -->
-    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
-    
     <link rel="stylesheet" href="css/style.css">
 </head>
 <body>
     <div id="roles">
-    <div class="container-fluid" style="margin-bottom: 20px;">
-        <div class="Rolebanner text-center">
-            <h1>Roles Page</h1>
-        </div>
+        <div class="container-fluid" style="margin-bottom: 20px;">
+            <div class="Rolebanner text-center">
+                <h1>Roles Page</h1>
+            </div>
 
-        <div>
-            <h4>These are the roles available </h4>
-            <p>Please select a role </p>
+            <div>
+                <h4>These are the roles available </h4>
+                <p>Please select a role </p>
+            </div>
         </div>
-    </div>
-    <div class="mx-3 table-responsive">
-        <table class="table table-bordered table-striped">
-            <tr>
-                <th>Role Name</th>
-                <th>Role Code</th>
-                <th>Role Description</th>
-                <th>Action</th>
-            </tr>
-            <tr v-for="r in role_details">
-                <td>{{r.role_name}}</td>
-                <td>{{r.role_code}}</td>
-                <td>{{r.role_desc}}</td>
-                <td>
-                    <button class="btn btn-sm btn-outline-danger">Delete</button>
-                    <button class="btn btn-sm btn-outline-info">Edit</button>
-                    <button class="btn btn-sm btn-outline-dark">View More</button>
-                </td>
-            </tr>
-        </table>
-    </div>
+        <div class="mx-3 table-responsive">
+            <table class="table table-bordered table-striped">
+                <thead>
+                    <tr>
+                        <th>Role Name</th>
+                        <th>Role Code</th>
+                        <th>Role Description</th>
+                        <th>Action</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr v-for="r in role_details">
+                        <td>{{r.role_name}}</td>
+                        <td>{{r.role_code}}</td>
+                        <td>{{r.role_desc}}</td>
+                        <td>
+                            <button class="btn btn-sm btn-outline-danger">Delete</button>
+                            <button class="btn btn-sm btn-outline-info">Edit</button>
+                            <button class="btn btn-sm btn-outline-dark">View More</button>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
     </div>
 
 
@@ -151,30 +149,43 @@
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0/dist/js/bootstrap.bundle.min.js" 
     integrity="sha384-A3rJD856KowSb7dwlZdYEkO39Gagi7vIsF0jrRAoQmDKKtQBHUuLZ9AsSv4jD4Xa" 
     crossorigin="anonymous"></script>
+    <!-- Vue.js Version 3 CDN -->
+    <script src="https://cdn.jsdelivr.net/npm/vue@2.6.12/dist/vue.js"></script>
+    <!--axios -->
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
     
     <script>
-        const roles = Vue.createApp({
+        const roles = Vue({
             el: '#roles',
             data: {
-                role_details: '',
+                role_details: [],
             },
-            methods: {
-                // Make a request for a user with a given ID
-                fetch_roles:function(){
-                    axios.get('http://127.0.0.1:4999/role')
-                    .then(function (response) {
-                        // handle success
-                        console.log(response);
-                        roles.role_details = response.data.roles
+
+            // methods: {
+            //     display all roles
+            //     get_roles(){
+            //         axios.get('http://127.0.0.1:4999/role')
+            //         .then(function (response) {
+            //             handle success
+            //             console.log(response);
+            //             this.role_details = response.data.roles
+            //         })
+            //         .catch(function (error) {
+            //             // handle error
+            //             console.log(error);
+            //         });
+            //     }
+            // },
+            mounted: function() {
+                axios.get('http://127.0.0.1:4999/role')
+                    .then(response => {
+                        
+                        this.roles= response.data.roles;
+                        // console.log(response.data.data)
+
+                       
                     })
-                    .catch(function (error) {
-                        // handle error
-                        console.log(error);
-                    });
-                }
-            },
-            created:function(){
-                this.fetch_roles();
+                    .catch(error => alert(error));
             }
         })
         roles.mount('#roles')

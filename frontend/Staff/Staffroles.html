@@ -11,6 +11,8 @@
     rel="stylesheet" 
     integrity="sha384-gH2yIJqKdNHPEq0n4Mqa/HGKIhSkIHeL5AyhkYV8i59U5AR6csBvApHHNl/vI1Bx" 
     crossorigin="anonymous">
+    <!--Bootstrap Vue-->
+    <link href="https://unpkg.com/bootstrap-vue@latest/dist/bootstrap-vue.min.css">
 
     <link rel="stylesheet" href="css/style.css">
 </head>
@@ -155,7 +157,7 @@
     <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
     
     <script>
-        const roles = Vue({
+        const roles = new Vue({
             el: '#roles',
             data: {
                 role_details: [],

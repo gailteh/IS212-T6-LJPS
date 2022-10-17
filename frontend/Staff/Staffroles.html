@@ -55,98 +55,6 @@
     </div>
 
 
-    <!--
-      <!-- ######## START cards ######## 
-      <div id="roles" class="row mx-auto"> <!--cards
-        <div class="col-md-3">
-            <!-- First row START 
-            <div v-for="r in role_details" class="card">
-              <!--1st card START
-                <h5 class="card-header">{{r.role_name}}</h5>
-                <!--
-                <img  class="Roleimg" src="img/chevron-executive.png" alt="Executive (Project Financing)">
-                
-                <div class="card-body">
-                    <h6 class="card-title">Role code:</h6>
-                    <h6 class="card-subtitle mb-2 text-muted">{{r.role_code}}</h6>
-                    <h6 class="card-title">Description:</h6>
-                    <p class="card-text">
-                        {{r.role_desc}}
-                    </p>
-                    <button class="view-skill" type="button">View skills</button>
-                </div>
-            </div>
-        </div> <!--1st card END
-
-        <div class="col-md-3">
-            <!-- 2nd card START 
-            <div class="card">
-                <h5 class="card-header">Senior Executive</h5>
-                <!--
-                <img class="Roleimg" src="img/chevron-senior_executive.png" alt="Senior Executive (Project Financing)">
-                
-                <div class="card-body">
-                    <h6 class="card-title">Track:</h6>
-                    <h6 class="card-subtitle mb-2 text-muted">Project Financing</h6>
-                    <h6 class="card-title">Description:</h6>
-                    <p class="card-text">
-                        The Senior Executive (Project Financing) is responsible for prioritising
-                        project financing needs based on profitability, financial risk and organisation
-                        capability.  
-                    </p>
-                    <button class="view-skill" type="button">View skills</button>
-                </div>
-            </div>
-        </div><!-- 2nd card END 
-
-        <div class="col-md-3">
-            <!-- 3rd card START 
-            <div class="card">
-                <h5 class="card-header">Manager</h5>
-                <!--
-                <img class="Roleimg" src="img/chevron-manager.png" alt="Manager (Project Financing)">
-                
-                <div class="card-body">
-                    <h6 class="card-title">Track:</h6>
-                    <h6 class="card-subtitle mb-2 text-muted">Project Financing</h6>
-                    <h6 class="card-title">Description:</h6>
-                    <p class="card-text">
-                        The Manager (Project Financing) is responsible for planning and leading the
-                        project financing scoping, modelling and delivery. 
-                    </p>
-                    <button class="view-skill" type="button">View skills</button>
-                </div>
-            </div>
-        </div><!-- 3rd card END 
-
-        <div class="col-md-3">
-            <!-- 4th card START 
-            <div class="card">
-                <h5 class="card-header">Director</h5>
-                <!--
-                <img class="Roleimg" src="img/chevron-director.png" alt="Director (Project Financing)">
-                
-                <div class="card-body">
-                    <h6 class="card-title">Track:</h6>
-                    <h6 class="card-subtitle mb-2 text-muted">Project Financing</h6>
-                    <h6 class="card-title">Description:</h6>
-                    <p class="card-text">
-                        The Director (Project Financing) is responsible for spearheading the project
-                        financing activities while ensuring alignment with the organisation's financing
-                        goals. 
-                    </p>
-                    <button class="view-skill" type="button">View skills</button>
-                </div>
-            </div> <!--4th card END
-        </div>
-        <!-- First Row End 
-
-        
-
-    </div>
-    -->
-
-
     <!-- Bundled Bootstrap JS -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0/dist/js/bootstrap.bundle.min.js" 
     integrity="sha384-A3rJD856KowSb7dwlZdYEkO39Gagi7vIsF0jrRAoQmDKKtQBHUuLZ9AsSv4jD4Xa" 
@@ -163,21 +71,6 @@
                 role_details: [],
             },
 
-            // methods: {
-            //     display all roles
-            //     get_roles(){
-            //         axios.get('http://127.0.0.1:4999/role')
-            //         .then(function (response) {
-            //             handle success
-            //             console.log(response);
-            //             this.role_details = response.data.roles
-            //         })
-            //         .catch(function (error) {
-            //             // handle error
-            //             console.log(error);
-            //         });
-            //     }
-            // },
             mounted: function() {
                 axios.get('http://127.0.0.1:4999/role')
                     .then(response => {

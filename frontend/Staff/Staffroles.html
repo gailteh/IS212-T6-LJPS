@@ -155,7 +155,7 @@
     <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
     
     <script>
-        const roles = Vue({
+        const roles = new Vue({
             el: '#roles',
             data: {
                 role_details: [],
@@ -180,8 +180,8 @@
                 axios.get('http://127.0.0.1:4999/role')
                     .then(response => {
                         
-                        this.roles= response.data.roles;
-                        // console.log(response.data.data)
+                        this.role_details= response.data.data.roles;
+                        // console.log(response.data)
 
                        
                     })

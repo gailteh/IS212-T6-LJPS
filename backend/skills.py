@@ -65,10 +65,10 @@ class skill(db.Model):
 #         return {"role_code": self.role_code,"skill_code": self.skill_code}
 
 
-
-#display skills that respective to the role
+########        level 3 control access      ########
+#display skills that respective to the role 
 @app.route('/<int:role_code>/skills', methods=['GET'])
-def display_skills(role_code):
+def display_role_skills(role_code):
     # get skills content from skill
     skills = skill.query.filter(skill.position.any(role_code=role_code)).all()
 
@@ -91,6 +91,29 @@ def display_skills(role_code):
         return {
         "code": 204,
         "message": "There are no skills for this role."
+        }
+
+########        level 1 control access      ########
+#display all skills 
+@app.route('/skills', methods=['GET'])
+def display_skills():
+    # get skills content from skill
+    skills = skill.query.all()
+
+    if skills is None:
+        return {
+        "code": 404,
+        "message": "Error occured while displaying skills."
+        }
+
+    if skills:
+        return {
+            "code": 200,
+            "data": {
+                "skills": [sk.json() for sk in skills]
+                
+            },
+            "message": "These are the skills available."
         }
 
 if __name__ == '__main__':

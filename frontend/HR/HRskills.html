@@ -92,7 +92,7 @@
             },
 
             mounted: function() {
-                axios.get('http://127.0.0.1:4999/<int:role_code>/skills')
+                axios.get('http://127.0.0.1:4999/skills')
                     .then(response => {
                         
                         this.skills_details= response.data.data.skills;

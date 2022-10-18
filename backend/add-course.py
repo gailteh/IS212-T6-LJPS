@@ -1,5 +1,4 @@
 #create flask app
-from email import message
 from flask import Flask, request, jsonify
 from flask_sqlalchemy import SQLAlchemy
 from flask_cors import CORS
@@ -56,20 +55,20 @@ class Role(db.Model):
 
 #Initiate Learning Journey class
 class LearningJourney(db.Model):
-    __tablename__ = 'learningjourney'
-    LearningJourney_id = db.Column(db.Integer, primary_key = True, nullable= False)
+    __tablename__ = 'learning_journey'
+    lj_id = db.Column(db.Integer, primary_key = True, nullable= False)
     course_code = db.Column(db.String, ForeignKey('course.course_code'), primary_key = True, nullable = False)
     role_code = db.Column(db.Integer, ForeignKey('role.role_code'), primary_key = True, nullable = False)
     
 
-    def __init__(self, LearningJourney_id, role_code, course_code):
-        self.LearningJourney_id = LearningJourney_id
+    def __init__(self, lj_id, role_code, course_code):
+        self.lj_id = lj_id
         self.course_code = course_code
         self.role_code = role_code
         
     
     def json(self):
-        return {"LearningJourney_id": self.LearningJourney_id, 
+        return {"lj_id": self.lj_id, 
                 "course_code": self.role_code,
                 "role_code": self.role_code
                 }
@@ -81,13 +80,13 @@ def add_new_course():
     data = request.get_json()
 
     if not all(key in data.keys() for 
-                key in ('LearningJourney_id', 'course_code', 'role_code')):
+                key in ('lj_id', 'course_code', 'role_code')):
         return  jsonify({
             'message': "Incorrect JSON object provided"
         }), 500
     
     #create new record in the lj table
-    new_course = LearningJourney(LearningJourney_id = data['LearningJourney_id'], course_code = data['course_code'], role_code = data['role_code'])
+    new_course = LearningJourney(lj_id = data['lj_id'], course_code = data['course_code'], role_code = data['role_code'])
 
     # commit to DB
     try:

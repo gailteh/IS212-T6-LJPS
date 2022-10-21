@@ -1,7 +1,9 @@
-from flask import Flask
+from flask import Flask, request, jsonify
 from flask_sqlalchemy import SQLAlchemy
 from flask_cors import CORS
 from sqlalchemy import ForeignKey
+from flaskext.mysql import MySQL
+import pymysql
 
 app = Flask(__name__)
 # initiate database connection
@@ -52,6 +54,14 @@ def display_role():
         "code": 204,
         "message": "There are no roles available at the moment."
         }
+
+########        level 1 control access      ########
+@app.route("/role/<int:role_code>", methods=['GET', 'POST'])
+#For every new role, a new record is created
+def edit_role(role_code): 
+    pass
+    
+
 
 if __name__ == '__main__':
     app.run(port=4999, debug=True)

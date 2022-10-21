@@ -11,7 +11,11 @@
     rel="stylesheet" 
     integrity="sha384-gH2yIJqKdNHPEq0n4Mqa/HGKIhSkIHeL5AyhkYV8i59U5AR6csBvApHHNl/vI1Bx" 
     crossorigin="anonymous">
-    
+    <!--bootstrapVue js-->
+    <link type="text/css" rel="stylesheet" href="https://unpkg.com/bootstrap-vue@latest/dist/bootstrap-vue.min.css" />
+    <!-- vue -->
+    <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
+
     <link rel="stylesheet" href="css/style.css">
 </head>
 <body>
@@ -35,12 +39,72 @@
             </div>
       </div>
       <!-- ######## END Navigation bar ######## -->
-      <!-- add role -->
+      
+      <!-- ######## START Add Role ######## -->
+      <div class="row">
+        <div class="col-md-12">
+            <b-button id="show-btn" @click="showModal('my-modal')">Add role</b-button>
+            <b-modal ref="my-modal" hide-footer title="Add role">
+                <div>
+                    <form action="" @submit.prevent="onSubmit">
+                        <div class="form-group">
+                            <label for="">Role name</label>
+                            <input type="text" v-model="role_name" class="form-control">
+                        </div>
+                        <div class="form-group">
+                            <label for="">Role code</label>
+                            <input type="text" v-model="role_code" class="form-control">
+                        </div>
+                        <div class="form-group">
+                            <label for="">Role Description</label>
+                            <input type="text" v-model="role_desc" class="form-control">
+                        </div>
+                        <div class="form-group">
+                            <button class="btn btn-sm btn-outline-info">Add role</button>
+                        </div>
+                    </form>
+                </div>
+                <b-button class="mt-3" variant="outline-danger" block @click="hideModal('my-modal')">Close</b-button>
+            </b-modal>
+        </div>
+        <!-- ######## END Add Role ######## -->
+
+        <!-- ######## START Edit Role ######## -->
+        <div>
+            <b-modal ref="my-modal1" hide-footer title="Update Record">
+            <div>
+                <form action="" @submit.prevent="onUpdate">
+                <div class="form-group">
+                    <label for="">Role Name</label>
+                    <input type="text" v-model="edit_id">
+                    <input type="text" v-model="edit_role_name" class="form-control">
+                </div>
+                <div class="form-group">
+                    <label for="">Role Code</label>
+                    <input type="text" v-model="edit_role_code" class="form-control">
+                </div>
+                <div class="form-group">
+                    <label for="">Role Description</label>
+                    <input type="text" v-model="edit_role_desc" class="form-control">
+                </div>
+                <div class="form-group">
+                    <button class="btn btn-sm btn-outline-info">Update Role</button>
+                </div>
+                </form>
+            </div>
+            <b-button class="mt-3" variant="outline-danger" block @click="hideModal('my-modal1')">Close</b-button>
+            </b-modal>
+        </div>
+        <!-- ######## END Edit Role ######## -->
+
+      </div>
+
+      <!-- add course 
       <div class="col col-md-12">
         <div>
-            <button class="btn btn-primary" data-bs-toggle="collapse" data-bs-target="#add-course-collapse">Add Role</button>
+            <button class="btn btn-primary" data-bs-toggle="collapse" data-bs-target="#add-course-collapse">Add Course</button>
 
-            <!-- collapse add member form -->
+            <!-- collapse add member form 
             <div class="collapse mt-2" id="add-course-collapse">
                 <div class="card card-body">
                     <form action="" method="post">
@@ -51,11 +115,11 @@
                                 <th>Description</th>
                             </thead>
                             <tbody>
-                                <!-- <tr v-for="avail_roles in avail_roles">
-                                    <td>{{ avail_role.role_code }}</td>
-                                    <td>{{ avail_role.role_name }}</td>
-                                    <td>{{ avail_role.role_desc }}</td>
-                                </tr> -->
+                                <!-- <tr v-for="avail_course in avail_courses">
+                                    <td>{{ avail_course.course_code }}</td>
+                                    <td>{{ avail_course.course_name }}</td>
+                                    <td>{{ avail_course.course_desc }}</td>
+                                </tr>
                                 <tr>
                                     <td>COR3302</td>
                                     <td>yyy and xxx</td>
@@ -69,17 +133,18 @@
                     </form>
                 </div>
             </div>
-
+            
         </div>
     </div>
 
     <!-- message -->
-    <div class="text-center mt-4" v-if="deleted === true">
-        <p class="text-danger"><strong>{{ del_msg }}</strong></p>
-    </div>
-    <div class="text-center mt-4" v-if="added === true">
-        <p class="text-success"><strong>{{ add_msg }}</strong></p>
-    </div>
+        <div class="text-center mt-4" v-if="deleted === true">
+            <p class="text-danger"><strong>{{ del_msg }}</strong></p>
+        </div>
+        <div class="text-center mt-4" v-if="added === true">
+            <p class="text-success"><strong>{{ add_msg }}</strong></p>
+        </div>
+
 
         <div class="mx-3 table-responsive">
             <table class="table table-bordered table-striped">
@@ -98,7 +163,7 @@
                         <td>{{r.role_desc}}</td>
                         <td>
                             <button class="btn btn-sm btn-outline-danger">Delete</button>
-                            <button class="btn btn-sm btn-outline-info">Edit</button>
+                            <button @click="editRecord(r.role_code)" class="btn btn-sm btn-outline-info">Edit</button>
                             <button class="btn btn-sm btn-outline-dark">View More</button>
                         </td>
                     </tr>
@@ -115,24 +180,89 @@
     <script src="https://cdn.jsdelivr.net/npm/vue@2.6.12/dist/vue.js"></script>
     <!--axios -->
     <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+    <!--bootstrapVue js-->
+    <script src="https://unpkg.com/bootstrap-vue@latest/dist/bootstrap-vue.js"></script>
 
     <script>
         const hr_roles = new Vue({
             el: '#hr_roles',
             data: {
+                role_name: '',
+                role_code: '',
+                role_desc: '',
                 role_details: [],
+                edit_role_name: '',
+                edit_role_code: '',
+                edit_role_desc: '',
+                deleted: false,
+                added: false,
+                del_msg: 'Course Deleted',
+                add_msg: 'Course Added'
             },
+            methods: {
+                showModal(id){
+                    this.$refs[id].show()
+                },
+                hideModal(id){
+                    this.$refs[id].hide()
+                },
+                onSubmit(){
+                    if (this.role_name !== '' && this.role_code !== '' && this.role_desc !== ''){
+                        axios.post('http://127.0.0.1:4999/role', 
+                            {role_name: this.role_name, role_code: this.role_code, role_desc: this.role_desc}
+                        )
+                        .then(res=> {
+                            console.log(res)
+                            alert('New role successfully added')
+                            this.role_name = ''
+                            this.role_code = ''
+                            this.role_desc = ''
 
-            mounted: function() {
+                            hr_roles.hideModal('my-modal')
+                            hr_roles.get_role()
+                        })
+                        .catch(err=>{
+                            console.log(err)
+                        })
+                    } else {
+                        alert('Error! Empty fields')
+                    }
+                },
+                get_role(){
                 axios.get('http://127.0.0.1:4999/role')
                     .then(response => {
                         
                         this.role_details= response.data.data.roles;
                         // console.log(response.data)
-
-                    
                     })
                     .catch(error => alert(error));
+                },
+                addRecord(){
+                axios.post("#")
+                    .then(res =>{
+                        console.log(res)
+                        // this.getRecords()
+                    })
+                    .then(err => {
+                        console.log(err)
+                    })
+                }, 
+                editRecord(role_code){
+                    axios.get("http://127.0.0.1:4999/role/" + role_code)
+                    .then(res => {
+                        console.log(res.data)
+                        this.edit_role_name = res.data.editmember['role_name']
+                        this.edit_role_code = res.data.editmember['role_code']
+                        this.edit_role_desc = res.data.editmember['role_desc']
+                        hr_roles.showModal('my-modal1')
+                    })
+                    .catch(err => {
+                        console.log(err)
+                    })
+                }
+            }, 
+            mounted: function(){
+                this.get_role()
             }
         })
         hr_roles.mount('#hr_roles')

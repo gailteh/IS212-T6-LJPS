@@ -59,7 +59,11 @@
             <tbody>
                 <tr v-for="record in role_course_info">
                     <td><strong>{{ record.role_name }}</strong></td>
-                    <td>{{ record.course_name }}</td>             
+                    <td>{{ record.course_name }}</td>   
+                    <td class="float-end">
+                        <button class="btn btn-sm btn-info" >Edit</button>
+                        <button class="btn btn-sm btn-danger" >Delete</button>
+                    </td>          
                 </tr>
             </tbody>
             </table>

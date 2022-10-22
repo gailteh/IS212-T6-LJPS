@@ -69,7 +69,7 @@
         </div>
         <!-- ######## END Add Role ######## -->
 
-        <!-- ######## START Edit Role ######## -->
+        <!-- ######## START Edit/Update Role ######## -->
         <div>
             <b-modal ref="my-modal1" hide-footer title="Update Record">
             <div>
@@ -95,7 +95,7 @@
             <b-button class="mt-3" variant="outline-danger" block @click="hideModal('my-modal1')">Close</b-button>
             </b-modal>
         </div>
-        <!-- ######## END Edit Role ######## -->
+        <!-- ######## END Edit/Update Role ######## -->
 
       </div>
 
@@ -162,7 +162,7 @@
                         <td>{{r.role_code}}</td>
                         <td>{{r.role_desc}}</td>
                         <td>
-                            <button class="btn btn-sm btn-outline-danger">Delete</button>
+                            <button @click="deleteRecord(r.role_code)" class="btn btn-sm btn-outline-danger">Delete</button>
                             <button @click="editRecord(r.role_code)" class="btn btn-sm btn-outline-info">Edit</button>
                             <button class="btn btn-sm btn-outline-dark">View More</button>
                         </td>
@@ -208,7 +208,7 @@
                 },
                 onSubmit(){
                     if (this.role_name !== '' && this.role_code !== '' && this.role_desc !== ''){
-                        axios.post('http://127.0.0.1:4999/role', 
+                        axios.post('http://127.0.0.1:4999/create_role', 
                             {role_name: this.role_name, role_code: this.role_code, role_desc: this.role_desc}
                         )
                         .then(res=> {
@@ -248,18 +248,42 @@
                     })
                 }, 
                 editRecord(role_code){
-                    axios.get("http://127.0.0.1:4999/role/" + role_code)
-                    .then(res => {
-                        console.log(res.data)
-                        this.edit_role_name = res.data.editmember['role_name']
-                        this.edit_role_code = res.data.editmember['role_code']
-                        this.edit_role_desc = res.data.editmember['role_desc']
-                        hr_roles.showModal('my-modal1')
-                    })
-                    .catch(err => {
-                        console.log(err)
-                    })
-                }
+                    hr_roles.showModal('my-modal1')
+
+                    // axios.get("http://127.0.0.1:4999/role/" + role_code)
+                    // .then(res => {
+                    //     console.log(res.data)
+                    //     this.edit_role_name = res.data.editmember['role_name']
+                    //     this.edit_role_code = res.data.editmember['role_code']
+                    //     this.edit_role_desc = res.data.editmember['role_desc']
+                    //     hr_roles.showModal('my-modal1')
+                    // })
+                    // .catch(err => {
+                    //     console.log(err)
+                    // })
+                },
+                onUpdate(){
+                    if (this.edit_role_name !== '' && this.edit_role_code !== '' && this.edit_role_desc !== ''){
+                        axios.post('http://127.0.0.1:4999/role', 
+                            {role_name: this.edit_role_name, role_code: this.edit_role_code, role_desc: this.edit_role_desc}
+                        )
+                        .then(res=> {
+                            console.log(res)
+                            alert('New role successfully added')
+                            this.edit_role_name = ''
+                            this.edit_role_code = ''
+                            this.edit_role_desc = ''
+
+                            hr_roles.hideModal('my-modal1')
+                            hr_roles.get_role()
+                        })
+                        .catch(err=>{
+                            console.log(err)
+                        })
+                    } else {
+                        alert('Error! Empty fields')
+                    }
+                },
             }, 
             mounted: function(){
                 this.get_role()

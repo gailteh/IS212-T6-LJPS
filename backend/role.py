@@ -56,11 +56,50 @@ def display_role():
         }
 
 ########        level 1 control access      ########
-@app.route("/role/<int:role_code>", methods=['GET', 'POST'])
-#For every new role, a new record is created
-def edit_role(role_code): 
-    pass
+@app.route("/update_role/<int:role_code>", methods=['PUT'])
+def update_role(role_code):
+    role_code = role.query.get(role_code)
+
+    role_name = request.json['role_name']
+    role_desc = request.json['role_name']
+
+    role.role_name = role_name
+    role.role_desc = role_desc
+
+    db.session.commit()
+
+    return {
+        "code": 200,
+        "message": "Role successfully updated."
+    }
+
+
+@app.route("/create_role", methods=['POST'])
+def create_role():
+    data = request.get_json()
+
+    if not all(key in data.keys() for 
+                key in ('role_code', 'role_name', 'role_desc')):
+        return  jsonify({
+            'message': "Incorrect JSON object provided"
+        }), 500
     
+    #create new record in the lj table
+    new_role = role(role_code = data['role_code'], role_name = data['role_name'], role_desc = data['role_desc'])
+
+    # commit to DB
+    try:
+        db.session.add(new_role)
+        db.session.commit()
+    except Exception as e:
+        print(e)
+        return jsonify({
+            "message": "Unable to commit to database"
+        }), 500
+
+    return jsonify({
+        "Status": "Success"
+    }),201
 
 
 if __name__ == '__main__':

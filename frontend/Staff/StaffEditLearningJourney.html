@@ -127,7 +127,7 @@
             }
         },
         methods:{
-            getRecords(){
+            getCourses(){
                 axios.get('#')
                     .then(res => {
                         console.log(res)
@@ -140,14 +140,14 @@
                 axios.delete("#")
                     .then (res =>{
                         console.log(res)
-                        // this.getRecords()
+                        // this.getCourses()
                     })
             },
             addRecord(){
                 axios.post("#")
                     .then(res =>{
                         console.log(res)
-                        // this.getRecords()
+                        // this.getCourses()
                     })
                     .then(err => {
                         console.log(err)
@@ -155,7 +155,7 @@
             }, 
         }, 
         created() {
-            // this.getRecords()
+            // this.getCourses()
         },
     })
     

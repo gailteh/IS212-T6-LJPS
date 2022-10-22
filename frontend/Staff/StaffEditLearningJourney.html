@@ -85,22 +85,22 @@
                         <th>Description</th>
                     </thead>
                     <tbody>
-                        <!-- <tr v-for="lj_course in lj_courses">
-                            <td>{{ lj_course.course_code }}</td>
-                            <td>{{ lj_course.course_name }}</td>
-                            <td>{{ lj_course.course_desc }}</td>
+                        <tr v-for="ljc in lj_courses">
+                            <td>{{ ljc.course_code }}</td>
+                            <td>{{ ljc.course_name }}</td>
+                            <td>{{ ljc.course_desc }}</td>
                             <td>
-                                <button class="btn btn-sm btn-danger">Delete</button>
+                                <button class="btn btn-sm btn-danger" @click="del_course(lj_id, ljc.course_code)">Delete</button>
                             </td>
-                        </tr> -->
-                        <tr>
+                        </tr>
+                        <!-- <tr>
                             <td>COR3301</td>
                             <td>System Design and xxx</td>
                             <td>COR3301</td>
                             <td>
                                 <button class="btn btn-sm btn-danger" @click="deleted = !deleted">Delete</button>
                             </td>
-                        </tr>
+                        </tr> -->
                     </tbody>
                 </table>
             </div>
@@ -120,11 +120,28 @@
     const app = new Vue({
         el: "#crudapp",
         data: {
-                lj_id: 0,
+                // attempt to hard-code data part for testing
+                lj_id: 3,
                 course_code: '',
                 course_name: '',
                 course_description: '',
-                lj_courses:[],
+                // lj_courses:[],
+                lj_courses:[{
+                    "course_code": "COR002",
+                    "course_name": "Lean Six Sigma Green Belt Certification",
+                    "course_desc": "Apply Lean Six Sigma methodology and statistical tools such as Minitab to be used in process analytics",
+                    },
+                    {
+                        "course_code": "COR004",
+                        "course_name": "Service Excellence",
+                        "course_desc": "The programme provides the learner with the key foundations of what builds customer confidence in the service industr",
+                    },
+                    {
+                        "course_code": "FIN001",
+                        "course_name": "Data Collection and Analysis",
+                        "course_desc": "Data is meaningless unless insights and analysis can be drawn to provide useful information for business decision-making. It is imperative that data quality, integrity and security ",
+                    }
+                ],
                 avail_courses: [],
                 // avail_courses: [{course_code: "COR3302", course_name: 'yyy and xxx', course_description: 'decription 111'}], 
                 deleted: false,
@@ -158,18 +175,26 @@
             getCourses(){
                 axios.get('http://127.0.0.1:5000/learning_journey')
                     .then(response => {
-                        
                         this.role_details= response.data.data;
                         // console.log(response.data)
                     })
                     .catch(error => alert(error));
+                
             },
-            delRecord(lj_id, course_code){
-                axios.delete("#")
-                    .then (res =>{
-                        console.log(res)
-                        // this.getCourses()
-                    })
+            del_course: function(lj_id, ljc_code){
+                if (window.confirm('Delete this record')) {
+                        fetch("http://127.0.0.1:4888/del_ljc/"+String(lj_id)+"/"+ljc_code, {
+                            method: 'DELETE'
+                        })
+                        .then(res => {
+                            console.log(res)
+                            alert('delete successfully')
+                            this.getCourses()
+                        })
+                        .catch(err => {
+                            console.log(err)
+                        })
+                    }
             },
             addRecord(lj_id){
                 axios.post("#", {
@@ -188,6 +213,5 @@
             // this.getCourses()
         },
     })
-    app.mount('#crudapp')
 </script>
 </html>

@@ -58,16 +58,22 @@ def display_role():
 ########        level 1 control access      ########
 @app.route("/update_role/<int:role_code>", methods=['PUT'])
 def update_role(role_code):
-    role_code = role.query.get(role_code)
 
+    #role_details = role.query.filter_by(role_code=role_code).first()
+    role_detail = role.query.get(role_code)
     role_name = request.json['role_name']
-    role_desc = request.json['role_name']
+    role_desc = request.json['role_desc']
 
-    role.role_name = role_name
-    role.role_desc = role_desc
-
-    db.session.commit()
-
+    try:
+        role_detail.role_name = role_name
+        role_detail.role_desc = role_desc
+        db.session.commit()
+    
+    except Exception as e:
+        print(e)
+        return jsonify({
+            "message": "Unable to commit to database"
+        }), 500
     return {
         "code": 200,
         "message": "Role successfully updated."
@@ -115,7 +121,7 @@ def delete_role(role_code):
         return {
             "code": 500,
             "data": {
-                "lj_course": role_detail
+                "role_detail": role_detail
             },
             "message": "An error occurred while deleting the course from learning journey"
         }

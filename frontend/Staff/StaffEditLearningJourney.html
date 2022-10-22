@@ -11,7 +11,7 @@
         integrity="sha384-Zenh87qX5JnK2Jl0vWa8Ck2rdkQ2Bzep5IDxbcnCeuOxjzrPF/et3URy9Bv1WTRi" crossorigin="anonymous">
     
     <!-- vue -->
-    <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/vue@2.6.12/dist/vue.js"></script>
 
     
     
@@ -34,7 +34,7 @@
                 <!-- collapse add member form -->
                 <div class="collapse mt-2" id="add-course-collapse">
                     <div class="card card-body">
-                        <form action="" method="post">
+                        <form action="" method="post" @submit.prevent="onSubmit">
                             <table class="table table-hover">
                                 <thead>
                                     <th>ID</th>
@@ -42,17 +42,20 @@
                                     <th>Description</th>
                                 </thead>
                                 <tbody>
-                                    <!-- <tr v-for="avail_course in avail_courses">
+                                    <tr v-for="avail_course in avail_courses">
                                         <td>{{ avail_course.course_code }}</td>
                                         <td>{{ avail_course.course_name }}</td>
                                         <td>{{ avail_course.course_desc }}</td>
-                                    </tr> -->
+                                        <td><button class="btn btn-sm btn-info" @click="added = !added">Add</button>
+                                    </td>
+                                    </tr>
+                                    
                                     <tr>
-                                        <td>COR3302</td>
+                                        <!-- <td>COR3302</td>
                                         <td>yyy and xxx</td>
                                         <td>COR3301</td>
-                                        <td>
-                                            <button class="btn btn-sm btn-info" @click="added = !added">Add</button>
+                                        <td> -->
+                                            <!-- <button class="btn btn-sm btn-info" @click="added = !added">Add</button> -->
                                         </td>
                                     </tr>
                                 </tbody>
@@ -114,27 +117,52 @@
 <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
 
 <script>
-    const app = Vue.createApp({
-        data(){
-            return {
+    const app = new Vue({
+        el: "#crudapp",
+        data: {
                 lj_id: 0,
+                course_code: '',
+                course_name: '',
+                course_description: '',
                 lj_courses:[],
-                avail_courses: [], 
+                avail_courses: [],
+                // avail_courses: [{course_code: "COR3302", course_name: 'yyy and xxx', course_description: 'decription 111'}], 
                 deleted: false,
                 added: false,
                 del_msg: 'Course Deleted',
-                add_msg: 'Course Added'
-            }
-        },
+                add_msg: 'Course Added',
+            },
         methods:{
+            onSubmit(){
+                    if (this.lj_id !== '' && this.course_code !== '' && this.course_name !== '' && this.course_description !== ''){
+                        axios.post("http://localhost:5000/learning_journey", 
+                            {lj_id: this.lj_id,
+                            course_code: this.course_code,
+                            course_name: this.course_name,
+                            course_description: this.course_description}
+                        )
+                        .then(res=> {
+                            console.log(res)
+                            alert('New course successfully added')
+                            this.avail_courses = []
+
+                            app.getCourses()
+                        })
+                        .catch(err=>{
+                            console.log(err)
+                        })
+                    } else {
+                        alert('Error! Empty fields')
+                    }
+                },
             getCourses(){
-                axios.get('#')
-                    .then(res => {
-                        console.log(res)
+                axios.get('http://127.0.0.1:5000/learning_journey')
+                    .then(response => {
+                        
+                        this.role_details= response.data.data;
+                        // console.log(response.data)
                     })
-                    .then(err => {
-                        console.log(err)
-                    })
+                    .catch(error => alert(error));
             },
             delRecord(lj_id, course_code){
                 axios.delete("#")
@@ -143,22 +171,23 @@
                         // this.getCourses()
                     })
             },
-            addRecord(){
-                axios.post("#")
-                    .then(res =>{
-                        console.log(res)
-                        // this.getCourses()
-                    })
-                    .then(err => {
-                        console.log(err)
-                    })
+            addRecord(lj_id){
+                axios.post("#", {
+                })
+                .then(res =>{
+                    console.log(res)
+                    this.added = true
+                    // this.getRecords()
+                })
+                .then(err => {
+                    console.log(err)
+                })
             }, 
         }, 
         created() {
             // this.getCourses()
         },
     })
-    
-    const vm = app.mount('#crudapp')
+    app.mount('#crudapp')
 </script>
 </html>

@@ -69,7 +69,7 @@
         </div>
         <!-- ######## END Add Role ######## -->
 
-        <!-- ######## START Edit/Update Role ######## -->
+        <!-- ######## START Edit/Update Role ######## 
         <div>
             <b-modal ref="my-modal1" hide-footer title="Update Record">
             <div>
@@ -99,44 +99,6 @@
 
       </div>
 
-      <!-- add course 
-      <div class="col col-md-12">
-        <div>
-            <button class="btn btn-primary" data-bs-toggle="collapse" data-bs-target="#add-course-collapse">Add Course</button>
-
-            <!-- collapse add member form 
-            <div class="collapse mt-2" id="add-course-collapse">
-                <div class="card card-body">
-                    <form action="" method="post">
-                        <table class="table table-hover">
-                            <thead>
-                                <th>ID</th>
-                                <th>Name</th>
-                                <th>Description</th>
-                            </thead>
-                            <tbody>
-                                <!-- <tr v-for="avail_course in avail_courses">
-                                    <td>{{ avail_course.course_code }}</td>
-                                    <td>{{ avail_course.course_name }}</td>
-                                    <td>{{ avail_course.course_desc }}</td>
-                                </tr>
-                                <tr>
-                                    <td>COR3302</td>
-                                    <td>yyy and xxx</td>
-                                    <td>COR3301</td>
-                                    <td>
-                                        <button class="btn btn-sm btn-info" @click="added = !added">Add</button>
-                                    </td>
-                                </tr>
-                            </tbody>
-                        </table>
-                    </form>
-                </div>
-            </div>
-            
-        </div>
-    </div>
-
     <!-- message -->
         <div class="text-center mt-4" v-if="deleted === true">
             <p class="text-danger"><strong>{{ del_msg }}</strong></p>
@@ -163,8 +125,7 @@
                         <td>{{r.role_desc}}</td>
                         <td>
                             <button @click="deleteRecord(r.role_code)" class="btn btn-sm btn-outline-danger">Delete</button>
-                            <button @click="editRecord(r.role_code)" class="btn btn-sm btn-outline-info">Edit</button>
-                            <button class="btn btn-sm btn-outline-dark">View More</button>
+                            <button @click="editRecord()" class="btn btn-sm btn-outline-info">Edit</button>
                         </td>
                     </tr>
                 </tbody>
@@ -237,16 +198,6 @@
                     })
                     .catch(error => alert(error));
                 },
-                addRecord(){
-                axios.post("#")
-                    .then(res =>{
-                        console.log(res)
-                        // this.getRecords()
-                    })
-                    .then(err => {
-                        console.log(err)
-                    })
-                }, 
                 editRecord(role_code){
                     hr_roles.showModal('my-modal1')
 
@@ -284,7 +235,22 @@
                         alert('Error! Empty fields')
                     }
                 },
+                deleteRecord(role_code) {
+                    if (window.confirm('Delete this record')) {
+                        axios.delete("http://127.0.0.1:4999/delete_role/" + role_code)
+                        .then(res => {
+                            console.log(res)
+                                alert('delete successfully')
+                                hr_roles.get_role()
+                        })
+                        .catch(err => {
+                            console.log(err)
+                        })
+                    }
+                },
             }, 
+            
+
             mounted: function(){
                 this.get_role()
             }

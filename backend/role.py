@@ -75,6 +75,7 @@ def update_role(role_code):
 
 
 @app.route("/create_role", methods=['POST'])
+# Add new role 
 def create_role():
     data = request.get_json()
 
@@ -101,6 +102,27 @@ def create_role():
         "Status": "Success"
     }),201
 
+
+@app.route("/delete_role/<int:role_code>", methods=['DELETE'])
+def delete_role(role_code):
+    role_detail = role.query.filter_by(role_code=role_code).first()
+
+    # delete
+    try:
+        db.session.delete(role_detail)
+        db.session.commit()
+    except:
+        return {
+            "code": 500,
+            "data": {
+                "lj_course": role_detail
+            },
+            "message": "An error occurred while deleting the course from learning journey"
+        }
+    return {
+        "code": 200,
+        "message": str(role_detail) + " had been successfully deleted."
+    }
 
 if __name__ == '__main__':
     app.run(port=4999, debug=True)

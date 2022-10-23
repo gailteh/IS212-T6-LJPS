@@ -123,7 +123,7 @@ def delete_role(role_code):
             "data": {
                 "role_detail": role_detail
             },
-            "message": "An error occurred while deleting the course from learning journey"
+            "message": "An error occurred while deleting this role"
         }
     return {
         "code": 200,

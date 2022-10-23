@@ -11,11 +11,15 @@
     rel="stylesheet" 
     integrity="sha384-gH2yIJqKdNHPEq0n4Mqa/HGKIhSkIHeL5AyhkYV8i59U5AR6csBvApHHNl/vI1Bx" 
     crossorigin="anonymous">
-    
+    <!--bootstrapVue js-->
+    <link type="text/css" rel="stylesheet" href="https://unpkg.com/bootstrap-vue@latest/dist/bootstrap-vue.min.css" />
+    <!-- vue -->
+    <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
+
     <link rel="stylesheet" href="css/style.css">
 </head>
 <body>
-    <div id="hr_skill" class="container-fluid" style="margin-bottom: 20px;">
+    <div id="hr_skills" class="container-fluid" style="margin-bottom: 20px;">
         <div class="banner text-center">
             <h1>Skills page</h1>
         </div>
@@ -23,83 +27,101 @@
         <!-- ######## START Navigation bar ######## -->
         <div class="row "> 
             <div class="col-11">
-              <ul class="nav"> ​
+              <ul class="nav"> 
                 <li class="nav-item">
-                    <a class="nav-link text-dark" href="roles.html">Roles</a>
+                    <a class="nav-link text-dark" href="./HRroles.html">Roles</a>
                 </li>
                 <li class="nav-item">
-                  <a class="nav-link text-dark" href="skills.html">Skills</a>
+                  <a class="nav-link text-dark" href="./HRskills.html">Skills</a>
                 </li>
                 
               </ul>
             </div>
       </div>
       <!-- ######## END Navigation bar ######## -->
-      <!-- add role -->
-      <div class="col col-md-12">
-        <div>
-            <button class="btn btn-primary" data-bs-toggle="collapse" data-bs-target="#add-course-collapse">Add Role</button>
 
-            <!-- collapse add member form -->
-            <div class="collapse mt-2" id="add-course-collapse">
-                <div class="card card-body">
-                    <form action="" method="post">
-                        <table class="table table-hover">
-                            <thead>
-                                <th>ID</th>
-                                <th>Name</th>
-                                <th>Description</th>
-                            </thead>
-                            <tbody>
-                                <!-- <tr v-for="avail_roles in avail_roles">
-                                    <td>{{ avail_role.role_code }}</td>
-                                    <td>{{ avail_role.role_name }}</td>
-                                    <td>{{ avail_role.role_desc }}</td>
-                                </tr> -->
-                                <tr>
-                                    <td>COR3302</td>
-                                    <td>yyy and xxx</td>
-                                    <td>COR3301</td>
-                                    <td>
-                                        <button class="btn btn-sm btn-info" @click="added = !added">Add</button>
-                                    </td>
-                                </tr>
-                            </tbody>
-                        </table>
+        <!-- ######## START Add Role ######## -->
+      <div class="row">
+        <div class="col-md-12">
+            <b-button id="show-btn" @click="showModal('my-modal')">Add Skill</b-button>
+            <b-modal ref="my-modal" hide-footer title="Add skill">
+                <div>
+                    <form action="" @submit.prevent="onSubmit">
+                        <div class="form-group">
+                            <label for="">Skill name</label>
+                            <input type="text" v-model="skill_name" class="form-control">
+                        </div>
+                        <div class="form-group">
+                            <label for="">Skill code</label>
+                            <input type="text" v-model="skill_code" class="form-control">
+                        </div>
+                        <div class="form-group">
+                            <label for="">Skill Description</label>
+                            <input type="text" v-model="skill_desc" class="form-control">
+                        </div>
+                        <div class="form-group">
+                            <button class="btn btn-sm btn-outline-info">Add skill</button>
+                        </div>
                     </form>
                 </div>
-            </div>
-
+                <b-button class="mt-3" variant="outline-danger" block @click="hideModal('my-modal')">Close</b-button>
+            </b-modal>
         </div>
-    </div>
+        <!-- ######## END Add Role ######## -->
 
-    <!-- message -->
+        <!-- ######## START Edit/Update Role ######## -->
+        <div>
+            <b-modal ref="my-modal1" hide-footer title="Update Record">
+            <div>
+                <form action="" @submit.prevent="onUpdate">
+                <div class="form-group">
+                    <label for="">Skill Name</label>
+                    <input type="text" v-model="edit_skill_name" class="form-control">
+                </div>
+                <!-- <div class="form-group">
+                    <label for="">Role Code</label>
+                    <input type="text" v-model="edit_role_code" class="form-control">
+                </div> -->
+                <div class="form-group">
+                    <label for="">Skill Description</label>
+                    <input type="text" v-model="edit_skill_desc" class="form-control">
+                </div>
+                <div class="form-group">
+                    <button class="btn btn-sm btn-outline-info">Update Skill</button>
+                </div>
+                </form>
+            </div>
+            <b-button class="mt-3" variant="outline-danger" block @click="hideModal('my-modal1')">Close</b-button>
+            </b-modal>
+        </div>
+        <!-- ######## END Edit/Update Role ######## -->
+    <!-- message 
     <div class="text-center mt-4" v-if="deleted === true">
         <p class="text-danger"><strong>{{ del_msg }}</strong></p>
     </div>
     <div class="text-center mt-4" v-if="added === true">
         <p class="text-success"><strong>{{ add_msg }}</strong></p>
-    </div>
+    </div>-->
+
       <!-- Table -->
         <div class="mx-3 table-responsive">
             <table class="table table-bordered table-striped">
                 <thead>
                     <tr>
-                        <th>Role Name</th>
-                        <th>Role Code</th>
-                        <th>Role Description</th>
+                        <th>Skill Name</th>
+                        <th>Skill Code</th>
+                        <th>Skill Description</th>
                         <th>Action</th>
                     </tr>
                 </thead>
                 <tbody>
-                    <tr v-for="r in role_details">
-                        <td>{{r.role_name}}</td>
-                        <td>{{r.role_code}}</td>
-                        <td>{{r.role_desc}}</td>
+                    <tr v-for="s in skill_details">
+                        <td>{{s.skill_name}}</td>
+                        <td>{{s.skill_code}}</td>
+                        <td>{{s.skill_desc}}</td>
                         <td>
-                            <button class="btn btn-sm btn-outline-danger">Delete</button>
-                            <button class="btn btn-sm btn-outline-info">Edit</button>
-                            <button class="btn btn-sm btn-outline-dark">View More</button>
+                            <button @click="deleteRecord(s.skill_code)" class="btn btn-sm btn-outline-danger">Delete</button>
+                            <button @click="editRecord(s.skill_code)" class="btn btn-sm btn-outline-info">Edit</button>
                         </td>
                     </tr>
                 </tbody>
@@ -112,32 +134,139 @@
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0/dist/js/bootstrap.bundle.min.js" 
     integrity="sha384-A3rJD856KowSb7dwlZdYEkO39Gagi7vIsF0jrRAoQmDKKtQBHUuLZ9AsSv4jD4Xa" 
     crossorigin="anonymous"></script>
-    
     <!-- Vue.js Version 3 CDN -->
     <script src="https://cdn.jsdelivr.net/npm/vue@2.6.12/dist/vue.js"></script>
     <!--axios -->
     <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
-    
+    <!--bootstrapVue js-->
+    <script src="https://unpkg.com/bootstrap-vue@latest/dist/bootstrap-vue.js"></script>
+
     <script>
-        const skills = new Vue({
-            el: '#skills',
+        const hr_skills = new Vue({
+            el: '#hr_skills',
             data: {
-                skills_details: [],
+                skill_name: '',
+                skill_code: '',
+                skill_desc: '',
+                skill_details: [],
+                edit_skill_name: '',
+                edit_skill_desc: ''
             },
 
-            mounted: function() {
+            methods: {
+                showModal(id){
+                    this.$refs[id].show()
+                },
+                hideModal(id){
+                    this.$refs[id].hide()
+                },
+                onSubmit(){
+                    if (this.skill_name !== '' && this.skill_code !== '' && this.skill_desc !== ''){
+                        axios.post('http://127.0.0.1:4999/create_skill', 
+                            {skill_name: this.skill_name, skill_code: this.skill_code, skill_desc: this.skill_desc}
+                        )
+                        .then(res=> {
+                            console.log(res)
+                            alert('New role successfully added')
+                            this.skill_name = ''
+                            this.skill_code = ''
+                            this.skill_desc = ''
+
+                            hr_skills.hideModal('my-modal')
+                            hr_skills.get_skill()
+                        })
+                        .catch(err=>{
+                            console.log(err)
+                        })
+                    } else {
+                        alert('Error! Empty fields')
+                    }
+                },
+                get_skill(){
                 axios.get('http://127.0.0.1:4999/skills')
                     .then(response => {
                         
-                        this.skills_details= response.data.data.skills;
+                        this.skill_details= response.data.data.skills;
                         // console.log(response.data)
-
-                       
                     })
                     .catch(error => alert(error));
+                },
+                editRecord(skill_code){
+                    hr_skills.showModal('my-modal1')
+
+                    // axios.get("http://127.0.0.1:4999/role/" + role_code)
+                    // .then(res => {
+                    //     console.log(res.data)
+                    //     this.edit_role_name = res.data.editmember['role_name']
+                    //     this.edit_role_code = res.data.editmember['role_code']
+                    //     this.edit_role_desc = res.data.editmember['role_desc']
+                    //     hr_roles.showModal('my-modal1')
+                    // })
+                    // .catch(err => {
+                    //     console.log(err)
+                    // })
+                },
+                onUpdate(skill_code){
+                    if (this.skill_name !== ''&& this.skill_desc !== ''){
+                        axios.post('http://127.0.0.1:4999/update_skill/' + skill_code,
+                            {skill_name: this.skill_name, skill_desc: this.skill_desc}
+                        )
+                        .then(res=> {
+                            console.log(res)
+                            alert('New role successfully updated')
+                            this.skill_name = ''
+                            this.skill_desc = ''
+
+                            hr_skills.hideModal('my-modal1')
+                            hr_skills.get_skill()
+                        })
+                        .catch(err=>{
+                            console.log(err)
+                        })
+                    } else {
+                        alert('Error! Empty fields')
+                    }
+                    // if (this.edit_role_name !== ''&& this.edit_role_desc !== ''){
+                    //     axios.post('http://127.0.0.1:4999/update_role/' + role_code,
+                    //         {role_name: this.edit_role_name, role_desc: this.edit_role_desc}
+                    //     )
+                    //     .then(res=> {
+                    //         console.log(res)
+                    //         alert('New role successfully updated')
+                    //         this.edit_role_name = ''
+                    //         this.edit_role_desc = ''
+
+                    //         hr_roles.hideModal('my-modal1')
+                    //         hr_roles.get_role()
+                    //     })
+                    //     .catch(err=>{
+                    //         console.log(err)
+                    //     })
+                    // } else {
+                    //     alert('Error! Empty fields')
+                    // }
+                },
+                deleteRecord(skill_code) {
+                    if (window.confirm('Delete this record')) {
+                        axios.delete("http://127.0.0.1:4999/delete_skill/" + skill_code)
+                        .then(res => {
+                            console.log(res)
+                                alert('delete successfully')
+                                hr_skills.get_skill()
+                        })
+                        .catch(err => {
+                            console.log(err)
+                        })
+                    }
+                },
+            }, 
+            
+
+            mounted: function(){
+                this.get_skill()
             }
         })
-        skills.mount('#skills')
+        hr_skills.mount('#hr_skills')
     </script>
 
 </body>

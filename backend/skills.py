@@ -1,4 +1,4 @@
-from flask import Flask
+from flask import Flask, request, jsonify
 from flask_sqlalchemy import SQLAlchemy
 from flask_cors import CORS
 from sqlalchemy import ForeignKey
@@ -43,10 +43,10 @@ class skill(db.Model):
     skill_name = db.Column(db.String, nullable=False)
     skill_desc = db.Column(db.String, nullable=False)
 
-    def __init__(self, skills_name, skills_code, skills_desc):
-        self.skill_code = skills_code
-        self.skill_name = skills_name
-        self.skill_desc = skills_desc
+    def __init__(self, skill_name, skill_code, skill_desc):
+        self.skill_code = skill_code
+        self.skill_name = skill_name
+        self.skill_desc = skill_desc
 
     def json(self):
         return {"skill_name": self.skill_name,"skill_code": self.skill_code, "skill_desc":self.skill_desc}
@@ -115,6 +115,81 @@ def display_skills():
             },
             "message": "These are the skills available."
         }
+
+@app.route("/update_skill/<int:skill_code>", methods=['PUT'])
+def update_skill(skill_code):
+
+    #role_details = role.query.filter_by(role_code=role_code).first()
+    skill_detail = role.query.get(skill_code)
+    skill_name = request.json['skill_name']
+    skill_desc = request.json['skill_desc']
+
+    try:
+        skill_detail.role_name = skill_name
+        skill_detail.role_desc = skill_desc
+        db.session.commit()
+    
+    except Exception as e:
+        print(e)
+        return jsonify({
+            "message": "Unable to commit to database"
+        }), 500
+    return {
+        "code": 200,
+        "message": "Skill successfully updated."
+    }
+
+
+@app.route("/create_skill", methods=['POST'])
+# Add new role 
+def create_skill():
+    data = request.get_json()
+
+    if not all(key in data.keys() for 
+                key in ('skill_code', 'skill_name', 'skill_desc')):
+        return  jsonify({
+            'message': "Incorrect JSON object provided"
+        }), 500
+    
+    #create new record in the lj table
+    new_skill = skill(skill_code = data['skill_code'], skill_name = data['skill_name'], skill_desc = data['skill_desc'])
+
+    # commit to DB
+    try:
+        db.session.add(new_skill)
+        db.session.commit()
+    except Exception as e:
+        print(e)
+        return jsonify({
+            "message": "Unable to commit to database"
+        }), 500
+
+    return jsonify({
+        "Status": "Success"
+    }),201
+
+
+@app.route("/delete_skill/<int:skill_code>", methods=['DELETE'])
+def delete_skill(skill_code):
+    skill_detail = skill.query.filter_by(skill_code=skill_code).first()
+
+    # delete
+    try:
+        db.session.delete(skill_detail)
+        db.session.commit()
+    except:
+        return {
+            "code": 500,
+            "data": {
+                "skill_detail": skill_detail
+            },
+            "message": "An error occurred while deleting this skill"
+        }
+    return {
+        "code": 200,
+        "message": str(skill_detail) + " had been successfully deleted."
+    }
+
 
 if __name__ == '__main__':
     app.run(port=4999, debug=True)

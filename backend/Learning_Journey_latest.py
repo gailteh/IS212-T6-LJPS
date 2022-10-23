@@ -7,7 +7,7 @@ import json
 
 '''
 Assumed JSON:
-{"LearningJourney_id": , "course_ID", "staff_id"}
+{"lj_id": , "course_ID", "staff_id"}
 '''
 
 app = Flask(__name__)
@@ -97,21 +97,21 @@ class Role(db.Model):
     #     return { "role_name":self.role_name, "role_code":self.role_code, "role_desc":self.role_desc}
 
 class Learning_Journey(db.Model):
-    __tablename__ = 'LearningJourney'
+    __tablename__ = 'Learning_Journey'
 
-    LearningJourney_id = db.Column(db.Integer, primary_key=True, nullable=False)
+    lj_id = db.Column(db.Integer, primary_key=True, nullable=False)
     # staff_id = db.Column(db.String, primary_key=True, nullable=False)
     course_code = db.Column(db.String, ForeignKey("Course.course_code"), primary_key=True, nullable=False)
     role_code = db.Column(db.String, ForeignKey("Role.role_code"), primary_key=True, nullable=False, )
 
-    def __init__(self, LearningJourney_id, course_code, role_code):
-        self.LearningJourney_id = LearningJourney_id
+    def __init__(self, lj_id, course_code, role_code):
+        self.lj_id = lj_id
         # self.staff_id = staff_id
         self.course_code = course_code
         self.role_code = role_code
 
     # def json(self):
-    #     return {"LearningJourney_id":self.LearningJourney_id, "course_code":self.course_code, "role_code":self.role_code}
+    #     return {"lj_id":self.lj_id, "course_code":self.course_code, "role_code":self.role_code}
     
     __mapper_args__ = {
         'polymorphic_identity': 'LearningJourney'
@@ -226,10 +226,10 @@ def role_course():
 
 # @app.route('/learning_journey/<in>', methods=['DELETE'])
 # # deleting 1 course from learning journey
-# def del_course_from_learning_journey(LearningJourney_id, course_code):
+# def del_course_from_learning_journey(lj_id, course_code):
     
-#     #  get learning journey row using LearningJourney_id and course_code
-#     lj_course = Learning_Journey.query.filter_by(LearningJourney_id=LearningJourney_id, course_code=course_code).first()
+#     #  get learning journey row using lj_id and course_code
+#     lj_course = Learning_Journey.query.filter_by(lj_id=lj_id, course_code=course_code).first()
 
 #     # delete
 #     try:

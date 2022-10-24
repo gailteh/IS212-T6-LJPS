@@ -72,26 +72,21 @@ def edit_role(role_code):
         }
 
 
-@app.route("/update_role", methods=['PUT'])
-def update_role():
-
-    # role_details = role.query.filter_by(role_code=role_code).first()
-    # role_detail = role.query.get(role_code)
-    # role_name = request.json['role_name']
-    # role_desc = request.json['role_desc']
-    
+@app.route("/update_role/<int:role_code>", methods=['PUT'])
+def update_role(role_code):
+    role_detail = role.query.filter_by(role_code=role_code).first()
     data = request.get_json()
+
     edit_role_name = data.get('edit_role_name')
     edit_role_code = data.get('edit_role_code')
     edit_role_desc = data.get('edit_role_desc')
+
     try:
-        # role_detail.role_name = role_name
-        # role_detail.role_desc = role_desc
-        # db.session.commit()
-        role.role_name = edit_role_name
-        role.role_code = edit_role_code
-        role.role_desc = edit_role_desc
+        role_detail.role_name = edit_role_name
+        role_detail.role_code = edit_role_code
+        role_detail.role_desc = edit_role_desc
         db.session.commit()
+       
     except Exception as e:
         print(e)
         return jsonify({
@@ -99,6 +94,7 @@ def update_role():
         }), 500
     return {
         "code": 200,
+        "role": role_detail.json(),
         "message": "Role successfully updated."
     }
 

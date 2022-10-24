@@ -218,6 +218,8 @@ INSERT INTO `learning_journey` (`lj_id`, `course_code`, `role_code`) VALUES
 (6,	'MGT002',	6), 
 (6,	'COR004',	6);
 
+
+
 -- --
 -- -- Constraints for table `RoleSkillRelation`
 -- --

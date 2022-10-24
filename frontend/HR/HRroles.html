@@ -237,27 +237,6 @@
                     } else {
                         alert('Error! Empty fields')
                     }
-
-
-                    // if (this.edit_role_name !== ''&& this.edit_role_desc !== ''){
-                    //     axios.post('http://127.0.0.1:4999/update_role/' + role_code,
-                    //         {role_name: this.edit_role_name, role_desc: this.edit_role_desc}
-                    //     )
-                    //     .then(res=> {
-                    //         console.log(res)
-                    //         alert('New role successfully updated')
-                    //         this.edit_role_name = ''
-                    //         this.edit_role_desc = ''
-
-                    //         hr_roles.hideModal('my-modal1')
-                    //         hr_roles.get_role()
-                    //     })
-                    //     .catch(err=>{
-                    //         console.log(err)
-                    //     })
-                    // } else {
-                    //     alert('Error! Empty fields')
-                    // }
                 },
                 deleteRecord(role_code) {
                     if (window.confirm('Delete this record')) {

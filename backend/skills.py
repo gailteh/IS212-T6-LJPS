@@ -94,6 +94,50 @@ def display_role_skills(role_code):
         }
 
 ########        level 1 control access      ########
+@app.route("/edit_skill/<int:skill_code>", methods=['GET', 'POST'])
+def edit_skill(skill_code):
+    skill_details = skill.query.filter_by(skill_code=skill_code).first()
+
+    if skill_details:
+        return{
+            "code": 200,
+            "roles": skill_details.json(),
+            "message": "Skill successfully retrieved."
+        }
+    else :
+        return {
+            "message": "Unable to retreieve skill."
+        }
+
+
+@app.route("/update_skill/<int:skill_code>", methods=['PUT'])
+def update_skill(skill_code):
+    skill_detail = skill.query.filter_by(skill_code=skill_code).first()
+    data = request.get_json()
+
+    edit_skill_name = data.get('edit_skill_name')
+    edit_skill_code = data.get('edit_skill_code')
+    edit_skill_desc = data.get('edit_skill_desc')
+
+    try:
+        skill_detail.skill_name = edit_skill_name
+        skill_detail.skill_code = edit_skill_code
+        skill_detail.skill_desc = edit_skill_desc
+        db.session.commit()
+       
+    except Exception as e:
+        print(e)
+        return jsonify({
+            "message": "Unable to commit to database"
+        }), 500
+    return {
+        "code": 200,
+        "role": skill_detail.json(),
+        "message": "Skill successfully updated."
+    }
+
+
+
 #display all skills 
 @app.route('/skills', methods=['GET'])
 def display_skills():
@@ -115,30 +159,6 @@ def display_skills():
             },
             "message": "These are the skills available."
         }
-
-@app.route("/update_skill/<int:skill_code>", methods=['PUT'])
-def update_skill(skill_code):
-
-    #role_details = role.query.filter_by(role_code=role_code).first()
-    skill_detail = role.query.get(skill_code)
-    skill_name = request.json['skill_name']
-    skill_desc = request.json['skill_desc']
-
-    try:
-        skill_detail.role_name = skill_name
-        skill_detail.role_desc = skill_desc
-        db.session.commit()
-    
-    except Exception as e:
-        print(e)
-        return jsonify({
-            "message": "Unable to commit to database"
-        }), 500
-    return {
-        "code": 200,
-        "message": "Skill successfully updated."
-    }
-
 
 @app.route("/create_skill", methods=['POST'])
 # Add new role 
@@ -170,6 +190,7 @@ def create_skill():
 
 
 @app.route("/delete_skill/<int:skill_code>", methods=['DELETE'])
+#Delete role
 def delete_skill(skill_code):
     skill_detail = skill.query.filter_by(skill_code=skill_code).first()
 

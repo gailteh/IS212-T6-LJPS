@@ -21,80 +21,7 @@ db = SQLAlchemy(app)
 
 CORS(app)
 
-# initiate classes: Course, learning journey
-class Course(db.Model):
-    __tablename__ = 'Course'
-    course_name = db.Column(db.String, nullable=False)
 
-    course_code = db.Column(db.String, primary_key=True, nullable=False)
-    course_desc = db.Column(db.String, nullable=False)
-    course_status = db.Column(db.String, nullable=False)
-
-    def __init__(self, course_name, course_code, course_desc, course_status):
-        self.course_name = course_name
-        self.course_code = course_code
-        self.course_desc = course_desc
-        self.course_status = course_status
-    __mapper_args__ = {
-        'polymorphic_identity': 'Course'
-    }
-
-    def to_dict(self):
-        """
-        'to_dict' converts the object into a dictionary,
-        in which the keys correspond to database columns
-        """
-        columns = self.__mapper__.column_attrs.keys()
-        result = {}
-        for column in columns:
-            result[column] = getattr(self, column)
-        return result
-
-    # def json(self):
-    #     return {"course_name": self.course_name, "course_code": self.course_code,"course_desc": self.course_desc, "course_status": self.course_status}
-
-# class Skills(db.Model):
-#     __tablename__ = 'Skill'
-
-#     skills_name = db.Column(db.String, nullable=False)
-#     skills_code = db.Column(db.Integer, primary_key=True, nullable=False)
-#     skills_desc = db.Column(db.String, nullable=False)
-
-#     def __init__(self, skills_name, skills_code, skills_desc):
-#         self.skills_name = skills_name
-#         self.skills_code = skills_code
-#         self.skills_desc = skills_desc
-
-#     def json(self):
-#         return {"skills_name": self.skills_name,"skills_code": self.skills_code, "skills_desc":self.skills_desc}
-
-class Role(db.Model):
-    __tablename__ = 'Role'
-
-    role_name = db.Column(db.String, nullable=False)
-    role_code = db.Column(db.Integer, primary_key=True, nullable=False)
-    role_desc = db.Column(db.String, nullable=False)
-    def __init__(self, role_name, role_code, role_desc):
-        self.role_name = role_name       
-        self.role_code = role_code
-        self.role_desc = role_desc
-
-    __mapper_args__ = {
-        'polymorphic_identity': 'Role'
-    }
-
-    def to_dict(self):
-        """
-        'to_dict' converts the object into a dictionary,
-        in which the keys correspond to database columns
-        """
-        columns = self.__mapper__.column_attrs.keys()
-        result = {}
-        for column in columns:
-            result[column] = getattr(self, column)
-        return result
-    # def json(self):
-    #     return { "role_name":self.role_name, "role_code":self.role_code, "role_desc":self.role_desc}
 
 class Learning_Journey(db.Model):
     __tablename__ = 'Learning_Journey'
@@ -129,30 +56,131 @@ class Learning_Journey(db.Model):
         return result
 
 
+
+# initiate classes: Course, learning journey
+class Course(db.Model):
+    __tablename__ = 'Course'
+    course_name = db.Column(db.String, nullable=False)
+
+    course_code = db.Column(db.String, primary_key=True, nullable=False)
+    course_desc = db.Column(db.String, nullable=False)
+    course_status = db.Column(db.String, nullable=False)
+
+    def __init__(self, course_name, course_code, course_desc, course_status):
+        self.course_name = course_name
+        self.course_code = course_code
+        self.course_desc = course_desc
+        self.course_status = course_status
+    __mapper_args__ = {
+        'polymorphic_identity': 'Course'
+    }
+
+    def to_dict(self):
+        """
+        'to_dict' converts the object into a dictionary,
+        in which the keys correspond to database columns
+        """
+        columns = self.__mapper__.column_attrs.keys()
+        result = {}
+        for column in columns:
+            result[column] = getattr(self, column)
+        return result
+
+    def json(self):
+        return {"course_name": self.course_name,"course_code": self.course_code, "course_desc":self.course_desc,"course_status":self.course_status}
+
+    # def json(self):
+    #     return {"course_name": self.course_name, "course_code": self.course_code,"course_desc": self.course_desc, "course_status": self.course_status}
+
+
+class Role(db.Model):
+    __tablename__ = 'Role'
+
+    role_name = db.Column(db.String, nullable=False)
+    role_code = db.Column(db.Integer, primary_key=True, nullable=False)
+    role_desc = db.Column(db.String, nullable=False)
+
+    def __init__(self, role_name, role_code, role_desc):
+        self.role_name = role_name       
+        self.role_code = role_code
+        self.role_desc = role_desc
+
+    __mapper_args__ = {
+        'polymorphic_identity': 'Role'
+    }
+
+    def to_dict(self):
+        """
+        'to_dict' converts the object into a dictionary,
+        in which the keys correspond to database columns
+        """
+        columns = self.__mapper__.column_attrs.keys()
+        result = {}
+        for column in columns:
+            result[column] = getattr(self, column)
+        return result
+    # def json(self):
+    #     return { "role_name":self.role_name, "role_code":self.role_code, "role_desc":self.role_desc}
+
+
+
+@app.route('/learning_journey/<int:role_code>', methods=['GET'])
+def display_role_course(role_code):
+
+    courses_list = Learning_Journey.query.filter_by(role_code=role_code).all()
+
+    courses = []
+
+    for course in courses_list:
+
+        course_dict = {}
+
+        course_code = course.to_dict()['course_code']
+
+        course_name_query = Course.query.filter_by(course_code=course_code).first()
+        # print(role_name_query.to_dict()['role_name'])
+        course_name = course_name_query.to_dict()['course_name']
+
+        course__desc_query = Course.query.filter_by(course_code=course_code).first()
+        # print(role_name_query.to_dict()['role_name'])
+        course_desc = course__desc_query.to_dict()['course_desc']
+
+        role_status_query = Course.query.filter_by(course_code=course_code).first()
+        # print(role_name_query.to_dict()['role_name'])
+        course_status = role_status_query.to_dict()['course_status']
+
+        course_dict['course_code'] = course_code
+        course_dict['course_name'] = course_name
+        course_dict['course_desc'] = course_desc
+        course_dict['course_status'] = course_status
+
+        courses.append(course_dict)
+        print(courses)
+
+    if courses is None:
+        return jsonify({
+        "code": 404,
+        "message": "Error occured while displaying skills for this role."
+        })
+
+    if (len(courses) > 0):
+        return jsonify({
+            "code": 200,
+            "data": [cr for cr in courses],
+            "message": "These are the courses for this role."
+        })
+
+    elif (len(courses) == 0):
+        return {
+        "code": 204,
+        "message": "There are no courses for this role."
+        }
+
+
 @app.route("/learning_journey")
 def role_course():
     lj_list = Learning_Journey.query.all()
-    # print(type(lj_list))
-
-    # role_dict = {}
-    # for lj in lj_list:
-    #     role_code = lj.to_dict()['role_code']
-    #     course_code = lj.to_dict()['course_code']
-
-    #     role_name_query = Role.query.filter_by(role_code=role_code).first()
-    #     # print(role_name_query.to_dict()['role_name'])
-    #     role_name = role_name_query.to_dict()['role_name']
-
-    #     course_name_query = Course.query.filter_by(course_code=course_code).first()
-    #     # print(course_name_query.to_dict()['course_name'])
-    #     course_name = course_name_query.to_dict()['course_name']
-
-    #     if role_name not in role_dict.keys():
-
-    #         role_dict[role_name] = [course_name]
-    #         print(course_name)
-    #     else: 
-    #         role_dict[role_name].append(course_name)
+    
     role_list = []
     role_name_list = []
 
@@ -171,6 +199,7 @@ def role_course():
         course_name = course_name_query.to_dict()['course_name']
 
         if role_name not in role_name_list:
+            role_dict['role_code'] = role_code
             role_dict['role_name'] = role_name
             role_dict['course_name'] = [course_name]
             # print(course_name)

@@ -68,7 +68,7 @@ class Learning_Journey(db.Model):
     __tablename__ = 'learning_journey'
 
     lj_id = db.Column(db.Integer, primary_key=True, nullable=False)
-    course_code = db.Column(db.String, db.ForeignKey('courses.course_code'), primary_key=True, nullable = False)
+    course_code = db.Column(db.String, db.ForeignKey('courses.course_code'), nullable = False)
     role_code = db.Column(db.Integer,  db.ForeignKey('roles.role_code'), nullable = False)
 
     def __init__(self, lj_id, course_code, role_code):
@@ -82,12 +82,12 @@ class Learning_Journey(db.Model):
 
 
 
-@app.route('/del_ljc/<int:lj_id>/<string:course_code>', methods=['DELETE'])
+@app.route('/del_lj/<int:lj_id>', methods=['DELETE'])
 # deleting 1 course from learning journey
-def del_course(lj_id, course_code):
+def del_lj(lj_id):
     
     #  get learning journey rows using lj_id
-    lj_course = Learning_Journey.query.filter_by(lj_id=lj_id, course_code=course_code).first()
+    lj_course = Learning_Journey.query.filter_by(lj_id=lj_id).first()
 
     # delete
     try:
@@ -104,8 +104,8 @@ def del_course(lj_id, course_code):
     return jsonify({
         "code": 200,
         "data": lj_course.json(),
-        "message": course_code + " on "+ str(lj_id) + " had been successfully deleted."
+        "message": "Learning Journey "+ str(lj_id) + str(lj_course) +" had been successfully deleted."
     })
 
 if __name__ == '__main__':
-    app.run(port=4888, debug=True)
+    app.run(port=4877, debug=True)

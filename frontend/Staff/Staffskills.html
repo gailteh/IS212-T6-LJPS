@@ -32,22 +32,22 @@
             <table class="table table-bordered table-striped">
                 <thead>
                     <tr>
-                        <th>Role Name</th>
-                        <th>Role Code</th>
-                        <th>Role Description</th>
-                        <th>Action</th>
+                        <th>Skill Name</th>
+                        <th>Skill Code</th>
+                        <th>Skill Description</th>
+                        
                     </tr>
                 </thead>
                 <tbody>
-                    <tr v-for="r in role_details">
-                        <td>{{r.role_name}}</td>
-                        <td>{{r.role_code}}</td>
-                        <td>{{r.role_desc}}</td>
-                        <td>
+                    <tr v-for="s in skills_details">
+                        <td>{{s.skill_name}}</td>
+                        <td>{{s.skill_code}}</td>
+                        <td>{{s.skill_desc}}</td>
+                        <!-- <td>
                             <button class="btn btn-sm btn-outline-danger">Delete</button>
                             <button class="btn btn-sm btn-outline-info">Edit</button>
                             <button class="btn btn-sm btn-outline-dark">View More</button>
-                        </td>
+                        </td> -->
                     </tr>
                 </tbody>
             </table>
@@ -62,22 +62,44 @@
     <script src="https://cdn.jsdelivr.net/npm/vue@2.6.12/dist/vue.js"></script>
     <!--axios -->
     <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
-    
+
+
     <script>
+        
+
+
+
+        // function getParameter (parameterName) {
+        //     let parameters = new URLSearchParams(window.location.search);
+        //     return parameters.get(parameterName);
+
+        // }
+        // console.log(getParameter('role_code'));
+
         const skills = new Vue({
+            
             el: '#skills',
             data: {
+
                 skills_details: [],
+                parameters: 0,
             },
 
             mounted: function() {
-                axios.get('http://127.0.0.1:4999/<int:role_code>/skills')
+             
+                let parameters = new URLSearchParams(window.location.search);
+                this.parameters = parameters.get('role_code');
+                // console.log(this.parameters);
+                // console.log('http://127.0.0.1:4999/' + this.parameters + '/skills');
+
+                axios.get('http://127.0.0.1:4999/' + this.parameters + '/skills')
                     .then(response => {
                         
                         this.skills_details= response.data.data.skills;
-                        // console.log(response.data)
 
-                       
+                        console.log(response.data)
+
+                    
                     })
                     .catch(error => alert(error));
             }

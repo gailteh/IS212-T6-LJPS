@@ -55,10 +55,10 @@
                     <td><strong>{{ record.role_name }}</strong></td>
                     <td>{{ record.course_name }}</td>   
                     <td class="float-end">
-                        <button class="btn btn-sm btn-info">
-                            <a href="StaffEditLearningJourney.html">Edit</a>
+                        <button class="btn btn-sm btn-info" >
+                            <a v-bind:href="`StaffEditLearningJourney.html?role_code=${record.role_code}`">Edit </a>
                         </button>
-                        <button @click="deleteRecord(record.role_name)" class="btn btn-sm btn-danger" >Delete</button>
+                        <button class="btn btn-sm btn-danger" >Delete</button>
                     </td>          
                 </tr>
             </tbody>
@@ -104,7 +104,7 @@ const vm = new Vue({
                     .then(response => {
                         
                         this.role_course_info = response.data.data;
-                        // console.log(response.data.data)
+                        console.log(response.data.data)
 
                        
                     })

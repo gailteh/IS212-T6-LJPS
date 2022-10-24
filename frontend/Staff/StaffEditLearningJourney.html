@@ -88,12 +88,14 @@
                         <th>ID</th>
                         <th>Name</th>
                         <th>Description</th>
+                        <th>Status</th>
                     </thead>
                     <tbody>
                         <tr v-for="ljc in lj_courses">
                             <td>{{ ljc.course_code }}</td>
                             <td>{{ ljc.course_name }}</td>
                             <td>{{ ljc.course_desc }}</td>
+                            <td>{{ ljc.course_status }}</td>
                             <td>
                                 <button class="btn btn-sm btn-danger" @click="del_course(lj_id, ljc.course_code)">Delete</button>
                             </td>
@@ -157,6 +159,7 @@ crossorigin="anonymous"></script>
                 added: false,
                 del_msg: 'Course Deleted',
                 add_msg: 'Course Added',
+                parameters:0
             },
         methods:{
             onSubmit(){
@@ -182,13 +185,23 @@ crossorigin="anonymous"></script>
                     }
                 },
             getCourses(){
-                axios.get('http://127.0.0.1:5000/learning_journey')
+                
+                let parameters = new URLSearchParams(window.location.search);
+                this.parameters = parameters.get('role_code');
+                // console.log(this.parameters);
+                // console.log('http://127.0.0.1:4999/' + this.parameters + '/skills');
+
+                axios.get('http://127.0.0.1:5000/learning_journey/' + this.parameters)
                     .then(response => {
-                        this.lj_courses= response.data.data.role_list;
-                        // console.log(response.data)
+                        
+                        this.lj_courses= response.data.data;
+
+                        
+                        console.log(response.data.data);
+                    
                     })
                     .catch(error => alert(error));
-                
+
             },
             del_course: function(lj_id, ljc_code){
                 if (window.confirm('Delete this record')) {

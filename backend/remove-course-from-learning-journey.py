@@ -9,7 +9,8 @@ app = Flask(__name__)
 # app.config['SQLALCHEMY_ENGINE_OPTIONS'] = {'pool_size': 100,
 #                                           'pool_recycle': 280}
 
-app.config['SQLALCHEMY_DATABASE_URI'] = "mysql+mysqlconnector://root@localhost:3306/is212_spm"
+# app.config['SQLALCHEMY_DATABASE_URI'] = "mysql+mysqlconnector://root@localhost:3306/is212_spm"
+app.config['SQLALCHEMY_DATABASE_URI'] = "mysql+mysqlconnector://root:root@localhost:8889/is212_SPM"
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 
 db = SQLAlchemy(app)
@@ -67,7 +68,7 @@ class Learning_Journey(db.Model):
     __tablename__ = 'learning_journey'
 
     lj_id = db.Column(db.Integer, primary_key=True, nullable=False)
-    course_code = db.Column(db.String, db.ForeignKey('courses.course_code'), nullable = False)
+    course_code = db.Column(db.String, db.ForeignKey('courses.course_code'), primary_key=True, nullable = False)
     role_code = db.Column(db.Integer,  db.ForeignKey('roles.role_code'), nullable = False)
 
     def __init__(self, lj_id, course_code, role_code):
@@ -80,11 +81,12 @@ class Learning_Journey(db.Model):
         return {"lj_id":self.lj_id, "course_code":self.course_code, "role_code": self.role_code}
 
 
+
 @app.route('/del_ljc/<int:lj_id>/<string:course_code>', methods=['DELETE'])
 # deleting 1 course from learning journey
 def del_course(lj_id, course_code):
     
-    #  get learning journey row using lj_id and course_code
+    #  get learning journey rows using lj_id
     lj_course = Learning_Journey.query.filter_by(lj_id=lj_id, course_code=course_code).first()
 
     # delete
@@ -95,13 +97,14 @@ def del_course(lj_id, course_code):
         return jsonify({
             "code": 500,
             "data": {
-                "lj_course": lj_course
+                "lj_course": lj_course.json()
             },
             "message": "An error occurred while deleting the course from learning journey"
         })
     return jsonify({
         "code": 200,
-        "message": str(lj_course) + " had been successfully deleted."
+        "data": lj_course.json(),
+        "message": course_code + " on "+ str(lj_id) + " had been successfully deleted."
     })
 
 if __name__ == '__main__':

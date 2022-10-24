@@ -47,7 +47,7 @@
                             <button class="btn btn-sm btn-outline-danger">Delete</button>
                             <button class="btn btn-sm btn-outline-info">Edit</button>
                             <button class="btn btn-sm btn-outline-dark">
-                                <a href="Staffskills.html">View More </a>
+                                <a v-bind:href="`Staffskills.html?role_code=${r.role_code}`">View More </a>
                             </button>
                         </td>
                     </tr>
@@ -67,6 +67,9 @@
     <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
     
     <script>
+
+
+
         const roles = new Vue({
             el: '#roles',
             data: {

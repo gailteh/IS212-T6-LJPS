@@ -26,13 +26,7 @@
             <div class="col-11">
                 <ul class="nav">
                     <li class="nav-item">
-                        <a href="index.html" class="nav-link active text-dark">Home</a>
-                    </li>
-                    <li class="nav-item">
-                        <a href="roles.html" class="nav-link active text-dark">Roles</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link text-dark" href="skills.html">Skills</a>
+                        <a class="nav-link active text-dark" href="./Staffroles.html">Roles</a>
                     </li>
                     <li class="nav-item">
                         <a class="nav-link text-dark" href="">Learning Journey</a>
@@ -61,8 +55,10 @@
                     <td><strong>{{ record.role_name }}</strong></td>
                     <td>{{ record.course_name }}</td>   
                     <td class="float-end">
-                        <button class="btn btn-sm btn-info" >Edit</button>
-                        <button class="btn btn-sm btn-danger" >Delete</button>
+                        <button class="btn btn-sm btn-info">
+                            <a href="StaffEditLearningJourney.html">Edit</a>
+                        </button>
+                        <button @click="deleteRecord(record.role_name)" class="btn btn-sm btn-danger" >Delete</button>
                     </td>          
                 </tr>
             </tbody>
@@ -87,6 +83,21 @@ const vm = new Vue({
             el: '#main-container',
             data: {
                 role_course_info: []
+            },
+            methods:{
+                deleteRecord(course_code, role_code) {
+                    if (window.confirm('Delete this record')) {
+                        axios.delete("http://127.0.0.1:4999/del_ljc/" + lj_id + "/" + String(course_code) + ">")
+                        .then(res => {
+                            console.log(res)
+                                alert('delete successfully')
+                                vm.get_role()
+                        })
+                        .catch(err => {
+                            console.log(err)
+                        })
+                    }
+                },
             },
             mounted: function() {
                 axios.get('http://127.0.0.1:5000/learning_journey')

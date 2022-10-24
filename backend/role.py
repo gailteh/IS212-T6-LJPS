@@ -56,19 +56,42 @@ def display_role():
         }
 
 ########        level 1 control access      ########
-@app.route("/update_role/<int:role_code>", methods=['PUT'])
-def update_role(role_code):
+@app.route("/edit_role/<int:role_code>", methods=['GET', 'POST'])
+def edit_role(role_code):
+    role_details = role.query.filter_by(role_code=role_code).first()
 
-    #role_details = role.query.filter_by(role_code=role_code).first()
-    role_detail = role.query.get(role_code)
-    role_name = request.json['role_name']
-    role_desc = request.json['role_desc']
+    if role_details:
+        return{
+            "code": 200,
+            "roles": role_details.json(),
+            "message": "Role successfully updated."
+        }
+    else :
+        return {
+            "message": "Unable to retreieve role."
+        }
 
-    try:
-        role_detail.role_name = role_name
-        role_detail.role_desc = role_desc
-        db.session.commit()
+
+@app.route("/update_role", methods=['PUT'])
+def update_role():
+
+    # role_details = role.query.filter_by(role_code=role_code).first()
+    # role_detail = role.query.get(role_code)
+    # role_name = request.json['role_name']
+    # role_desc = request.json['role_desc']
     
+    data = request.get_json()
+    edit_role_name = data.get('edit_role_name')
+    edit_role_code = data.get('edit_role_code')
+    edit_role_desc = data.get('edit_role_desc')
+    try:
+        # role_detail.role_name = role_name
+        # role_detail.role_desc = role_desc
+        # db.session.commit()
+        role.role_name = edit_role_name
+        role.role_code = edit_role_code
+        role.role_desc = edit_role_desc
+        db.session.commit()
     except Exception as e:
         print(e)
         return jsonify({

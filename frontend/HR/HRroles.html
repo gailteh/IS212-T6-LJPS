@@ -78,10 +78,10 @@
                     <label for="">Role Name</label>
                     <input type="text" v-model="edit_role_name" class="form-control">
                 </div>
-                <!-- <div class="form-group">
+                <div class="form-group">
                     <label for="">Role Code</label>
                     <input type="text" v-model="edit_role_code" class="form-control">
-                </div> -->
+                </div>
                 <div class="form-group">
                     <label for="">Role Description</label>
                     <input type="text" v-model="edit_role_desc" class="form-control">
@@ -152,6 +152,7 @@
                 role_desc: '',
                 role_details: [],
                 edit_role_name: '',
+                edit_role_code: '',
                 edit_role_desc: '',
                 deleted: false,
                 added: false,
@@ -197,30 +198,31 @@
                     .catch(error => alert(error));
                 },
                 editRecord(role_code){
-                    hr_roles.showModal('my-modal1')
+                    // hr_roles.showModal('my-modal1')
 
-                    // axios.get("http://127.0.0.1:4999/role/" + role_code)
-                    // .then(res => {
-                    //     console.log(res.data)
-                    //     this.edit_role_name = res.data.editmember['role_name']
-                    //     this.edit_role_code = res.data.editmember['role_code']
-                    //     this.edit_role_desc = res.data.editmember['role_desc']
-                    //     hr_roles.showModal('my-modal1')
-                    // })
-                    // .catch(err => {
-                    //     console.log(err)
-                    // })
+                    axios.get("http://127.0.0.1:4999/edit_role/" + role_code)
+                    .then(res => {
+                        console.log(res.data)
+                        this.edit_role_name = res.data.roles['role_name']
+                        this.edit_role_code = res.data.roles['role_code']
+                        this.edit_role_desc = res.data.roles['role_desc']
+                        hr_roles.showModal('my-modal1')
+                    })
+                    .catch(err => {
+                        console.log(err)
+                    })
                 },
-                onUpdate(role_code){
-                    if (this.role_name !== ''&& this.role_desc !== ''){
+                onUpdate(){
+                    if (this.edit_role_name !== '' && this.edit_role_code !== '' && this.edit_role_desc !== ''){
                         axios.post('http://127.0.0.1:4999/update_role/' + role_code,
-                            {role_name: this.role_name, role_desc: this.role_desc}
+                            {edit_role_name: this.edit_role_name, edit_role_code: this.edit_role_code, edit_role_desc: this.edit_role_desc}
                         )
                         .then(res=> {
                             console.log(res)
                             alert('New role successfully updated')
-                            this.role_name = ''
-                            this.role_desc = ''
+                            this.edit_role_name = ''
+                            this.edit_role_code = ''
+                            this.edit_role_desc = ''
 
                             hr_roles.hideModal('my-modal1')
                             hr_roles.get_role()

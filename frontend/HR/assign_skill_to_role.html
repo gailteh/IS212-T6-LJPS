@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Assign Skills to Role</title>
+
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0/dist/css/bootstrap.min.css" 
+    rel="stylesheet" 
+    integrity="sha384-gH2yIJqKdNHPEq0n4Mqa/HGKIhSkIHeL5AyhkYV8i59U5AR6csBvApHHNl/vI1Bx" 
+    crossorigin="anonymous">
+    <!--bootstrapVue js-->
+    <link type="text/css" rel="stylesheet" href="https://unpkg.com/bootstrap-vue@latest/dist/bootstrap-vue.min.css" />
+    <!-- vue -->
+    <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
+
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+    <!-- table display all roles and skills relations -->
+    <div id="assign_skill" class="container-fluid" style="margin-bottom: 20px;">
+        <!-- START nav bar -->
+        <div class="row">
+            <div class="col-11">
+                <ul class="nav">
+                    <li class="nav-item">
+                        <a class="nav-link active text-dark" href="./Staffroles.html">Roles</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link text-dark" href="">Learning Journey</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link active text-dark" href="">Assign skills to roles</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link active text-dark" href="">Assign courses to skills</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+        <!--END navbar-->
+
+        <!-- ######## START Add Role ######## -->
+      <div class="row">
+        <div class="col-md-12">
+            <b-button id="show-btn" @click="showModal('my-modal')">Add Skill to Role</b-button>
+            <b-modal ref="my-modal" hide-footer title="Add role">
+                <div>
+                    <form action="" @submit.prevent="onSubmit">
+                        <div class="form-group">
+                            <label for="">Role name</label>
+                            <input type="text" v-model="role_name" class="form-control">
+                        </div>
+                        <div class="form-group">
+                            <label for="">Role code</label>
+                            <input type="text" v-model="role_code" class="form-control">
+                        </div>
+                        <div class="form-group">
+                            <label for="">Skill name</label>
+                            <input type="text" v-model="skill_name" class="form-control">
+                        </div>
+                        <div class="form-group">
+                            <label for="">Skill code</label>
+                            <input type="text" v-model="skill_code" class="form-control">
+                        </div>
+                        <div class="form-group">
+                            <button class="btn btn-sm btn-outline-info">Add Skill to Role</button>
+                        </div>
+                    </form>
+                </div>
+                <b-button class="mt-3" variant="outline-danger" block @click="hideModal('my-modal')">Close</b-button>
+            </b-modal>
+        </div>
+        <!-- ######## END Add Role ######## -->
+
+        <div class="mx-3 table-responsive">
+            <table class="table table-bordered table-striped">
+                <thead>
+                    <tr>
+                        <th>Role Name</th>
+                        <th>Role Code</th>
+                        <th>Skill Name</th>
+                        <th>Skill Code</th>
+                        <th>Action</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr v-for="r in role_skill_details">
+                        <td>{{r.role_name}}</td>
+                        <td>{{r.role_code}}</td>
+                        <td>{{r.skill_name}}</td>
+                        <td>{{r.skill_code}}</td>
+                        <td>
+                            <button @click="deleteRecord(r.role_code)" class="btn btn-sm btn-outline-danger">Delete</button>
+                            <button @click="editRecord(r.role_code)" class="btn btn-sm btn-outline-info">Edit</button>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+    <!-- Bundled Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0/dist/js/bootstrap.bundle.min.js" 
+    integrity="sha384-A3rJD856KowSb7dwlZdYEkO39Gagi7vIsF0jrRAoQmDKKtQBHUuLZ9AsSv4jD4Xa" 
+    crossorigin="anonymous"></script>
+    <!-- Vue.js Version 3 CDN -->
+    <script src="https://cdn.jsdelivr.net/npm/vue@2.6.12/dist/vue.js"></script>
+    <!--axios -->
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+    <!--bootstrapVue js-->
+    <script src="https://unpkg.com/bootstrap-vue@latest/dist/bootstrap-vue.js"></script>
+    
+</body>
+</html>

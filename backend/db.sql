@@ -98,7 +98,7 @@ CREATE TABLE `role_skill_relation` (
 
 INSERT INTO `role_skill_relation` (`role_code`, `skill_code`) VALUES
 (1,	2),
-(1,	5),
+(1,	7),
 (2,	9), 
 (2,	8), 
 (3,	10), 
@@ -217,6 +217,46 @@ INSERT INTO `learning_journey` (`lj_id`, `course_code`, `role_code`) VALUES
 (5,	'COR004',	5), 
 (6,	'MGT002',	6), 
 (6,	'COR004',	6);
+
+
+--
+-- Table structure for table `RoleSkillCourseRelation`
+--
+
+CREATE TABLE `role_skill_course_relation` (
+  `role_code` INT(11) NOT NULL,
+  `skill_code` INT(11) NOT NULL,
+  `course_code` VARCHAR(200) NOT NULL,
+  FOREIGN KEY (`role_code`) REFERENCES `Role` (`role_code`),
+  FOREIGN KEY (`skill_code`) REFERENCES `Skill` (`skill_code`),
+  FOREIGN KEY (`course_code`) REFERENCES `Course` (`course_code`),
+  UNIQUE (`role_code`, `skill_code`, `course_code`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+--
+-- Dumping data for table `RoleSkillCourseRelation`
+--
+
+INSERT INTO `role_skill_course_relation` (`role_code`, `skill_code`,`course_code`) VALUES
+(1, 2, 'COR001'),
+(1, 7, 'FIN003'),
+(2, 9, 'COR002'),
+(2, 8, 'HRD001'),
+(3, 10, 'FIN001'),
+(3,	8, 'HRD001'), 
+(3,	3, 'COR001'), 
+(4,	12, 'COR006'), 
+(4,	9, 'FIN002'), 
+(5,	6, 'MGT001'), 
+(5,	9, 'FIN002'), 
+(5,	4, 'COR004'), 
+(6,	4, 'COR004'), 
+(6,	14, 'MGT002'), 
+(7,	7, 'FIN003'), 
+(7,	3, 'COR002'), 
+(7,	9, 'FIN001'), 
+(8,	3, 'COR001'), 
+(9,	9, 'FIN002')
 
 
 

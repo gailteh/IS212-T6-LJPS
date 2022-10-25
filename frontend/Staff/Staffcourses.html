@@ -65,27 +65,43 @@
 
     <script>
         const course = new Vue({
-            el: '#hr_roles',
+            el: '#course',
             data: {
-                course_name: '',
-                course_code: '',
-                course_desc: '',
+                // course_name: '',
+                // course_code: '',
+                // course_desc: '',
                 course_details: [],
+                parameters: 0,
+
             },
-            methods:{
-                get_course(){
-                axios.get('http://127.0.0.1:4999/course')
-                    .then(response => {
+            // methods:{
+            //     get_course(){
+            //     axios.get('http://127.0.0.1:4999/course')
+            //         .then(response => {
                         
-                        this.course_details= response.data.data.courses;
-                        // console.log(response.data)
-                    })
-                    .catch(error => alert(error));
-                }
-            },
-            mounted: function(){
-                this.get_course()
-            }
+            //             this.course_details= response.data.data.courses;
+            //             // console.log(response.data)
+            //         })
+            //         .catch(error => alert(error));
+            //     }
+            // },
+            mounted: function() {
+             
+             let parameters = new URLSearchParams(window.location.search);
+             this.parameters = parameters.get('skill_code');
+
+
+             axios.get('http://127.0.0.1:4999/' + this.parameters + '/course')
+                 .then(response => {
+                     
+                     this.course_details= response.data.data.courses;
+
+                     console.log(response.data.data.courses[0].course_name)
+
+                 
+                 })
+                 .catch(error => alert(error));
+         }
         })
         course.mount('#course')
     </script>

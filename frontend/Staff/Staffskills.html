@@ -35,7 +35,7 @@
                         <th>Skill Name</th>
                         <th>Skill Code</th>
                         <th>Skill Description</th>
-                        
+                        <th>Action</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -43,11 +43,13 @@
                         <td>{{s.skill_name}}</td>
                         <td>{{s.skill_code}}</td>
                         <td>{{s.skill_desc}}</td>
-                        <!-- <td>
+                        <td>
                             <button class="btn btn-sm btn-outline-danger">Delete</button>
                             <button class="btn btn-sm btn-outline-info">Edit</button>
-                            <button class="btn btn-sm btn-outline-dark">View More</button>
-                        </td> -->
+                            <button class="btn btn-sm btn-outline-dark">
+                                <a v-bind:href="`Staffcourses.html?skill_code=${s.skill_code}`">View More </a>
+                            </button>
+                        </td>
                     </tr>
                 </tbody>
             </table>

@@ -83,7 +83,6 @@
                         <th>Role Code</th>
                         <th>Skill Name</th>
                         <th>Skill Code</th>
-                        <th>Action</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -92,10 +91,6 @@
                         <td>{{r.role_code}}</td>
                         <td>{{r.skill_name}}</td>
                         <td>{{r.skill_code}}</td>
-                        <td>
-                            <button @click="deleteRecord(r.role_code)" class="btn btn-sm btn-outline-danger">Delete</button>
-                            <button @click="editRecord(r.role_code)" class="btn btn-sm btn-outline-info">Edit</button>
-                        </td>
                     </tr>
                 </tbody>
             </table>
@@ -112,5 +107,61 @@
     <!--bootstrapVue js-->
     <script src="https://unpkg.com/bootstrap-vue@latest/dist/bootstrap-vue.js"></script>
     
+    <script>
+        const hr_roles = new Vue({
+            el: '#hr_roles',
+            data: {
+                role_name: '',
+                role_code: '',
+                skill_name: '',
+                skill_code: '',
+                role_skill: [],
+            },
+            methods: {
+                showModal(id){
+                    this.$refs[id].show()
+                },
+                hideModal(id){
+                    this.$refs[id].hide()
+                },
+                onSubmit(){
+                    if (this.role_name !== '' && this.role_code !== '' && this.role_desc !== ''){
+                        axios.post('http://127.0.0.1:4999/create_role', 
+                            {role_name: this.role_name, role_code: this.role_code, role_desc: this.role_desc}
+                        )
+                        .then(res=> {
+                            console.log(res)
+                            alert('New role successfully added')
+                            this.role_name = ''
+                            this.role_code = ''
+                            this.role_desc = ''
+
+                            hr_roles.hideModal('my-modal')
+                            hr_roles.get_role()
+                        })
+                        .catch(err=>{
+                            console.log(err)
+                        })
+                    } else {
+                        alert('Error! Empty fields')
+                    }
+                },
+                get_role(){
+                axios.get('http://127.0.0.1:4999/role')
+                    .then(response => {
+                        
+                        this.role_details= response.data.data.roles;
+                        // console.log(response.data)
+                    })
+                    .catch(error => alert(error));
+                },
+            }, 
+            
+
+            mounted: function(){
+                this.get_role()
+            }
+        })
+    </script>
 </body>
 </html>

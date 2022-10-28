@@ -39,7 +39,7 @@ INSERT INTO `role` (`role_name`, `role_code`, `role_desc`, `role_skill_relation`
 ("Operations Coordinator", 2, "Responsible for ensuring that all departments are running smoothly. They plan purchases, negotiate contracts and coordinate budgeting to make sure business continues as usual with minimal downtime or interruption from one department's workflow.", "assigned"),
 ("HR Manager", 3, "Lead and direct the routine functions of the Human Resources (HR) department including hiring and interviewing staff, administering pay, benefits, and leave, and enforcing company policies and practices.", "assigned"),
 ("Sales Rep", 4, "Responsible for selling products and meeting customer needs while obtaining orders from existing or potential sales outlets. They ensure that the customer is satisfied and adequately taken care of while making a purchase.", "assigned"),
-("Sales Manager", 5, "Responsible for leading sales teams to reach sales targets. Sales managers are primarily tasked with hiring and training team members, setting quotas, evaluating and adjusting performance, and developing processes that drive sales."),
+("Sales Manager", 5, "Responsible for leading sales teams to reach sales targets. Sales managers are primarily tasked with hiring and training team members, setting quotas, evaluating and adjusting performance, and developing processes that drive sales.", "assigned"),
 ("Roving Service Engineer", 6, "Provides technical and maintenance support to the operating units including rotating and reciprocating equipment.", "assigned"),
 ("Repair Engineer", 7, "Works with engineering and other departments to establish the materials, processes and specifications needed for fabrication, rework and repairs.", "assigned"),
 ("Operations Manager", 8, "Oversee operational activities at every level of an organization. Their duties include hiring and training employees and managing quality assurance programs.", "assigned"),
@@ -135,6 +135,7 @@ CREATE TABLE `course` (
   `course_code` varchar(100) NOT NULL,
   `course_desc` varchar(200) NOT NULL,
   `course_status` varchar(200) NOT NULL,
+  `course_skill_relation` varchar(200) NOT NULL,
   PRIMARY KEY (`course_code`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
@@ -142,17 +143,17 @@ CREATE TABLE `course` (
 -- Dumping data for table `Course`
 --
 
-INSERT INTO `course` (`course_name`, `course_code`, `course_desc`, `course_status`) VALUES
-("Systems Thinking and Design", "COR001", "good Design", 'active'),
-("Lean Six Sigma Green Belt Certification", "COR002", " Apply Lean Six Sigma methodology and statistical tools such as Minitab to be used in process analytics", 'active'),
-("Service Excellence", "COR004", "The programme provides the learner with the key foundations of what builds customer confidence in the service industry", 'pending'),
-("Manage Change", "COR006", "Identify risks associated with change and develop risk mitigation plans.", 'retired'),
-("Data Collection and Analysis", "FIN001", "Data is meaningless unless insights and analysis can be drawn to provide useful information for business decision-making. It is imperative that data quality, integrity and security", 'active'),
-("Risk and Compliance Reporting", "FIN002", "Regulatory reporting is a requirement for businesses from highly regulated sectors to demonstrate compliance with the necessary regulatory provisions.", 'active'),
-("Business Continuity Planning", "FIN003", "Business continuity planning is essential in any business to minimise loss when faced with potential threats and disruptions.", 'retired'),
-("Leading and Shaping a Culture in Learning", "HRD001", "This training programme, delivered by the National Centre of Excellence (Workplace Learning), aims to equip participants with the skills and knowledge of the National workplace learning certification framework,", 'active'),
-("People Management", "MGT001", "enable learners to manage team performance and development through effective communication, conflict resolution and negotiation skills.", 'active'),
-("Workplace Conflict Management for Professionals", "MGT002", "This course will address the gaps to build consensus and utilise knowledge of conflict management techniques to diffuse tensions and achieve resolutions effectively in the best interests of the organisation.", 'active');
+INSERT INTO `course` (`course_name`, `course_code`, `course_desc`, `course_status`, `course_skill_relation`) VALUES
+("Systems Thinking and Design", "COR001", "good Design", 'active', 'assigned'),
+("Lean Six Sigma Green Belt Certification", "COR002", " Apply Lean Six Sigma methodology and statistical tools such as Minitab to be used in process analytics", 'active', 'assigned'),
+("Service Excellence", "COR004", "The programme provides the learner with the key foundations of what builds customer confidence in the service industry", 'pending', 'assigned'),
+("Manage Change", "COR006", "Identify risks associated with change and develop risk mitigation plans.", 'retired', 'assigned'),
+("Data Collection and Analysis", "FIN001", "Data is meaningless unless insights and analysis can be drawn to provide useful information for business decision-making. It is imperative that data quality, integrity and security", 'active', 'assigned'),
+("Risk and Compliance Reporting", "FIN002", "Regulatory reporting is a requirement for businesses from highly regulated sectors to demonstrate compliance with the necessary regulatory provisions.", 'active', 'assigned'),
+("Business Continuity Planning", "FIN003", "Business continuity planning is essential in any business to minimise loss when faced with potential threats and disruptions.", 'retired', 'assigned'),
+("Leading and Shaping a Culture in Learning", "HRD001", "This training programme, delivered by the National Centre of Excellence (Workplace Learning), aims to equip participants with the skills and knowledge of the National workplace learning certification framework,", 'active', 'assigned'),
+("People Management", "MGT001", "enable learners to manage team performance and development through effective communication, conflict resolution and negotiation skills.", 'active', 'assigned'),
+("Workplace Conflict Management for Professionals", "MGT002", "This course will address the gaps to build consensus and utilise knowledge of conflict management techniques to diffuse tensions and achieve resolutions effectively in the best interests of the organisation.", 'active', 'assigned');
 
 --
 -- Table structure for table `SkillCourseRelation`

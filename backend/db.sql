@@ -26,7 +26,6 @@ CREATE TABLE `role` (
   `role_name` varchar(100) NOT NULL ,
   `role_code` INT(11) NOT NULL,
   `role_desc` varchar(200) NOT NULL,
-  `role_skill_relation` varchar(100) NOT NULL,
   PRIMARY KEY (`role_code`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
@@ -34,17 +33,17 @@ CREATE TABLE `role` (
 -- Dumping data for table `Role`
 --
 
-INSERT INTO `role` (`role_name`, `role_code`, `role_desc`, `role_skill_relation`) VALUES
-("Customer Service Officer", 1, "Tasked to answer calls professionally to provide information about products and services, take/ cancel orders, or obtain details of complaints. Keep records of customer interactions and transactions, recording details of inquiries, complaints, and comments, as well as actions are taken.", "assigned"),
-("Operations Coordinator", 2, "Responsible for ensuring that all departments are running smoothly. They plan purchases, negotiate contracts and coordinate budgeting to make sure business continues as usual with minimal downtime or interruption from one department's workflow.", "assigned"),
-("HR Manager", 3, "Lead and direct the routine functions of the Human Resources (HR) department including hiring and interviewing staff, administering pay, benefits, and leave, and enforcing company policies and practices.", "assigned"),
-("Sales Rep", 4, "Responsible for selling products and meeting customer needs while obtaining orders from existing or potential sales outlets. They ensure that the customer is satisfied and adequately taken care of while making a purchase.", "assigned"),
-("Sales Manager", 5, "Responsible for leading sales teams to reach sales targets. Sales managers are primarily tasked with hiring and training team members, setting quotas, evaluating and adjusting performance, and developing processes that drive sales.", "assigned"),
-("Roving Service Engineer", 6, "Provides technical and maintenance support to the operating units including rotating and reciprocating equipment.", "assigned"),
-("Repair Engineer", 7, "Works with engineering and other departments to establish the materials, processes and specifications needed for fabrication, rework and repairs.", "assigned"),
-("Operations Manager", 8, "Oversee operational activities at every level of an organization. Their duties include hiring and training employees and managing quality assurance programs.", "assigned"),
-("Accountant", 9, "Helps businesses make critical financial decisions by collecting, tracking, and correcting the company's finances. They are responsible for financial audits, reconciling bank statements, and ensuring financial records are accurate throughout the year.", "assigned"),
-("Finance Manager", 10, "Responsible for the overall financial health of an organization. Working in many different industries, they produce financial reports, direct investment activities, and develop strategies and plans for the long-term financial goals of their organization.", "unassigned");
+INSERT INTO `role` (`role_name`, `role_code`, `role_desc`) VALUES
+("Customer Service Officer", 1, "Tasked to answer calls professionally to provide information about products and services, take/ cancel orders, or obtain details of complaints. Keep records of customer interactions and transactions, recording details of inquiries, complaints, and comments, as well as actions are taken."),
+("Operations Coordinator", 2, "Responsible for ensuring that all departments are running smoothly. They plan purchases, negotiate contracts and coordinate budgeting to make sure business continues as usual with minimal downtime or interruption from one department's workflow."),
+("HR Manager", 3, "Lead and direct the routine functions of the Human Resources (HR) department including hiring and interviewing staff, administering pay, benefits, and leave, and enforcing company policies and practices."),
+("Sales Rep", 4, "Responsible for selling products and meeting customer needs while obtaining orders from existing or potential sales outlets. They ensure that the customer is satisfied and adequately taken care of while making a purchase."),
+("Sales Manager", 5, "Responsible for leading sales teams to reach sales targets. Sales managers are primarily tasked with hiring and training team members, setting quotas, evaluating and adjusting performance, and developing processes that drive sales."),
+("Roving Service Engineer", 6, "Provides technical and maintenance support to the operating units including rotating and reciprocating equipment."),
+("Repair Engineer", 7, "Works with engineering and other departments to establish the materials, processes and specifications needed for fabrication, rework and repairs."),
+("Operations Manager", 8, "Oversee operational activities at every level of an organization. Their duties include hiring and training employees and managing quality assurance programs."),
+("Accountant", 9, "Helps businesses make critical financial decisions by collecting, tracking, and correcting the company's finances. They are responsible for financial audits, reconciling bank statements, and ensuring financial records are accurate throughout the year."),
+("Finance Manager", 10, "Responsible for the overall financial health of an organization. Working in many different industries, they produce financial reports, direct investment activities, and develop strategies and plans for the long-term financial goals of their organization.");
 
 -- --------------------------------------------------------
 
@@ -56,8 +55,6 @@ CREATE TABLE `skill` (
   `skill_name` varchar(100) NOT NULL,
   `skill_code` INT(11) NOT NULL,
   `skill_desc` varchar(200) NOT NULL,
-  `role_skill_relation` varchar(100) NOT NULL,
-  `skill_course_relation` varchar(100) NOT NULL,
   PRIMARY KEY (`skill_code`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
@@ -65,21 +62,21 @@ CREATE TABLE `skill` (
 -- Dumping data for table `Skill`
 --
 
-INSERT INTO `skill` (`skill_name`, `skill_code`, `skill_desc`, `role_skill_relation`, `skill_course_relation`) VALUES
-("Analytical Skills", 1, "Ability to deconstruct information into smaller categories in order to draw conclusions. Analytical skill consists of categories that include logical reasoning, critical thinking, communication, research, data analysis and creativity.", "unassigned", "unassigned"),
-("Communication Skills", 2, "Abilities to pass, receive and process information. Communication skills help you build relationships, share ideas and information and play your role in the workplace effectively.", "assigned", "assigned"),
-("Management Skills", 3, "Management is a process of planning, decision making, organizing, leading, motivation and controlling the human resources, financial, physical, and information resources of an organization to reach its goals efficiently and effectively.", "assigned", "assigned"),
-("Data Handling", 4, "The ability to use data effectively to improve your programs, including looking at lists and summaries, looking for patterns, analyzing results, and making presentations to others.", "assigned", "assigned"),
-("Presentation Skills", 5, "Skills you need in delivering effective and engaging presentations to a variety of audiences. These skills cover a variety of areas such as the structure of your presentation, the design of your slides, the tone of your voice and the body language you convey.", "unassigned", "unassigned"),
-("Accounting Skills", 6, "Abilities that allow you to accurately and ethically manage financial transactions, analyze financial data and generate financial reports. They include hard skills such as understanding generally accepted accounting principles, mathematical comprehension and data analysis.", "assigned", "assigned"),
-("Leadership Skills", 7, "Strengths and abilities individuals demonstrate that help to oversee processes, guide initiatives and steer their employees toward the achievement of goals", "assigned", "assigned"),
-("Training Skills", 8, " An employer-provided program that teaches or develops proficiencies for the workplace. The aim of skills training is to equip employees with the knowledge and attributes necessary to carry out their duties at the optimal level.", "assigned", "assigned"),
-("Digital Literacy Skills", 9, "An individual's ability to find, evaluate, and communicate information through typing and other media on various digital platforms.", "assigned", "assigned"),
-("Marketing Skills", 10, "Able to identify customers' problems, sometimes before they do, and find a way of addressing those needs and problems through the products and services that you provide.", "assigned", "assigned"),
-("Hardware Management Skills", 11, "Knowledge and expertise to be able to operate  and maintain particular electronic devices.", "unassigned", "unassigned"),
-("Software Management Skills", 12, "Abilities that show how well you can use a specific type of computer program.", "assigned", "assigned"),
-("Cybersecurity Skills", 13, "A variety of skills such as troubleshooting, maintaining, and updating information security systems; implementing continuous network monitoring; and providing real-time security solutions.", "unassigned", "unassigned"),
-("Global Awareness", 14, "A capacity that incorporates the attitudes, knowledge, and skills necessary for a person to competently and perceptively navigate the challenges and opportunities of a globalized world in a way that promotes the greater good.", "assigned", "assigned");
+INSERT INTO `skill` (`skill_name`, `skill_code`, `skill_desc`) VALUES
+("Analytical Skills", 1, "Ability to deconstruct information into smaller categories in order to draw conclusions. Analytical skill consists of categories that include logical reasoning, critical thinking, communication, research, data analysis and creativity."),
+("Communication Skills", 2, "Abilities to pass, receive and process information. Communication skills help you build relationships, share ideas and information and play your role in the workplace effectively."),
+("Management Skills", 3, "Management is a process of planning, decision making, organizing, leading, motivation and controlling the human resources, financial, physical, and information resources of an organization to reach its goals efficiently and effectively."),
+("Data Handling", 4, "The ability to use data effectively to improve your programs, including looking at lists and summaries, looking for patterns, analyzing results, and making presentations to others."),
+("Presentation Skills", 5, "Skills you need in delivering effective and engaging presentations to a variety of audiences. These skills cover a variety of areas such as the structure of your presentation, the design of your slides, the tone of your voice and the body language you convey."),
+("Accounting Skills", 6, "Abilities that allow you to accurately and ethically manage financial transactions, analyze financial data and generate financial reports. They include hard skills such as understanding generally accepted accounting principles, mathematical comprehension and data analysis."),
+("Leadership Skills", 7, "Strengths and abilities individuals demonstrate that help to oversee processes, guide initiatives and steer their employees toward the achievement of goals"),
+("Training Skills", 8, " An employer-provided program that teaches or develops proficiencies for the workplace. The aim of skills training is to equip employees with the knowledge and attributes necessary to carry out their duties at the optimal level."),
+("Digital Literacy Skills", 9, "An individual's ability to find, evaluate, and communicate information through typing and other media on various digital platforms."),
+("Marketing Skills", 10, "Able to identify customers' problems, sometimes before they do, and find a way of addressing those needs and problems through the products and services that you provide."),
+("Hardware Management Skills", 11, "Knowledge and expertise to be able to operate  and maintain particular electronic devices."),
+("Software Management Skills", 12, "Abilities that show how well you can use a specific type of computer program."),
+("Cybersecurity Skills", 13, "A variety of skills such as troubleshooting, maintaining, and updating information security systems; implementing continuous network monitoring; and providing real-time security solutions."),
+("Global Awareness", 14, "A capacity that incorporates the attitudes, knowledge, and skills necessary for a person to competently and perceptively navigate the challenges and opportunities of a globalized world in a way that promotes the greater good.");
 
 
 --
@@ -135,7 +132,6 @@ CREATE TABLE `course` (
   `course_code` varchar(100) NOT NULL,
   `course_desc` varchar(200) NOT NULL,
   `course_status` varchar(200) NOT NULL,
-  `course_skill_relation` varchar(200) NOT NULL,
   PRIMARY KEY (`course_code`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
@@ -143,17 +139,17 @@ CREATE TABLE `course` (
 -- Dumping data for table `Course`
 --
 
-INSERT INTO `course` (`course_name`, `course_code`, `course_desc`, `course_status`, `course_skill_relation`) VALUES
-("Systems Thinking and Design", "COR001", "good Design", 'active', 'assigned'),
-("Lean Six Sigma Green Belt Certification", "COR002", " Apply Lean Six Sigma methodology and statistical tools such as Minitab to be used in process analytics", 'active', 'assigned'),
-("Service Excellence", "COR004", "The programme provides the learner with the key foundations of what builds customer confidence in the service industry", 'pending', 'assigned'),
-("Manage Change", "COR006", "Identify risks associated with change and develop risk mitigation plans.", 'retired', 'assigned'),
-("Data Collection and Analysis", "FIN001", "Data is meaningless unless insights and analysis can be drawn to provide useful information for business decision-making. It is imperative that data quality, integrity and security", 'active', 'assigned'),
-("Risk and Compliance Reporting", "FIN002", "Regulatory reporting is a requirement for businesses from highly regulated sectors to demonstrate compliance with the necessary regulatory provisions.", 'active', 'assigned'),
-("Business Continuity Planning", "FIN003", "Business continuity planning is essential in any business to minimise loss when faced with potential threats and disruptions.", 'retired', 'assigned'),
-("Leading and Shaping a Culture in Learning", "HRD001", "This training programme, delivered by the National Centre of Excellence (Workplace Learning), aims to equip participants with the skills and knowledge of the National workplace learning certification framework,", 'active', 'assigned'),
-("People Management", "MGT001", "enable learners to manage team performance and development through effective communication, conflict resolution and negotiation skills.", 'active', 'assigned'),
-("Workplace Conflict Management for Professionals", "MGT002", "This course will address the gaps to build consensus and utilise knowledge of conflict management techniques to diffuse tensions and achieve resolutions effectively in the best interests of the organisation.", 'active', 'assigned');
+INSERT INTO `course` (`course_name`, `course_code`, `course_desc`, `course_status`) VALUES
+("Systems Thinking and Design", "COR001", "good Design", 'active'),
+("Lean Six Sigma Green Belt Certification", "COR002", " Apply Lean Six Sigma methodology and statistical tools such as Minitab to be used in process analytics", 'active'),
+("Service Excellence", "COR004", "The programme provides the learner with the key foundations of what builds customer confidence in the service industry", 'pending'),
+("Manage Change", "COR006", "Identify risks associated with change and develop risk mitigation plans.", 'retired'),
+("Data Collection and Analysis", "FIN001", "Data is meaningless unless insights and analysis can be drawn to provide useful information for business decision-making. It is imperative that data quality, integrity and security", 'active'),
+("Risk and Compliance Reporting", "FIN002", "Regulatory reporting is a requirement for businesses from highly regulated sectors to demonstrate compliance with the necessary regulatory provisions.", 'active'),
+("Business Continuity Planning", "FIN003", "Business continuity planning is essential in any business to minimise loss when faced with potential threats and disruptions.", 'retired'),
+("Leading and Shaping a Culture in Learning", "HRD001", "This training programme, delivered by the National Centre of Excellence (Workplace Learning), aims to equip participants with the skills and knowledge of the National workplace learning certification framework,", 'active'),
+("People Management", "MGT001", "enable learners to manage team performance and development through effective communication, conflict resolution and negotiation skills.", 'active'),
+("Workplace Conflict Management for Professionals", "MGT002", "This course will address the gaps to build consensus and utilise knowledge of conflict management techniques to diffuse tensions and achieve resolutions effectively in the best interests of the organisation.", 'active');
 
 --
 -- Table structure for table `SkillCourseRelation`

@@ -22,14 +22,16 @@ class role(db.Model):
     role_code = db.Column(db.Integer, primary_key=True, nullable=False)
     role_name = db.Column(db.String, nullable=False)
     role_desc = db.Column(db.String, nullable=False)
+    role_skill_relation = db.Column(db.String, nullable=False)
     
-    def __init__(self, role_code, role_name, role_desc):
+    def __init__(self, role_code, role_name, role_desc, role_skill_relation):
         self.role_code = role_code
         self.role_name = role_name
         self.role_desc = role_desc
+        self.role_skill_relation = role_skill_relation
 
     def json(self):
-        return {"role_code":self.role_code, "role_name":self.role_name, "role_desc":self.role_desc}
+        return {"role_code":self.role_code, "role_name":self.role_name, "role_desc":self.role_desc, "role_skill_relation":self.role_skill_relation}
 
 @app.route('/role', methods=['GET'])
 def display_role():
@@ -148,6 +150,13 @@ def delete_role(role_code):
         "code": 200,
         "message": str(role_detail) + " had been successfully deleted."
     }
+
+@app.route("/assign_role", methods=['GET'])
+def assign_role():
+    # role_detail = role.query.all()
+    # for role in role_detail:
+        
+    pass
 
 if __name__ == '__main__':
     app.run(port=4999, debug=True)

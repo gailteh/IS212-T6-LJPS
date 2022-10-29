@@ -14,10 +14,16 @@ db = SQLAlchemy(app)
 
 CORS(app)
 
-# initiate classes: Role, Skills, RoleSkillRelation
+# initiate classes: Role Skill Relation
 role_skill_relation = db.Table('role_skill_relation',
     db.Column('role_code', db.Integer, db.ForeignKey('role.role_code')),
     db.Column('skill_code', db.Integer, db.ForeignKey('skill.skill_code'))
+)
+# initiate classes: Skill Course Relation
+skill_course_relation = db.Table('skill_course_relation',
+    
+    db.Column('skill_code', db.Integer, db.ForeignKey('skill.skill_code')),
+    db.Column('course_code', db.Integer, db.ForeignKey('course.course_code'))
 )
 
 class role(db.Model):
@@ -43,6 +49,7 @@ class skill(db.Model):
     skill_code = db.Column(db.Integer, primary_key=True, nullable=False)
     skill_name = db.Column(db.String, nullable=False)
     skill_desc = db.Column(db.String, nullable=False)
+    skill_course = db.relationship('course',secondary=skill_course_relation, backref=db.backref('position'))
 
     def __init__(self, skill_name, skill_code, skill_desc):
         self.skill_code = skill_code
@@ -51,6 +58,24 @@ class skill(db.Model):
 
     def json(self):
         return {"skill_name": self.skill_name,"skill_code": self.skill_code, "skill_desc":self.skill_desc}
+
+class course(db.Model):
+    __tablename__ = 'course'
+
+    course_code = db.Column(db.Integer, primary_key=True, nullable=False)
+    course_name = db.Column(db.String, nullable=False)
+    course_desc = db.Column(db.String, nullable=False)
+    course_status = db.Column(db.String, nullable=False)
+
+    def __init__(self, course_code, course_name, course_desc, course_status):
+        self.course_code = course_code
+        self.course_name = course_name
+        self.course_desc = course_desc
+        self.course_status = course_status
+
+    def json(self):
+        return {"course_code":self.course_code, "course_name":self.course_name, "course_desc":self.course_desc, "course_status":self.course_status}
+
 
 ########################        Role backend      ########################
 ########        level 3 control access      ########
@@ -322,7 +347,34 @@ def delete_skill(skill_code):
     }
 
 
+########################        Course backend      ########################
+########        level 3 control access      ########
+#display skills that respective to the role 
+@app.route('/<int:skill_code>/course', methods=['GET'])
+def display_skills_course(skill_code):
+    # get skills content from skill
+    courses = course.query.filter(course.position.any(skill_code=skill_code)).all()
 
+    if courses is None:
+        return {
+        "code": 404,
+        "message": "Error occured while displaying courses for this skill."
+        }
+
+    if (len(courses) > 0):
+        return {
+            "code": 200,
+            "data": {
+                "courses": [crs.json() for crs in courses]
+                
+            },
+            "message": "These are the courses for this skill."
+        }
+    elif (len(courses) == 0):
+        return {
+        "code": 204,
+        "message": "There are no courses for this skill."
+        }
 
 if __name__ == '__main__':
     app.run(port=4999, debug=True)

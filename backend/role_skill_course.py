@@ -376,5 +376,27 @@ def display_skills_course(skill_code):
         "message": "There are no courses for this skill."
         }
 
+########        level 1 control access      ########
+#display courses
+@app.route('/course', methods=['GET'])
+def display_course():
+    courses = course.query.all()
+
+    if courses is None:
+        return {
+        "code": 404,
+        "message": "Error occured while displaying skills."
+        }
+
+    if courses:
+        return {
+            "code": 200,
+            "data": {
+                "skills": [c.json() for c in courses]
+                
+            },
+            "message": "These are the skills available."
+        }
+
 if __name__ == '__main__':
     app.run(port=4999, debug=True)

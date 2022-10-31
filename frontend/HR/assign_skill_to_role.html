@@ -109,7 +109,7 @@
                 </div>
             </div>
         </div>
-        <!--END of Role table-->
+        <!--END of Role table -->
 
         <!-- START Role and Skill relation table -->
         <div class="row">
@@ -123,14 +123,14 @@
                             <th>Skill Code</th>
                         </tr>
                     </thead>
-                    <!-- <tbody>
-                        <tr v-for="rs in role_skill_details">
+                    <tbody>
+                        <tr v-for="rs in relationship_details">
                             <td>{{rs.role_name}}</td>
                             <td>{{rs.role_code}}</td>
                             <td>{{rs.skill_name}}</td>
                             <td>{{rs.skill_code}}</td>
                         </tr>
-                    </tbody> -->
+                    </tbody>
                 </table>
             </div>
         </div>
@@ -156,7 +156,8 @@
                 skill_code: '',
                 role_skill: [],
                 role_assign_details: [],
-                skill_assign_details: []
+                skill_assign_details: [],
+                relationship_details: []
             },
             methods: {
                 showModal(id){
@@ -196,7 +197,7 @@
                     .catch(error => alert(error));
                 },
                 get_skill(){
-                axios.get('http://127.0.0.1:4999/skills')
+                axios.get('http://127.0.0.1:4998/skills')
                     .then(response => {
                         
                         this.skill_assign_details= response.data.data.skills;
@@ -204,6 +205,14 @@
                     })
                     .catch(error => alert(error));
                 },
+                get_role_skill_relationship(){
+                    axios.get('http://127.0.0.1:4999/role-skill-relation')
+                        .then(response => {
+                            console.log(response)
+                            // this.relationship_details = 
+                        })
+                        .catch(error => alert(error))
+                }
             }, 
             
 

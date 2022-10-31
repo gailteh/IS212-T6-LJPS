@@ -1,11 +1,12 @@
 from flask import Flask, request, jsonify
 from flask_sqlalchemy import SQLAlchemy
 from flask_cors import CORS
-from sqlalchemy import ForeignKey
+from sqlalchemy import ForeignKey, select
 
 app = Flask(__name__)
 # initiate database connection
 app.config['SQLALCHEMY_DATABASE_URI'] = "mysql+mysqlconnector://root@localhost:3306/is212_spm"
+# app.config['SQLALCHEMY_DATABASE_URI'] = "mysql+mysqlconnector://root:root@localhost:8889/is212_spm"
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 
 db = SQLAlchemy(app)
@@ -91,6 +92,36 @@ def display_role_skills(role_code):
         return {
         "code": 204,
         "message": "There are no skills for this role."
+        }
+
+# display role-skill relation
+@app.route("/role-skill-relation", methods=['GET'])
+def display_rs_relation():
+    # get all relation content
+    relations = db.session.execute(select(role_skill_relation)).all()
+
+    # get role and skill
+    relationship = []
+    for rs in relations:
+        rs = dict(rs)
+        role_c = rs['role_code']
+        skill_c = rs['skill_code']
+        role_info = db.session.execute(select(role.role_code,role.role_name).where(role.role_code==role_c)).first()
+        skill_info = db.session.execute(select(skill.skill_code,skill.skill_name).where(skill.skill_code==skill_c)).first()
+        rs_info = {}
+        rs_info.update(dict(role_info))
+        rs_info.update(dict(skill_info))
+        relationship.append(rs_info)
+
+    if len(relations) > 0:
+        return {
+            "code":200,
+            "relations": relationship,
+            "message": "All relations displayed."
+        }
+    elif relations == None:
+        return{
+            "message":"Go check your code!"
         }
 
 ########        level 1 control access      ########

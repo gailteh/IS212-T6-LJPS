@@ -44,7 +44,7 @@
                         <td>{{c.course_code}}</td>
                         <td>{{c.course_desc}}</td>
                         <td>
-                            <button @click="" class="btn btn-sm btn-outline-primary">Add into Learning Journey</button>
+                            <button @click="updateRecord(c.course_code)" class="btn btn-sm btn-outline-primary">Add into Learning Journey</button>
                         </td>
                     </tr>
                 </tbody>
@@ -70,9 +70,11 @@
                 // course_name: '',
                 // course_code: '',
                 // course_desc: '',
+                lj_id: 0,
+                course_code: '',
                 course_details: [],
-                parameters: 0,
-
+                parameters_skill_code: 0,
+                parameters_role_code: 0,
             },
             // methods:{
             //     get_course(){
@@ -85,13 +87,48 @@
             //         .catch(error => alert(error));
             //     }
             // },
+            
+            methods:{
+               
+                updateRecord(course_code) {
+                event.preventDefault();
+                    if (this.lj_id !== '' && course_code !== '' && this.parameters_role_code !== ''){
+                        console.log(this.lj_id);
+                        console.log(course_code);
+                        console.log(this.parameters_role_code);
+
+                        axios.post("http://127.0.0.1:5000/learning_journey", 
+                            {lj_id: this.lj_id,
+                            course_code: course_code,
+                            role_code: this.parameters_role_code}
+                        )
+                        .then(res=> {
+                            console.log(res)
+                            alert('New course successfully added')
+                            this.avail_courses = []
+
+                            crudapp.getCourses()
+                        })
+                        .catch(err=>{
+                            console.log(err)
+                        })
+                    } else {
+                        alert('Error! Empty fields')
+                    }
+                }},
+
             mounted: function() {
              
              let parameters = new URLSearchParams(window.location.search);
-             this.parameters = parameters.get('skill_code');
+             this.parameters_skill_code = parameters.get('skill_code');
+             console.log(this.parameters_skill_code);
 
+             this.parameters_role_code = parameters.get('role_code');
+             console.log(this.parameters_role_code);
 
-             axios.get('http://127.0.0.1:4999/' + this.parameters + '/course')
+             this.lj_id = this.parameters_role_code;
+
+             axios.get('http://127.0.0.1:4999/' + this.parameters_skill_code + '/course')
                  .then(response => {
                      
                      this.course_details= response.data.data.courses;

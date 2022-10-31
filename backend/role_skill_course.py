@@ -1,7 +1,7 @@
 from flask import Flask, request, jsonify
 from flask_sqlalchemy import SQLAlchemy
 from flask_cors import CORS
-from sqlalchemy import ForeignKey
+from sqlalchemy import ForeignKey, select
 from flaskext.mysql import MySQL
 import pymysql
 
@@ -345,7 +345,35 @@ def delete_skill(skill_code):
         "code": 200,
         "message": str(skill_detail) + " had been successfully deleted."
     }
+# display role-skill relation
+@app.route("/role-skill-relation", methods=['GET'])
+def display_rs_relation():
+    # get all relation content
+    relations = db.session.execute(select(role_skill_relation)).all()
 
+    # get role and skill
+    relationship = []
+    for rs in relations:
+        rs = dict(rs)
+        role_c = rs['role_code']
+        skill_c = rs['skill_code']
+        role_info = db.session.execute(select(role.role_code,role.role_name).where(role.role_code==role_c)).first()
+        skill_info = db.session.execute(select(skill.skill_code,skill.skill_name).where(skill.skill_code==skill_c)).first()
+        rs_info = {}
+        rs_info.update(dict(role_info))
+        rs_info.update(dict(skill_info))
+        relationship.append(rs_info)
+
+    if len(relations) > 0:
+        return {
+            "code":200,
+            "relations": relationship,
+            "message": "All relations displayed."
+        }
+    elif relations == None:
+        return{
+            "message":"Go check your code!"
+        }
 
 ########################        Course backend      ########################
 ########        level 3 control access      ########

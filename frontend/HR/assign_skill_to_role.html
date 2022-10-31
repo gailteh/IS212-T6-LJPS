@@ -167,9 +167,9 @@
                     this.$refs[id].hide()
                 },
                 onSubmit(){
-                    if (this.role_name !== '' && this.role_code !== '' && this.role_desc !== ''){
-                        axios.post('http://127.0.0.1:4999/create_role', 
-                            {role_name: this.role_name, role_code: this.role_code, role_desc: this.role_desc}
+                    if (this.role_code !== '' && this.skill_code !== ''){
+                        axios.post('http://127.0.0.1:4999/create-role-skill-relation', 
+                            {role_code: this.role_code, skill_code: this.skill_code}
                         )
                         .then(res=> {
                             console.log(res)
@@ -197,10 +197,10 @@
                     .catch(error => alert(error));
                 },
                 get_skill(){
-                axios.get('http://127.0.0.1:4998/skills')
+                axios.get('http://127.0.0.1:4999/skills')
                     .then(response => {
                         
-                        this.skill_assign_details= response.data.data.skills;
+                        this.skill_assign_details = response.data.data.skills;
                         // console.log(response.data)
                     })
                     .catch(error => alert(error));
@@ -209,7 +209,7 @@
                     axios.get('http://127.0.0.1:4999/role-skill-relation')
                         .then(response => {
                             console.log(response)
-                            // this.relationship_details = 
+                            this.relationship_details = response.data.relations;
                         })
                         .catch(error => alert(error))
                 }
@@ -219,6 +219,7 @@
             mounted: function(){
                 this.get_role()
                 this.get_skill()
+                this.get_role_skill_relationship()
             }
         })
     </script>

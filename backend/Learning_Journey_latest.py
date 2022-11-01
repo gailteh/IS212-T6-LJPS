@@ -228,6 +228,34 @@ def role_course():
         }
     ), 404
 
+@app.route("/learning_journey", methods=['POST'])
+#For every new course that is added to a learning journey, a new record is created
+def add_new_course(): 
+    data = request.get_json()
+
+    if not all(key in data.keys() for 
+                key in ('lj_id', 'course_code', 'role_code')):
+        return  jsonify({
+            'message': "Incorrect JSON object provided"
+        }), 500
+    
+    #create new record in the lj table
+    new_course = Learning_Journey(lj_id = data['lj_id'], course_code = data['course_code'], role_code = data['role_code'])
+
+    # commit to DB
+    try:
+        db.session.add(new_course)
+        db.session.commit()
+    except Exception as e:
+        print(e)
+        return jsonify({
+            "message": "Unable to commit to database"
+        }), 500
+
+    return jsonify({
+        "Status": "Success"
+    }),201
+
 # @app.route('/learning_journey/<string:staff_id>', methods=['GET'])
 # # deleting 1 course from learning journey
 # def get_all_learning_journey(staff_id):

@@ -375,6 +375,36 @@ def display_rs_relation():
             "message":"Go check your code!"
         }
 
+#add role skill relation
+@app.route("/create-role-skill-relation", methods=['POST'])
+def create_role_skill_relation():
+    data = request.get_json()
+
+    if not all(key in data.keys() for 
+                key in ('role_code', 'skill_code')):
+        return  jsonify({
+            'message': "Incorrect JSON object provided"
+        }), 500
+    
+    #create new record in the lj table
+    # new_role_skill = db.session.execute(select(role_skill_relation))(role_code = data['role_code'], skill_code = data['skill_code'])
+
+    # commit to DB
+    try:
+        db.session.execute(role_skill_relation.insert().values({"role_code":data['role_code'], "skill_code":data['skill_code']}))
+        # db.session.add(new_role_skill)
+        db.session.commit()
+    except Exception as e:
+        print(e)
+        return jsonify({
+            "message": "Unable to commit to database"
+        }), 500
+
+    return jsonify({
+        "Status": "Success"
+    }),201
+
+
 ########################        Course backend      ########################
 ########        level 3 control access      ########
 #display skills that respective to the role 

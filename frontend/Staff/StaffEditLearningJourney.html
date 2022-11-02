@@ -97,7 +97,7 @@
                             <td>{{ ljc.course_desc }}</td>
                             <td>{{ ljc.course_status }}</td>
                             <td>
-                                <button class="btn btn-sm btn-danger" @click="del_course(lj_id, ljc.course_code)">Delete</button>
+                                <button class="btn btn-sm btn-danger" @click="del_course(role_code, ljc.course_code)" data-method="Delete">Delete</button>
                             </td>
                         </tr>
                         <!-- <tr>
@@ -132,7 +132,8 @@ crossorigin="anonymous"></script>
         el: "#crudapp",
         data: {
                 // attempt to hard-code data part for testing
-                lj_id: '',
+                role_code: 0,
+                lj_id:0,
                 course_code: '',
                 course_name: '',
                 course_description: '',
@@ -191,7 +192,7 @@ crossorigin="anonymous"></script>
                 // console.log(this.parameters);
                 // console.log('http://127.0.0.1:4999/' + this.parameters + '/skills');
 
-                axios.get('http://127.0.0.1:5000/learning_journey/' + this.parameters)
+                axios.get('http://127.0.0.1:4848/learning_journey/' + this.parameters)
                     .then(response => {
                         
                         this.lj_courses= response.data.data;
@@ -203,9 +204,9 @@ crossorigin="anonymous"></script>
                     .catch(error => alert(error));
 
             },
-            del_course: function(lj_id, ljc_code){
+            del_course(role_code, ljc_code){
                 if (window.confirm('Delete this record')) {
-                        axios.delete("http://127.0.0.1:4888/del_ljc/"+String(lj_id)+"/"+ljc_code)
+                        axios.delete("http://127.0.0.1:4888/del_ljc/"+role_code+"/"+ljc_code)
                         .then(res => {
                             console.log(res)
                             alert('delete successfully')
@@ -215,24 +216,15 @@ crossorigin="anonymous"></script>
                             console.log(err)
                         })
                     }
-            },
-            addRecord(lj_id){
-                axios.post("#", {
-                })
-                .then(res =>{
-                    console.log(res)
-                    this.added = true
-                    // this.getRecords()
-                })
-                .then(err => {
-                    console.log(err)
-                })
-            }, 
+            }
         }, 
         mounted: function(){
             this.getCourses()
+            let parameters = new URLSearchParams(window.location.search)
+            this.role_code = parameters.get('role_code')
+            this.lj_id = parameters.get('lj_id')
+
         }
     })
-    crudapp.mount('#crudapp')
 </script>
 </html>

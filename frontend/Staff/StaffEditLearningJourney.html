@@ -97,7 +97,7 @@
                             <td>{{ ljc.course_desc }}</td>
                             <td>{{ ljc.course_status }}</td>
                             <td>
-                                <button class="btn btn-sm btn-danger" @click="del_course(role_code, ljc.course_code)" data-method="Delete">Delete</button>
+                                <button class="btn btn-sm btn-danger" @click="del_course(lj_id, ljc.course_code)">Delete</button>
                             </td>
                         </tr>
                         <!-- <tr>
@@ -132,11 +132,11 @@ crossorigin="anonymous"></script>
         el: "#crudapp",
         data: {
                 // attempt to hard-code data part for testing
-                role_code: 0,
-                lj_id:0,
+                lj_id: '',
                 course_code: '',
                 course_name: '',
                 course_description: '',
+                skills_list: [],
                 lj_courses:[],
                 // lj_courses:[{
                 //     "course_code": "COR002",
@@ -160,9 +160,28 @@ crossorigin="anonymous"></script>
                 added: false,
                 del_msg: 'Course Deleted',
                 add_msg: 'Course Added',
-                parameters:0
+                parameters:0,
+                roelcode_param:0,
+                skillcode_param:0,
+                coursecode_param:0
             },
         methods:{
+            getskillslist(){
+                let parameters = new URLSearchParams(window.location.search);
+                this.rolecode_param = parameters.get('role_code');
+                // console.log(this.rolecode_param);
+                axios.get("http://127.0.0.1:4999/" + this.rolecode_param + "/skills")
+                .then( res => {
+                    skills = res.data.data
+                    // console.log(skills);
+                    for (skill in skills){
+                        this.skills_list.push(skill);
+                    }
+                    console.log(this.skills_list)
+                })
+                .catch(error => alert(error));
+            },
+
             onSubmit(){
                     if (this.lj_id !== '' && this.course_code !== '' && this.course_name !== '' && this.course_description !== ''){
                         axios.post("http://127.0.0.1:5000/learning_journey", 
@@ -192,21 +211,21 @@ crossorigin="anonymous"></script>
                 // console.log(this.parameters);
                 // console.log('http://127.0.0.1:4999/' + this.parameters + '/skills');
 
-                axios.get('http://127.0.0.1:4848/learning_journey/' + this.parameters)
+                axios.get('http://127.0.0.1:5000/learning_journey/' + this.parameters)
                     .then(response => {
                         
                         this.lj_courses= response.data.data;
 
-                        
+
                         console.log(response.data.data);
                     
                     })
                     .catch(error => alert(error));
 
             },
-            del_course(role_code, ljc_code){
+            del_course: function(lj_id, ljc_code){
                 if (window.confirm('Delete this record')) {
-                        axios.delete("http://127.0.0.1:4888/del_ljc/"+role_code+"/"+ljc_code)
+                        axios.delete("http://127.0.0.1:4888/del_ljc/"+String(lj_id)+"/"+ljc_code)
                         .then(res => {
                             console.log(res)
                             alert('delete successfully')
@@ -216,15 +235,25 @@ crossorigin="anonymous"></script>
                             console.log(err)
                         })
                     }
-            }
+            },
+            addRecord(lj_id){
+                axios.post("#", {
+                })
+                .then(res =>{
+                    console.log(res)
+                    this.added = true
+                    // this.getRecords()
+                })
+                .then(err => {
+                    console.log(err)
+                })
+            }, 
         }, 
         mounted: function(){
             this.getCourses()
-            let parameters = new URLSearchParams(window.location.search)
-            this.role_code = parameters.get('role_code')
-            this.lj_id = parameters.get('lj_id')
-
+            this.getskillslist()
         }
     })
+    // crudapp.mount('#crudapp')
 </script>
 </html>

@@ -1,11 +1,12 @@
 from flask import Flask, request, jsonify
 from flask_sqlalchemy import SQLAlchemy
 from flask_cors import CORS
-from sqlalchemy import ForeignKey
+from sqlalchemy import ForeignKey,select
 
 app = Flask(__name__)
 # initiate database connection
 app.config['SQLALCHEMY_DATABASE_URI'] = "mysql+mysqlconnector://root@localhost:3306/is212_spm"
+# app.config['SQLALCHEMY_DATABASE_URI'] = "mysql+mysqlconnector://root:root@localhost:8889/is212_spm"
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 
 db = SQLAlchemy(app)
@@ -73,28 +74,47 @@ class course(db.Model):
 
 
 ########        level 3 control access      ########
-#display skills that respective to the role 
+#display courses that respective to the skill 
 @app.route('/<int:skill_code>/course', methods=['GET'])
-def display_role_skills(skill_code):
+def display_skill_courses(skill_code):
     # get skills content from skill
-    courses = course.query.filter(course.position.any(skill_code=skill_code)).all()
+    # courses = course.query.filter(course.position.any(skill_code=skill_code)).all()
 
-    if courses is None:
+    # get all relation using skill code
+    sc_relation = db.session.execute(select(skill_course_relation).where(skill_course_relation.c.skill_code == skill_code)).all()
+
+    # convert row object into dict which can be jsonify
+    avail_course = []
+    for sc in sc_relation:
+        # get course details first, filter based on course code and status
+        sc = dict(sc)
+        course_c = sc['course_code']
+        cour = db.session.execute(select(course.course_code,course.course_name,course.course_desc,course.course_status).where(course.course_code==course_c)).first()
+        cour = dict(cour)
+        if cour['course_status'] == "active":
+            # # transform obtained course info into dict
+            sc_info = {}
+            sc_info.update(cour)
+            # save course dict into avail_course list
+            avail_course.append(cour)
+                
+
+    if avail_course is None:
         return {
         "code": 404,
         "message": "Error occured while displaying courses for this skill."
         }
 
-    if (len(courses) > 0):
+    if (len(avail_course) > 0):
         return {
             "code": 200,
             "data": {
-                "courses": [crs.json() for crs in courses]
+                "courses": avail_course
                 
             },
             "message": "These are the courses for this skill."
         }
-    elif (len(courses) == 0):
+    elif (len(avail_course) == 0):
         return {
         "code": 204,
         "message": "There are no courses for this skill."

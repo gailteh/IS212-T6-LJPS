@@ -484,5 +484,32 @@ def display_relation():
         }
 
 
+#add course skill relation
+@app.route("/create-skill-course-relation", methods=['POST'])
+def create_skill_course_relation():
+    data = request.get_json()
+
+    if not all(key in data.keys() for 
+                key in ('skill_code', 'course_code')):
+        return  jsonify({
+            'message': "Incorrect JSON object provided"
+        }), 500
+    
+    # commit to DB
+    try:
+        db.session.execute(skill_course_relation.insert().values({"skill_code":data['skill_code'], "course_code":data['course_code']}))
+        # db.session.add(new_role_skill)
+        db.session.commit()
+    except Exception as e:
+        print(e)
+        return jsonify({
+            "message": "Unable to commit to database"
+        }), 500
+
+    return jsonify({
+        "Status": "Success"
+    }),201
+
+
 if __name__ == '__main__':
     app.run(port=4999, debug=True)

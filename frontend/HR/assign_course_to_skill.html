@@ -169,18 +169,18 @@
                     this.$refs[id].hide()
                 },
                 onSubmit(){
-                    if (this.role_name !== '' && this.role_code !== '' && this.role_desc !== ''){
-                        axios.post('http://127.0.0.1:4999/create_role', 
-                            {role_name: this.role_name, role_code: this.role_code, role_desc: this.role_desc}
+                    if (this.skill_code !== '' && this.course_code !== ''){
+                        axios.post('http://127.0.0.1:4999/create-skill-course-relation', 
+                            {skill_code: this.skill_code, course_code: this.course_code}
                         )
                         .then(res=> {
                             console.log(res)
-                            alert('New role skill relation successfully added')
-                            this.role_code = ''
+                            alert('New skill course relation successfully added')
                             this.skill_code = ''
+                            this.course_code = ''
 
                             assign_skills.hideModal('my-modal')
-                            assign_skills.get_role()
+                            assign_skills.get_skill_course_relationship()
                         })
                         .catch(err=>{
                             console.log(err)

@@ -136,6 +136,7 @@ crossorigin="anonymous"></script>
                 course_code: '',
                 course_name: '',
                 course_description: '',
+                skills_list: [],
                 lj_courses:[],
                 // lj_courses:[{
                 //     "course_code": "COR002",
@@ -159,9 +160,28 @@ crossorigin="anonymous"></script>
                 added: false,
                 del_msg: 'Course Deleted',
                 add_msg: 'Course Added',
-                parameters:0
+                parameters:0,
+                roelcode_param:0,
+                skillcode_param:0,
+                coursecode_param:0
             },
         methods:{
+            getskillslist(){
+                let parameters = new URLSearchParams(window.location.search);
+                this.rolecode_param = parameters.get('role_code');
+                // console.log(this.rolecode_param);
+                axios.get("http://127.0.0.1:4999/" + this.rolecode_param + "/skills")
+                .then( res => {
+                    skills = res.data.data
+                    // console.log(skills);
+                    for (skill in skills){
+                        this.skills_list.push(skill);
+                    }
+                    console.log(this.skills_list)
+                })
+                .catch(error => alert(error));
+            },
+
             onSubmit(){
                     if (this.lj_id !== '' && this.course_code !== '' && this.course_name !== '' && this.course_description !== ''){
                         axios.post("http://127.0.0.1:5000/learning_journey", 
@@ -196,7 +216,7 @@ crossorigin="anonymous"></script>
                         
                         this.lj_courses= response.data.data;
 
-                        
+
                         console.log(response.data.data);
                     
                     })
@@ -231,8 +251,9 @@ crossorigin="anonymous"></script>
         }, 
         mounted: function(){
             this.getCourses()
+            this.getskillslist()
         }
     })
-    crudapp.mount('#crudapp')
+    // crudapp.mount('#crudapp')
 </script>
 </html>

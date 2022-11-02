@@ -125,14 +125,14 @@
                             <th>Course Code</th>
                         </tr>
                     </thead>
-                    <!-- <tbody>
-                        <tr v-for="rs in role_skill_details">
-                            <td>{{rs.role_name}}</td>
-                            <td>{{rs.role_code}}</td>
+                    <tbody>
+                        <tr v-for="rs in relationship_details">
                             <td>{{rs.skill_name}}</td>
                             <td>{{rs.skill_code}}</td>
+                            <td>{{rs.course_name}}</td>
+                            <td>{{rs.course_code}}</td>
                         </tr>
-                    </tbody> -->
+                    </tbody>
                 </table>
             </div>
         </div>
@@ -157,9 +157,9 @@
                 course_status: '',
                 skill_name: '',
                 skill_code: '',
-                // role_skill: [],
                 course_assign_details: [],
-                skill_assign_details: []
+                skill_assign_details: [],
+                relationship_details: []
             },
             methods: {
                 showModal(id){
@@ -193,7 +193,7 @@
                 axios.get('http://127.0.0.1:4999/course')
                     .then(response => {
                         
-                        this.course_assign_details= response.data.data.courses;
+                        this.course_assign_details= response.data.data.course;
                         // console.log(response.data)
                     })
                     .catch(error => alert(error));
@@ -207,12 +207,21 @@
                     })
                     .catch(error => alert(error));
                 },
+                get_skill_course_relationship(){
+                    axios.get('http://127.0.0.1:4999/skill-course-relation')
+                        .then(response => {
+                            console.log(response)
+                            this.relationship_details = response.data.relations;
+                        })
+                        .catch(error => alert(error))
+                }
             }, 
             
 
             mounted: function(){
                 this.get_course()
                 this.get_skill()
+                this.get_skill_course_relationship()
             }
         })
     </script>

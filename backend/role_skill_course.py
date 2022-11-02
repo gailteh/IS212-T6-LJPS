@@ -386,9 +386,6 @@ def create_role_skill_relation():
             'message': "Incorrect JSON object provided"
         }), 500
     
-    #create new record in the lj table
-    # new_role_skill = db.session.execute(select(role_skill_relation))(role_code = data['role_code'], skill_code = data['skill_code'])
-
     # commit to DB
     try:
         db.session.execute(role_skill_relation.insert().values({"role_code":data['role_code'], "skill_code":data['skill_code']}))
@@ -450,11 +447,42 @@ def display_course():
         return {
             "code": 200,
             "data": {
-                "skills": [c.json() for c in courses]
+                "course": [c.json() for c in courses]
                 
             },
             "message": "These are the skills available."
         }
+
+# display course-skill relation
+@app.route("/skill-course-relation", methods=['GET'])
+def display_relation():
+    # get all relation content
+    relations = db.session.execute(select(skill_course_relation)).all()
+
+    # get course and skill
+    relationship = []
+    for rs in relations:
+        rs = dict(rs)
+        course_c = rs['course_code']
+        skill_c = rs['skill_code']
+        skill_info = db.session.execute(select(skill.skill_code,skill.skill_name).where(skill.skill_code==skill_c)).first()
+        course_info = db.session.execute(select(course.course_code,course.course_name).where(course.course_code==course_c)).first()
+        rs_info = {}
+        rs_info.update(dict(course_info))
+        rs_info.update(dict(skill_info))
+        relationship.append(rs_info)
+
+    if len(relations) > 0:
+        return {
+            "code":200,
+            "relations": relationship,
+            "message": "All relations displayed."
+        }
+    elif relations == None:
+        return{
+            "message":"Go check your code!"
+        }
+
 
 if __name__ == '__main__':
     app.run(port=4999, debug=True)

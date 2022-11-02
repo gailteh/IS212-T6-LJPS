@@ -136,11 +136,12 @@ def create_role_skill_relation():
         }), 500
     
     #create new record in the lj table
-    new_role_skill = db.session.execute(select(role_skill_relation))(role_code = data['role_code'], skill_code = data['skill_code'])
+    # new_role_skill = db.session.execute(select(role_skill_relation))(role_code = data['role_code'], skill_code = data['skill_code'])
 
     # commit to DB
     try:
-        db.session.add(new_role_skill)
+        db.session.execute(role_skill_relation.insert().values({"role_code":data['role_code'], "skill_code":data['skill_code']}))
+        # db.session.add(new_role_skill)
         db.session.commit()
     except Exception as e:
         print(e)

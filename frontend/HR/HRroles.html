@@ -248,7 +248,7 @@
                         axios.delete("http://127.0.0.1:4999/delete_role/" + role_code)
                         .then(res => {
                             console.log(res)
-                                alert('delete successfully')
+                                alert('Role delete successfully')
                                 hr_roles.get_role()
                         })
                         .catch(err => {

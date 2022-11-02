@@ -242,7 +242,7 @@
                         axios.delete("http://127.0.0.1:4999/delete_skill/" + skill_code)
                         .then(res => {
                             console.log(res)
-                                alert('delete successfully')
+                                alert('Skill delete successfully')
                                 hr_skills.get_skill()
                         })
                         .catch(err => {

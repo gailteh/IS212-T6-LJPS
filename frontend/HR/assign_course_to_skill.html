@@ -125,14 +125,14 @@
                             <th>Course Code</th>
                         </tr>
                     </thead>
-                    <!-- <tbody>
-                        <tr v-for="rs in role_skill_details">
-                            <td>{{rs.role_name}}</td>
-                            <td>{{rs.role_code}}</td>
+                    <tbody>
+                        <tr v-for="rs in relationship_details">
                             <td>{{rs.skill_name}}</td>
                             <td>{{rs.skill_code}}</td>
+                            <td>{{rs.course_name}}</td>
+                            <td>{{rs.course_code}}</td>
                         </tr>
-                    </tbody> -->
+                    </tbody>
                 </table>
             </div>
         </div>
@@ -157,9 +157,9 @@
                 course_status: '',
                 skill_name: '',
                 skill_code: '',
-                // role_skill: [],
                 course_assign_details: [],
-                skill_assign_details: []
+                skill_assign_details: [],
+                relationship_details: []
             },
             methods: {
                 showModal(id){
@@ -169,18 +169,18 @@
                     this.$refs[id].hide()
                 },
                 onSubmit(){
-                    if (this.role_name !== '' && this.role_code !== '' && this.role_desc !== ''){
-                        axios.post('http://127.0.0.1:4999/create_role', 
-                            {role_name: this.role_name, role_code: this.role_code, role_desc: this.role_desc}
+                    if (this.skill_code !== '' && this.course_code !== ''){
+                        axios.post('http://127.0.0.1:4999/create-skill-course-relation', 
+                            {skill_code: this.skill_code, course_code: this.course_code}
                         )
                         .then(res=> {
                             console.log(res)
-                            alert('New role skill relation successfully added')
-                            this.role_code = ''
+                            alert('New skill course relation successfully added')
                             this.skill_code = ''
+                            this.course_code = ''
 
                             assign_skills.hideModal('my-modal')
-                            assign_skills.get_role()
+                            assign_skills.get_skill_course_relationship()
                         })
                         .catch(err=>{
                             console.log(err)
@@ -193,7 +193,7 @@
                 axios.get('http://127.0.0.1:4999/course')
                     .then(response => {
                         
-                        this.course_assign_details= response.data.data.courses;
+                        this.course_assign_details= response.data.data.course;
                         // console.log(response.data)
                     })
                     .catch(error => alert(error));
@@ -207,12 +207,21 @@
                     })
                     .catch(error => alert(error));
                 },
+                get_skill_course_relationship(){
+                    axios.get('http://127.0.0.1:4999/skill-course-relation')
+                        .then(response => {
+                            console.log(response)
+                            this.relationship_details = response.data.relations;
+                        })
+                        .catch(error => alert(error))
+                }
             }, 
             
 
             mounted: function(){
                 this.get_course()
                 this.get_skill()
+                this.get_skill_course_relationship()
             }
         })
     </script>

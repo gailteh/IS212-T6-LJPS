@@ -9,8 +9,8 @@ app = Flask(__name__)
 # app.config['SQLALCHEMY_ENGINE_OPTIONS'] = {'pool_size': 100,
 #                                           'pool_recycle': 280}
 
-# app.config['SQLALCHEMY_DATABASE_URI'] = "mysql+mysqlconnector://root@localhost:3306/is212_spm"
-app.config['SQLALCHEMY_DATABASE_URI'] = "mysql+mysqlconnector://root:root@localhost:8889/is212_SPM"
+app.config['SQLALCHEMY_DATABASE_URI'] = "mysql+mysqlconnector://root@localhost:3306/is212_spm"
+# app.config['SQLALCHEMY_DATABASE_URI'] = "mysql+mysqlconnector://root:root@localhost:8889/is212_SPM"
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 
 db = SQLAlchemy(app)
@@ -67,9 +67,9 @@ class Role(db.Model):
 class Learning_Journey(db.Model):
     __tablename__ = 'learning_journey'
 
-    lj_id = db.Column(db.Integer, primary_key=True, nullable=False)
+    lj_id = db.Column(db.Integer, nullable=False)
     course_code = db.Column(db.String, db.ForeignKey('courses.course_code'), primary_key=True, nullable = False)
-    role_code = db.Column(db.Integer,  db.ForeignKey('roles.role_code'), nullable = False)
+    role_code = db.Column(db.Integer,  db.ForeignKey('roles.role_code'), nullable = False,primary_key=True)
 
     def __init__(self, lj_id, course_code, role_code):
         self.lj_id = lj_id
@@ -82,12 +82,12 @@ class Learning_Journey(db.Model):
 
 
 
-@app.route('/del_ljc/<int:lj_id>/<string:course_code>', methods=['DELETE'])
+@app.route('/del_ljc/<int:role_code>/<string:course_code>', methods=['DELETE'])
 # deleting 1 course from learning journey
-def del_course(lj_id, course_code):
+def del_course(role_code, course_code):
     
     #  get learning journey rows using lj_id
-    lj_course = Learning_Journey.query.filter_by(lj_id=lj_id, course_code=course_code).first()
+    lj_course = Learning_Journey.query.filter_by(role_code=role_code, course_code=course_code).first()
 
     # delete
     try:
@@ -104,7 +104,7 @@ def del_course(lj_id, course_code):
     return jsonify({
         "code": 200,
         "data": lj_course.json(),
-        "message": course_code + " on "+ str(lj_id) + " had been successfully deleted."
+        "message": course_code + " on "+ str(role_code) + " had been successfully deleted."
     })
 
 if __name__ == '__main__':

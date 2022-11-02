@@ -375,6 +375,33 @@ def display_rs_relation():
             "message":"Go check your code!"
         }
 
+#add role skill relation
+@app.route("/create-role-skill-relation", methods=['POST'])
+def create_role_skill_relation():
+    data = request.get_json()
+
+    if not all(key in data.keys() for 
+                key in ('role_code', 'skill_code')):
+        return  jsonify({
+            'message': "Incorrect JSON object provided"
+        }), 500
+    
+    # commit to DB
+    try:
+        db.session.execute(role_skill_relation.insert().values({"role_code":data['role_code'], "skill_code":data['skill_code']}))
+        # db.session.add(new_role_skill)
+        db.session.commit()
+    except Exception as e:
+        print(e)
+        return jsonify({
+            "message": "Unable to commit to database"
+        }), 500
+
+    return jsonify({
+        "Status": "Success"
+    }),201
+
+
 ########################        Course backend      ########################
 ########        level 3 control access      ########
 #display skills that respective to the role 
@@ -420,11 +447,69 @@ def display_course():
         return {
             "code": 200,
             "data": {
-                "skills": [c.json() for c in courses]
+                "course": [c.json() for c in courses]
                 
             },
             "message": "These are the skills available."
         }
+
+# display course-skill relation
+@app.route("/skill-course-relation", methods=['GET'])
+def display_relation():
+    # get all relation content
+    relations = db.session.execute(select(skill_course_relation)).all()
+
+    # get course and skill
+    relationship = []
+    for rs in relations:
+        rs = dict(rs)
+        course_c = rs['course_code']
+        skill_c = rs['skill_code']
+        skill_info = db.session.execute(select(skill.skill_code,skill.skill_name).where(skill.skill_code==skill_c)).first()
+        course_info = db.session.execute(select(course.course_code,course.course_name).where(course.course_code==course_c)).first()
+        rs_info = {}
+        rs_info.update(dict(course_info))
+        rs_info.update(dict(skill_info))
+        relationship.append(rs_info)
+
+    if len(relations) > 0:
+        return {
+            "code":200,
+            "relations": relationship,
+            "message": "All relations displayed."
+        }
+    elif relations == None:
+        return{
+            "message":"Go check your code!"
+        }
+
+
+#add course skill relation
+@app.route("/create-skill-course-relation", methods=['POST'])
+def create_skill_course_relation():
+    data = request.get_json()
+
+    if not all(key in data.keys() for 
+                key in ('skill_code', 'course_code')):
+        return  jsonify({
+            'message': "Incorrect JSON object provided"
+        }), 500
+    
+    # commit to DB
+    try:
+        db.session.execute(skill_course_relation.insert().values({"skill_code":data['skill_code'], "course_code":data['course_code']}))
+        # db.session.add(new_role_skill)
+        db.session.commit()
+    except Exception as e:
+        print(e)
+        return jsonify({
+            "message": "Unable to commit to database"
+        }), 500
+
+    return jsonify({
+        "Status": "Success"
+    }),201
+
 
 if __name__ == '__main__':
     app.run(port=4999, debug=True)

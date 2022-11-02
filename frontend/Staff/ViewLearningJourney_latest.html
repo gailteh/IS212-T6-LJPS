@@ -56,7 +56,7 @@
                     <td>{{ record.course_name }}</td>   
                     <td class="float-end">
                         <button class="btn btn-sm btn-info" >
-                            <a v-bind:href="`StaffEditLearningJourney.html?role_code=${record.role_code}`">Edit </a>
+                            <a v-bind:href="`StaffEditLearningJourney.html?role_code=${record.role_code}&lj_id=${record.role_code}`">Edit </a>
                         </button>
                         <button class="btn btn-sm btn-danger" >Delete</button>
                     </td>          
@@ -100,7 +100,7 @@ const vm = new Vue({
                 },
             },
             mounted: function() {
-                axios.get('http://127.0.0.1:5000/learning_journey')
+                axios.get('http://127.0.0.1:4848/learning_journey')
                     .then(response => {
                         
                         this.role_course_info = response.data.data;

@@ -35,7 +35,7 @@
                         <a class="nav-link active text-dark" href="./assign_skill_to_role.html">Assign skills to roles</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link active text-dark" href="">Assign courses to skills</a>
+                        <a class="nav-link active text-dark" href="./assign_course_to_skill.html">Assign courses to skills</a>
                     </li>
                 </ul>
             </div>
@@ -178,7 +178,7 @@
                             this.skill_code = ''
 
                             assign_roles.hideModal('my-modal')
-                            assign_roles.get_role()
+                            assign_roles.get_role_skill_relationship()
                         })
                         .catch(err=>{
                             console.log(err)

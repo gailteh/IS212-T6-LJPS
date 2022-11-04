@@ -23,20 +23,20 @@ class TestApp(flask_testing.TestCase):
 class TestRole(unittest.TestCase):
     def test_json(self):
         # Figure out a way to add in the relationship --> role_skill_relationship
-        roleTest = role(role_code=1,role_name='admin',role_desc='Admin is the best job in the world',role_skill_relation='dummy')
+        roleTest = role(role_code=1,role_name='admin',role_desc='Admin is the best job in the world',role_skill_relation='role-skill')
         self.assertEqual(roleTest.json(), {
             "role_code":1, 
             "role_name":'admin', 
             "role_desc":'Admin is the best job in the world',
-            "role_skill_relation":"dummy"
+            "role_skill_relation":"role-skill"
         })
 
 # For endpoints
 class TestDisplayRole(TestApp):
     def test_display_role(self):
         # Figure out a way to add in the relationship for r1,r2 --> role_skill_relationship
-        r1 = role(role_code=1,role_name="admin",role_desc='Best job in the world',role_skill_relation="dummy")
-        r2 = role(role_code=2,role_name="HR",role_desc='HR job',role_skill_relation='dummy')
+        r1 = role(role_code=1,role_name="admin",role_desc='Best job in the world',role_skill_relation="role-skill-1")
+        r2 = role(role_code=2,role_name="HR",role_desc='HR job',role_skill_relation='role-skill-2')
 
         db.session.add(r1)
         db.session.add(r2)
@@ -51,13 +51,13 @@ class TestDisplayRole(TestApp):
                     "role_code":1,
                     "role_name":"admin",
                     "role_desc":"Best job in the world",
-                    "role_skill_relation":"dummy"
+                    "role_skill_relation":"role-skill-1"
                 },
                 {
                     "role_code":2,
                     "role_name":"HR",
                     "role_desc":"HR job",
-                    "role_skill_relation":"dummy"
+                    "role_skill_relation":"role-skill-2"
                 }
                 
                 ]

@@ -33,6 +33,20 @@ class Course(db.Model):
                 'course_desc': self.course_desc,
                 'course_status': self.course_status}
 
+    __mapper_args__ = {
+        'polymorphic_identity': 'course'
+    }
+    def to_dict(self):
+        """
+        'to_dict' converts the object into a dictionary,
+        in which the keys correspond to database columns
+        """
+        columns = self.__mapper__.column_attrs.keys()
+        result = {}
+        for column in columns:
+            result[column] = getattr(self, column)
+        return result
+
 #Initiate Role Class
 class Role(db.Model):
     __tablename__ = 'role'
@@ -51,7 +65,19 @@ class Role(db.Model):
         return {"role_code":self.role_code, 
                 "role_name":self.role_name, 
                 "role_desc":self.role_desc}
-
+    __mapper_args__ = {
+        'polymorphic_identity': 'role'
+    }
+    def to_dict(self):
+        """
+        'to_dict' converts the object into a dictionary,
+        in which the keys correspond to database columns
+        """
+        columns = self.__mapper__.column_attrs.keys()
+        result = {}
+        for column in columns:
+            result[column] = getattr(self, column)
+        return result
 
 #Initiate Learning Journey class
 class LearningJourney(db.Model):
@@ -72,7 +98,19 @@ class LearningJourney(db.Model):
                 "course_code": self.role_code,
                 "role_code": self.role_code
                 }
-
+    __mapper_args__ = {
+        'polymorphic_identity': 'learning_journey'
+    }
+    def to_dict(self):
+        """
+        'to_dict' converts the object into a dictionary,
+        in which the keys correspond to database columns
+        """
+        columns = self.__mapper__.column_attrs.keys()
+        result = {}
+        for column in columns:
+            result[column] = getattr(self, column)
+        return result
 
 @app.route("/learning_journey", methods=['POST'])
 #For every new course that is added to a learning journey, a new record is created
@@ -83,27 +121,60 @@ def add_new_course():
                 key in ('lj_id', 'course_code', 'role_code')):
         return  jsonify({
             'message': "Incorrect JSON object provided"
-        }), 500
+        }), 499
+
+    # validate if a LJ already created previously
+    if (LearningJourney.query.filter_by(role_code=data['role_code']).first()):
     
-    #create new record in the lj table
-    new_course = LearningJourney(lj_id = data['lj_id'], course_code = data['course_code'], role_code = data['role_code'])
 
-    # commit to DB
-    try:
-        db.session.add(new_course)
-        db.session.commit()
-    except Exception as e:
-        print(e)
+        #create new record in the lj table
+        new_course = LearningJourney(lj_id = data['lj_id'], course_code = data['course_code'], role_code = data['role_code'])
+
+        role_info = Role.query.filter_by(role_code=data['role_code']).first()
+        role_name = role_info.to_dict()['role_name']
+
+        course_info = Course.query.filter_by(course_code=data['course_code']).first()
+        course_name = course_info.to_dict()['course_name']
+        # commit to DB
+        try:
+            db.session.add(new_course)
+            db.session.commit()
+        except Exception as e:
+            print(e)
+            return jsonify({
+                "message": "Unable to commit to database as this course is already added to Learning Journey for " + role_name
+            }), 501
+
         return jsonify({
-            "message": "Unable to commit to database"
-        }), 500
+            "Status": "Success",
+            "message": course_name + " is added to Learning Journey for " + role_name
+        }),201
 
-    return jsonify({
-        "Status": "Success"
-    }),201
+    else:
+        #create new record in the lj table
+        new_course = LearningJourney(lj_id = data['lj_id'], course_code = data['course_code'], role_code = data['role_code'])
 
+        role_info = Role.query.filter_by(role_code=data['role_code']).first()
+        role_name = role_info.to_dict()['role_name']
+        print(role_name)
+        course_info = Course.query.filter_by(course_code=data['course_code']).first()
+        course_name = course_info.to_dict()['course_name']
+        print(role_name)
 
+        # commit to DB
+        try:
+            db.session.add(new_course)
+            db.session.commit()
+        except Exception as e:
+            print(e)
+            return jsonify({
+                "message": "Unable to commit to database as this course is already added to Learning Journey for " + role_name
+            }), 501
 
+        return jsonify({
+            "Status": "Success",
+            "message": "Initiated Learning Journey for " + role_name + ", course " + course_name + " is added"
+        }), 201
 
 
 

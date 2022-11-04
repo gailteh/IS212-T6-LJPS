@@ -177,6 +177,58 @@ def display_role_course(role_code):
         "message": "There are no courses for this role."
         }
 
+@app.route('/learning_journey/<int:role_code>/<string:course_code>', methods=['GET'])
+def display_course_from_role(role_code,course_code):
+
+    courses_list = Learning_Journey.query.filter_by(role_code=role_code,course_code=course_code).all()
+
+    courses = []
+
+    for course in courses_list:
+
+        course_dict = {}
+
+        course_code = course.to_dict()['course_code']
+
+        course_name_query = Course.query.filter_by(course_code=course_code).first()
+        # print(role_name_query.to_dict()['role_name'])
+        course_name = course_name_query.to_dict()['course_name']
+
+        course__desc_query = Course.query.filter_by(course_code=course_code).first()
+        # print(role_name_query.to_dict()['role_name'])
+        course_desc = course__desc_query.to_dict()['course_desc']
+
+        role_status_query = Course.query.filter_by(course_code=course_code).first()
+        # print(role_name_query.to_dict()['role_name'])
+        course_status = role_status_query.to_dict()['course_status']
+
+        course_dict['course_code'] = course_code
+        course_dict['course_name'] = course_name
+        course_dict['course_desc'] = course_desc
+        course_dict['course_status'] = course_status
+
+        courses.append(course_dict)
+        print(courses)
+
+    if courses is None:
+        return jsonify({
+        "code": 404,
+        "message": "Error occured while displaying skills for this role."
+        })
+
+    if (len(courses) > 0):
+        return jsonify({
+            "code": 200,
+            "data": [cr for cr in courses],
+            "message": "This is the course."
+        })
+
+    elif (len(courses) == 0):
+        return {
+        "code": 204,
+        "message": "There are no courses for this role."
+        }
+
 
 @app.route("/learning_journey")
 def role_course():

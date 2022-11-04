@@ -75,6 +75,7 @@
                 course_details: [],
                 parameters_skill_code: 0,
                 parameters_role_code: 0,
+                error: ''
             },
             // methods:{
             //     get_course(){
@@ -103,14 +104,15 @@
                             role_code: this.parameters_role_code}
                         )
                         .then(res=> {
-                            console.log(res)
-                            alert('New course successfully added')
+                            console.log(res.data.message)
+                            alert(res.data.message)
                             this.avail_courses = []
 
                             crudapp.getCourses()
                         })
-                        .catch(err=>{
-                            console.log(err)
+                        .catch(e=>{
+                            console.log(e)
+                            alert(e.response.data.message)
                         })
                     } else {
                         alert('Error! Empty fields')
@@ -135,7 +137,7 @@
 
                      console.log(response.data.data.courses[0].course_name)
 
-                 
+                     
                  })
                  .catch(error => alert(error));
          }

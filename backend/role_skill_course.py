@@ -2,8 +2,6 @@ from flask import Flask, request, jsonify
 from flask_sqlalchemy import SQLAlchemy
 from flask_cors import CORS
 from sqlalchemy import ForeignKey, select
-from flaskext.mysql import MySQL
-import pymysql
 
 app = Flask(__name__)
 # initiate database connection

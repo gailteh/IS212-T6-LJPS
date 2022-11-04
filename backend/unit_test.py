@@ -15,7 +15,7 @@ class TestRole(unittest.TestCase):
         self.r2 = None
 
     # each unit test is run independently 
-    def test_role(self):
+    def test_display_role(self):
         role_code = self.r.balance
         #assertEqual tells pass or fail and break loop and the rest will not run
         self.assertEqual(self.r.role_code, 1)

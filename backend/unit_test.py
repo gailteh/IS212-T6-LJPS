@@ -1,7 +1,9 @@
 import unittest 
 import flask_testing
 import json
+from flask import url_for
 from role_skill_course import app, db, role, skill, course
+
 
 class TestApp(flask_testing.TestCase):
     app.config['SQLALCHEMY_DATABASE_URI'] = "sqlite://"
@@ -29,6 +31,7 @@ class TestRole(unittest.TestCase):
             "role_desc": "Admin is the best job in the world"
             # "role_skill_relation":"role-skill"
         })
+        
 
 # test Skill
 class TestSkill(unittest.TestCase):
@@ -84,6 +87,8 @@ class TestDisplayRole(TestApp):
             },
             "message": "These are the roles available."
         })
+        self.assertRaises(Exception, r1 == None)
+        self.assertRaises(Exception, r2 == None)
 
 
 class TestDisplaySkill(TestApp):
@@ -115,39 +120,78 @@ class TestDisplaySkill(TestApp):
             },
             "message": "These are the skills available."
         })
+        self.assertRaises(Exception, s1 == None)
+        self.assertRaises(Exception, s1 == None)
 
+class TestDeleteRole(TestApp):
+    def test_delete_role(self):
+        r1 = role(role_code = 1, role_name = "admin", role_desc = "Best job in the world")
+        r2 = role(role_code = 2, role_name = "HR", role_desc = "HR job")
 
-class TestDisplayCourse(TestApp):
-    def test_display_course(self):
-        c1 = course(course_code = 1, course_name = "Systems thinking", course_status = "active", course_desc = "Apply system thinking")
-        c2 = course(course_code = 2, course_name = "Six Sigma", course_status = "active", course_desc = "Apply six sigma")
-
-        db.session.add(c1)
-        db.session.add(c2)
+        db.session.add(r1)
+        db.session.add(r2)
         db.session.commit()
 
-        response = self.client.get("/course")
+        # db.session.delete(r2)
+        # db.session.commit()
+
+        response = self.client.get("/delete_role/" + str(r2.role_code))
         self.assertEqual(response.json,
         {
             "code": 200,
-            "data": {
-                "courses": [{
-                    "course_code": 1, 
-                    "course_name": "Systems thinking", 
-                    "course_status": "active",
-                    "course_desc": "Apply system thinking"
-                },
-                {
-                    "course_code": 2, 
-                    "course_name": "Six Sigma", 
-                    "course_status": "active",
-                    "course_desc": "Apply six sigma"
-                }
-                ]
-                
-            },
-            "message": "These are the courses available."
-        })                
+            "message": str(r2) + " had been successfully deleted."
+        })
+        # self.assertRaises(Exception, r1 == None)
+        # self.assertRaises(Exception, r2 == role(role_code=2, role_name = "HR", role_desc = "HR job"))
+
+class TestCreateRole(TestApp):
+    def test_create_role(self):
+        r1 = role(role_code = 1, role_name = "admin", role_desc = "Best job in the world")
+        r2 = role(role_code = 2, role_name = "HR", role_desc = "HR job")
+
+        response = self.client.get("/create_role")
+        self.assertEqual(response.json,
+        {
+            "Status": "Success"
+        })
+        self.assertRaises(Exception, r1 == None)
+        self.assertRaises(Exception, r2 == None)
+
+# class TestPostRole(TestApp):
+#     def test_post_role(self):
+            # missing value field = bad
+            # role = {"role_name": "some_role"}
+            # response = self.app.post(BASE_URL,
+            #                          data=json.dumps(item),
+            #                          content_type='application/json')
+            # self.assertEqual(response.status_code, 400)
+            # value field cannot take str
+            # role = {"role_name": "admin", "role_code": 'string', "role_desc": 'string'}
+            # response = self.app.post("/create_role",
+            #                          data=json.dumps(item),
+            #                          content_type='application/json')
+            # self.assertEqual(response.status_code, 400)
+
+
+            # valid: both required fields, value takes int
+            # role = {"role_name": "admin", "role_code": 1, "role_desc": 'string'}
+            # response = self.app.post("/create_role",
+            #                         data=json.dumps(role),
+            #                         content_type='application/json')
+            # self.assertEqual(response.status_code, 201)
+            # data = json.loads(response.get_role())
+            # self.assertEqual(data['role']['role_name'], 'admin')
+            # self.assertEqual(data['role']['role_code'], 1)
+            # self.assertEqual(data['role']['name'], 'string')
+            # cannot add item with same name again
+            # item = {"name": "screen", "value": 200}
+            # response = self.app.post(BASE_URL,
+            #                          data=json.dumps(item),
+            #                          content_type='application/json')
+            # self.assertEqual(response.status_code, 400)
+    ################################################################
+
+
 
 if __name__ == "__main__":
     unittest.main()

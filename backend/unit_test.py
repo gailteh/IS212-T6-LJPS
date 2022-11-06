@@ -2,7 +2,7 @@ import unittest
 import flask_testing
 import json
 from role_skill_course import app, db, role, skill, course
-
+from Learning_Journey_latest import app, db, Learning_Journey
 
 class TestApp(flask_testing.TestCase):
     app.config['SQLALCHEMY_DATABASE_URI'] = "sqlite://"
@@ -52,6 +52,17 @@ class TestCourse(unittest.TestCase):
             "course_name":"Systems thinking", 
             "course_status": "active",
             "course_desc":"Apply system thinking"
+            # "skill_course_relation":"role-skill"
+        })
+
+# test Learning Journey
+class TestCourse(unittest.TestCase):
+    def test_json(self):
+        LJ_Test = Learning_Journey(lj_id = 1, course_code = 1, role_code = 1)
+        self.assertEqual(LJ_Test.json(), {
+            "lj_id": 1, 
+            "course_code": 1, 
+            "role_code": 1,
             # "skill_course_relation":"role-skill"
         })
 
@@ -121,6 +132,40 @@ class TestDisplaySkill(TestApp):
         })
         self.assertRaises(Exception, s1 == None)
         self.assertRaises(Exception, s1 == None)
+
+class TestDisplayLearningJourney(TestApp):
+    def test_display_LJ(self):
+        lj1 = Learning_Journey(lj_id = 1, course_code = 1, role_code = 1)
+        lj2 = Learning_Journey(lj_id = 1, course_code = 2, role_code = 1)
+        r1 = role(role_code=1, role_name = "admin", role_desc = "Best job in the world")
+        c1 = course(course_code = 1, course_name = "Systems thinking", course_status = "active", course_desc = "Apply system thinking")
+        c2 = course(course_code = 2, course_name = "Risk and Compliance Reporting", course_status = "active", course_desc = "reporting")
+        
+        db.session.add(r1)
+        db.session.add(c1)
+        db.session.add(c2)
+        db.session.add(lj1)
+        db.session.add(lj2)
+
+        db.session.commit()
+
+        response = self.client.get("/learning_journey")
+        self.assertEqual(response.json,
+        {
+            "code": 200,
+            "data": [
+                {
+                "course_name": [
+                "Systems thinking","Risk and Compliance Reporting","Risk and Compliance Reporting"
+                ],
+                "role_code": '1',
+                "role_name": "admin"
+                }
+            ]
+        })
+
+        self.assertRaises(Exception, c1 == None)
+        self.assertRaises(Exception, c2 == None)
 
 
 if __name__ == "__main__":

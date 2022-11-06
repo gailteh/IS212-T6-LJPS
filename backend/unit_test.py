@@ -1,7 +1,6 @@
 import unittest 
 import flask_testing
 import json
-from flask import url_for
 from role_skill_course import app, db, role, skill, course
 
 
@@ -123,117 +122,6 @@ class TestDisplaySkill(TestApp):
         self.assertRaises(Exception, s1 == None)
         self.assertRaises(Exception, s1 == None)
 
-class TestDeleteRole(TestApp):
-    def test_delete_role(self):
-        r1 = role(role_code = 1, role_name = "admin", role_desc = "Best job in the world")
-        r2 = role(role_code = 2, role_name = "HR", role_desc = "HR job")
-
-        db.session.add(r1)
-        db.session.add(r2)
-        db.session.commit()
-
-        # db.session.delete(r2)
-        # db.session.commit()
-
-        response = self.client.get("/delete_role/" + str(r2.role_code))
-        self.assertEqual(response.json,
-        {
-            "code": 200,
-            "message": str(r2) + " had been successfully deleted."
-        })
-        # self.assertRaises(Exception, r1 == None)
-        # self.assertRaises(Exception, r2 == role(role_code=2, role_name = "HR", role_desc = "HR job"))
-
-class TestCreateRole(TestApp):
-    def test_create_role(self):
-        r1 = role(role_code = 1, role_name = "admin", role_desc = "Best job in the world")
-        r2 = role(role_code = 2, role_name = "HR", role_desc = "HR job")
-
-        response = self.client.get("/create_role")
-        self.assertEqual(response.json,
-        {
-            "Status": "Success"
-        })
-        self.assertRaises(Exception, r1 == None)
-        self.assertRaises(Exception, r2 == None)
-
-# class TestPostRole(TestApp):
-#     def test_post_role(self):
-            # missing value field = bad
-            # role = {"role_name": "some_role"}
-            # response = self.app.post(BASE_URL,
-            #                          data=json.dumps(item),
-            #                          content_type='application/json')
-            # self.assertEqual(response.status_code, 400)
-            # value field cannot take str
-            # role = {"role_name": "admin", "role_code": 'string', "role_desc": 'string'}
-            # response = self.app.post("/create_role",
-            #                          data=json.dumps(item),
-            #                          content_type='application/json')
-            # self.assertEqual(response.status_code, 400)
-
-
-            # valid: both required fields, value takes int
-            # role = {"role_name": "admin", "role_code": 1, "role_desc": 'string'}
-            # response = self.app.post("/create_role",
-            #                         data=json.dumps(role),
-            #                         content_type='application/json')
-            # self.assertEqual(response.status_code, 201)
-            # data = json.loads(response.get_role())
-            # self.assertEqual(data['role']['role_name'], 'admin')
-            # self.assertEqual(data['role']['role_code'], 1)
-            # self.assertEqual(data['role']['name'], 'string')
-            # cannot add item with same name again
-            # item = {"name": "screen", "value": 200}
-            # response = self.app.post(BASE_URL,
-            #                          data=json.dumps(item),
-            #                          content_type='application/json')
-            # self.assertEqual(response.status_code, 400)
-    ################################################################
-
-
 
 if __name__ == "__main__":
     unittest.main()
-
-
-
-# class TestRole(unittest.TestCase):
-#     #create objects that all functions uses
-#     def setUp(self):
-#         self.r = role("CEO", 1, 'manage the whole company')
-#         self.rl = role("UI designer", 2, 'design the web application')
-#         self.r2 = role("Business manager", 3, 'get profits')
-
-#     #teardown is at the end, make sure the code is clean and remove the things 
-#     def tearDown(self):
-#         self.r = None
-#         self.rl = None
-#         self.r2 = None
-
-#     # each unit test is run independently 
-#     def test_display_role(self):
-#         role_code = self.r.balance
-#         #assertEqual tells pass or fail and break loop and the rest will not run
-#         self.assertEqual(self.r.role_code, 1)
-#         self.assertEqual(self.r.role_name, "CEO")
-#         self.s.deposit(500)
-#         self.assertEqual(self.s.balance, 1500)
-
-#     def test_createRole(self):
-        
-#         self.s.withdraw(1000)
-#         self.assertEqual(self.s.balance, 500)
-
-#         #test if the amount goes beyond the balance amount, throw an error
-#         self.assertRaises(Exception, self.s.withdraw, 600)
-
-#     def test_EqualAccounts(self): # could be for boundary test cases
-        
-
-#         #assert checking the object itself
-#         #assert checking the fields at a time
-#         self.assertTrue(self.s.balance > 0)
-#         # check with s is = to s
-#         self.assertIs(self.s, self.s)
-#         self.assertIsNot(self.s, self.sl)

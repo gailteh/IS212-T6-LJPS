@@ -177,58 +177,6 @@ def display_role_course(role_code):
         "message": "There are no courses for this role."
         }
 
-@app.route('/learning_journey/<int:role_code>/<string:course_code>', methods=['GET'])
-def display_course_from_role(role_code,course_code):
-
-    courses_list = Learning_Journey.query.filter_by(role_code=role_code,course_code=course_code).all()
-
-    courses = []
-
-    for course in courses_list:
-
-        course_dict = {}
-
-        course_code = course.to_dict()['course_code']
-
-        course_name_query = Course.query.filter_by(course_code=course_code).first()
-        # print(role_name_query.to_dict()['role_name'])
-        course_name = course_name_query.to_dict()['course_name']
-
-        course__desc_query = Course.query.filter_by(course_code=course_code).first()
-        # print(role_name_query.to_dict()['role_name'])
-        course_desc = course__desc_query.to_dict()['course_desc']
-
-        role_status_query = Course.query.filter_by(course_code=course_code).first()
-        # print(role_name_query.to_dict()['role_name'])
-        course_status = role_status_query.to_dict()['course_status']
-
-        course_dict['course_code'] = course_code
-        course_dict['course_name'] = course_name
-        course_dict['course_desc'] = course_desc
-        course_dict['course_status'] = course_status
-
-        courses.append(course_dict)
-        print(courses)
-
-    if courses is None:
-        return jsonify({
-        "code": 404,
-        "message": "Error occured while displaying skills for this role."
-        })
-
-    if (len(courses) > 0):
-        return jsonify({
-            "code": 200,
-            "data": [cr for cr in courses],
-            "message": "This is the course."
-        })
-
-    elif (len(courses) == 0):
-        return {
-        "code": 204,
-        "message": "There are no courses for this role."
-        }
-
 
 @app.route("/learning_journey")
 def role_course():
@@ -280,34 +228,6 @@ def role_course():
             "message": "There are no LJs."
         }
     ), 404
-
-@app.route("/learning_journey", methods=['POST'])
-#For every new course that is added to a learning journey, a new record is created
-def add_new_course(): 
-    data = request.get_json()
-
-    if not all(key in data.keys() for 
-                key in ('lj_id', 'course_code', 'role_code')):
-        return  jsonify({
-            'message': "Incorrect JSON object provided"
-        }), 500
-    
-    #create new record in the lj table
-    new_course = Learning_Journey(lj_id = data['lj_id'], course_code = data['course_code'], role_code = data['role_code'])
-
-    # commit to DB
-    try:
-        db.session.add(new_course)
-        db.session.commit()
-    except Exception as e:
-        print(e)
-        return jsonify({
-            "message": "Unable to commit to database"
-        }), 500
-
-    return jsonify({
-        "Status": "Success"
-    }),201
 
 # @app.route('/learning_journey/<string:staff_id>', methods=['GET'])
 # # deleting 1 course from learning journey

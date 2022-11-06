@@ -157,12 +157,15 @@ def display_course_from_role(role_code):
         if role_c == role_code:
             role_info = db.session.execute(select(role.role_code,role.role_name).where(role.role_code==role_c)).first()
             skill_info = db.session.execute(select(skill.skill_code,skill.skill_name).where(skill.skill_code==skill_c)).first()
-            course_info = db.session.execute(select(course.course_code,course.course_name).where(course.course_code==course_c)).first()
+            course_info = db.session.execute(select(course.course_code,course.course_name,course.course_desc,course.course_status).where(course.course_code==course_c)).first()
+            course_info_dict = dict(course_info)
             rs_info = {}
-            rs_info.update(dict(role_info))
-            rs_info.update(dict(skill_info))
-            rs_info.update(dict(course_info))
-            courses.append(rs_info)
+            if course_info_dict['course_status'] == "active":
+                rs_info.update(dict(course_info))
+                rs_info.update(dict(role_info))
+                rs_info.update(dict(skill_info))
+            if rs_info != {}:
+                courses.append(rs_info)
 
     if len(courses) > 0:
         return {

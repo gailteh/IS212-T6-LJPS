@@ -34,25 +34,31 @@
         <!-- add course -->
         <div class="col col-md-12">
             <div>
-                <button class="btn btn-primary" data-bs-toggle="collapse" data-bs-target="#add-course-collapse">Add Course</button>
+                <button class="btn btn-primary" data-bs-toggle="collapse" data-bs-target="#add-course-collapse">Show Courses</button>
 
                 <!-- collapse add member form -->
                 <div class="collapse mt-2" id="add-course-collapse">
                     <div class="card card-body">
-                        <form action="" method="post" @submit.prevent="onSubmit">
+                        <form action="">
                             <table class="table table-hover">
                                 <thead>
                                     <th>Course Code</th>
                                     <th>Course Name</th>
+                                    <th>Course Desc</th>
                                     <th>Action</th>
                                 </thead>
                                 <tbody>
                                     <tr v-for="avail_course in avail_courses">
                                         <td>{{ avail_course.course_code }}</td>
                                         <td>{{ avail_course.course_name }}</td>
-                                        <!-- <td>{{ avail_course.course_desc }}</td> -->
-                                        <td><button class="btn btn-sm btn-info" @click="added = !added">Add</button>
-                                    </td>
+                                        <td>{{ avail_course.course_desc }}</td>
+                                        <td>
+                                            <button class="btn btn-sm btn-info" @click="onSubmit(avail_course.course_code, avail_course.course_desc, avail_course.course_name)" data-method="post">
+                                            <a v-bind:href="`StaffEditLearningJourney.html?role_code=${avail_course.role_code}&lj_id=${avail_course.role_code}`">
+                                            Add
+                                            </a>
+                                            </button>
+                                        </td>
                                     </tr>
                                     
                                     <tr>
@@ -68,16 +74,7 @@
                         </form>
                     </div>
                 </div>
-                
             </div>
-        </div>
-
-        <!-- message -->
-        <div class="text-center mt-4" v-if="deleted === true">
-            <p class="text-danger"><strong>{{ del_msg }}</strong></p>
-        </div>
-        <div class="text-center mt-4" v-if="added === true">
-            <p class="text-success"><strong>{{ add_msg }}</strong></p>
         </div>
 
         <!-- show existing course -->
@@ -158,8 +155,6 @@ crossorigin="anonymous"></script>
                 // avail_courses: [{course_code: "COR3302", course_name: 'yyy and xxx', course_description: 'decription 111'}], 
                 deleted: false,
                 added: false,
-                del_msg: 'Course Deleted',
-                add_msg: 'Course Added',
                 parameters:0
             },
         methods:{
@@ -168,7 +163,7 @@ crossorigin="anonymous"></script>
                 this.parameters = parameters.get('role_code');
                 axios.get("http://127.0.0.1:4999/role-skill-course-relation/" + this.parameters)
                 .then(response => {
-                    // console.log(response.data.rel_courses)
+                    console.log(response.data.rel_courses)
                     this.avail_courses = response.data.rel_courses;
                 })
                 .catch(err=>{
@@ -176,30 +171,32 @@ crossorigin="anonymous"></script>
                 })
             },
 
-            onSubmit(){
-                let parameters = new URLSearchParams(window.location.search);
-                this.lj_id = parameters.get('role_code');
-                if (this.lj_id !== '' && this.course_code !== '' && this.course_name !== '' && this.course_description !== ''){
-                    axios.post("http://127.0.0.1:4848/learning_journey", 
-                        {lj_id: this.lj_id,
-                        course_code: this.course_code,
-                        course_name: this.course_name,
-                        course_description: this.course_description}
-                    )
-                    .then(res=> {
-                        console.log(res)
-                        alert('New course successfully added')
-                        this.avail_courses = []
+            onSubmit(course_code,course_desc,course_name){
+                this.course_code = course_code
+                this.course_desc = course_desc
+                this.course_name = course_name
+                if (this.course_code !== ''){
+                        axios.post('http://127.0.0.1:5000/learning_journey', 
+                            {lj_id: this.lj_id,
+                            course_code: this.course_code,
+                            role_code: this.role_code}
+                        )
+                        .then(res=> {
+                            console.log(res)
+                            alert('Course has been successfully added')
+                            this.course_name = ''
+                            this.course_code = ''
+                            this.course_desc = ''
+                            crudapp.getCourses()
 
-                        crudapp.getCourses()
-                    })
-                    .catch(err=>{
-                        console.log(err)
-                    })
-                } else {
-                    alert('Error! Empty fields')
-                }
-                },
+                        })
+                        .catch(err=>{
+                            console.log(err)
+                        })
+                    } else {
+                        alert('Error! Empty fields')
+                    }
+            },
             getCourses(){
                 
                 let parameters = new URLSearchParams(window.location.search);
@@ -234,11 +231,14 @@ crossorigin="anonymous"></script>
             }
         }, 
         mounted: function(){
+            this.getavailcourses()
             this.getCourses()
+
             let parameters = new URLSearchParams(window.location.search)
             this.role_code = parameters.get('role_code')
             this.lj_id = parameters.get('lj_id')
-            this.getavailcourses()
+
+            
         }
     })
 </script>

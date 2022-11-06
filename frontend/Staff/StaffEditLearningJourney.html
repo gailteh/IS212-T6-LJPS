@@ -77,14 +77,6 @@
             </div>
         </div>
 
-        <!-- message -->
-        <div class="text-center mt-4" v-if="deleted === true">
-            <p class="text-danger"><strong>{{ del_msg }}</strong></p>
-        </div>
-        <div class="text-center mt-4" v-if="added === true">
-            <p class="text-success"><strong>{{ add_msg }}</strong></p>
-        </div>
-
         <!-- show existing course -->
         <div class="row">
             <div class="col-md-12">
@@ -163,8 +155,6 @@ crossorigin="anonymous"></script>
                 // avail_courses: [{course_code: "COR3302", course_name: 'yyy and xxx', course_description: 'decription 111'}], 
                 deleted: false,
                 added: false,
-                del_msg: 'Course Deleted',
-                add_msg: 'Course Added',
                 parameters:0
             },
         methods:{

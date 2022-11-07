@@ -1,6 +1,4 @@
-# IS212-T6-LJPS
 INSTALLATION GUIDE
-
 (1) set up and run a WAMP or MAMP server
 
 (2) execute the contents of 'db.sql' in phpMyAdmin, i.e. at:

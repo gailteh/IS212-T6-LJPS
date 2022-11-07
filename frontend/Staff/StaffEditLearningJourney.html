@@ -161,7 +161,7 @@ crossorigin="anonymous"></script>
             getavailcourses(){
                 let parameters = new URLSearchParams(window.location.search);
                 this.parameters = parameters.get('role_code');
-                axios.get("http://127.0.0.1:4999/role-skill-course-relation/" + this.parameters)
+                axios.get("http://127.0.0.1:4997/role-skill-course-relation/" + this.parameters)
                 .then(response => {
                     console.log(response.data.rel_courses)
                     this.avail_courses = response.data.rel_courses;

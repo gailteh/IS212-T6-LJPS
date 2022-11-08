@@ -6,6 +6,7 @@ from sqlalchemy import ForeignKey, select
 app = Flask(__name__)
 # initiate database connection
 app.config['SQLALCHEMY_DATABASE_URI'] = "mysql+mysqlconnector://root@localhost:3306/is212_spm"
+app.config['SQLALCHEMY_DATABASE_URI'] = "mysql+mysqlconnector://root:root@localhost:8889/is212_spm"
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 
 db = SQLAlchemy(app)
@@ -320,37 +321,37 @@ def add_new_course():
             "message": "Initiated Learning Journey for " + role_name + ", course " + course_name + " is added"
         }), 201
 
-@app.route("/role-skill-course-relation", methods=['GET'])
-def display_rs_relation():
-    # get all relation content
-    relations = db.session.execute(select(role_skill_course_relation)).all()
+# @app.route("/role-skill-course-relation", methods=['GET'])
+# def display_rs_relation():
+#     # get all relation content
+#     relations = db.session.execute(select(role_skill_course_relation)).all()
 
-    # get role,skill,course rs
-    relationship = []
-    for rs in relations:
-        rs = dict(rs)
-        role_c = rs['role_code']
-        skill_c = rs['skill_code']
-        course_c = rs['course_code']
-        role_info = db.session.execute(select(Role.role_code,Role.role_name).where(Role.role_code==role_c)).first()
-        skill_info = db.session.execute(select(Skill.skill_code,Skill.skill_name).where(Skill.skill_code==skill_c)).first()
-        course_info = db.session.execute(select(Course.course_code,Course.course_name).where(Course.course_code==course_c)).first()
-        rs_info = {}
-        rs_info.update(dict(role_info))
-        rs_info.update(dict(skill_info))
-        rs_info.update(dict(course_info))
-        relationship.append(rs_info)
+#     # get role,skill,course rs
+#     relationship = []
+#     for rs in relations:
+#         rs = dict(rs)
+#         role_c = rs['role_code']
+#         skill_c = rs['skill_code']
+#         course_c = rs['course_code']
+#         role_info = db.session.execute(select(Role.role_code,Role.role_name).where(Role.role_code==role_c)).first()
+#         skill_info = db.session.execute(select(Skill.skill_code,Skill.skill_name).where(Skill.skill_code==skill_c)).first()
+#         course_info = db.session.execute(select(Course.course_code,Course.course_name).where(Course.course_code==course_c)).first()
+#         rs_info = {}
+#         rs_info.update(dict(role_info))
+#         rs_info.update(dict(skill_info))
+#         rs_info.update(dict(course_info))
+#         relationship.append(rs_info)
 
-    if len(relations) > 0:
-        return {
-            "code":200,
-            "relations": relationship,
-            "message": "All relations displayed."
-        }
-    elif relations == None:
-        return{
-            "message":"Go check your code!"
-        }
+#     if len(relations) > 0:
+#         return {
+#             "code":200,
+#             "relations": relationship,
+#             "message": "All relations displayed."
+#         }
+#     elif relations == None:
+#         return{
+#             "message":"Go check your code!"
+#         }
 
 @app.route("/role-skill-course-relation/<int:role_code>", methods=['GET'])
 def display_course_from_role(role_code):

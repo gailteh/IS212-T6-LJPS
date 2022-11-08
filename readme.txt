@@ -1,3 +1,6 @@
+Is212 G10 T6 Git Repository Link:
+https://github.com/gailteh/IS212-T6-LJPS
+
 INSTALLATION GUIDE
 (1) set up and run a WAMP or MAMP server
 

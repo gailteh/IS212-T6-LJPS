@@ -40,7 +40,6 @@
                 <h4>These are the skills for this role </h4>
                 <p>Please the skills </p>
             </div>
-        </div>
 
         <!-- Table -->
         <div class="mx-3 table-responsive">
@@ -81,6 +80,16 @@
 
     <script>
         
+
+
+
+        // function getParameter (parameterName) {
+        //     let parameters = new URLSearchParams(window.location.search);
+        //     return parameters.get(parameterName);
+
+        // }
+        // console.log(getParameter('role_code'));
+
         const skills = new Vue({
             
             el: '#skills',
@@ -94,6 +103,8 @@
              
                 let parameters = new URLSearchParams(window.location.search);
                 this.parameters = parameters.get('role_code');
+                // console.log(this.parameters);
+                // console.log('http://127.0.0.1:4999/' + this.parameters + '/skills');
 
                 axios.get('http://127.0.0.1:4999/' + this.parameters + '/skills')
                     .then(response => {

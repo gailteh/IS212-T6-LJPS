@@ -88,7 +88,7 @@ const vm = new Vue({
             methods:{
                 deleteRecord(role_code) {
                     if (window.confirm('Delete this record')) {
-                        axios.delete("http://127.0.0.1:4848/del_lj/" + role_code)
+                        axios.delete("http://127.0.0.1:4877/del_lj/" + role_code)
                         .then(res => {
                             console.log(res)
                                 alert('delete successfully')

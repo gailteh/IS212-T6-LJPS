@@ -22,19 +22,6 @@
             <div class="Rolebanner text-center">
                 <h1>Roles Page</h1>
             </div>
-            <!-- nav bar -->
-            <div class="row">
-                <div class="col-11">
-                    <ul class="nav">
-                        <li class="nav-item">
-                            <a class="nav-link active text-dark" href="./Staffroles.html">Roles</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" href="./ViewLearningJourney_latest.html">Learning Journey</a>
-                        </li>
-                    </ul>
-                </div>
-            </div>
 
             <div>
                 <h4>These are the roles available </h4>
@@ -92,6 +79,7 @@
                     .then(response => {
                         
                         this.role_details= response.data.data.roles;
+                        // console.log(response.data)
 
                        
                     })

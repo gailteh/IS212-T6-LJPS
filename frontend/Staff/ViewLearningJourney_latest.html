@@ -29,7 +29,7 @@
                         <a class="nav-link active text-dark" href="./Staffroles.html">Roles</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link text-dark" href="">Learning Journey</a>
+                        <a class="nav-link text-dark" href="./ViewLearningJourney_latest.html">Learning Journey</a>
                     </li>
                 </ul>
             </div>
@@ -88,7 +88,7 @@ const vm = new Vue({
             methods:{
                 deleteRecord(role_code) {
                     if (window.confirm('Delete this record')) {
-                        axios.delete("http://127.0.0.1:4877/del_lj/" + role_code)
+                        axios.delete("http://127.0.0.1:4848/del_lj/" + role_code)
                         .then(res => {
                             console.log(res)
                                 alert('delete successfully')
@@ -123,29 +123,6 @@ const vm = new Vue({
                     .catch(error => alert(error));
             }
         });
-
-
-//        Vue.component('LJ-comp', {
-//     props: ['id'],
-//     template: '<span><strong>{{title}}</strong> {{name}}</span>',
-//     data: function () {
-//         return {
-//             title: '',
-//             name: 'Unknown'
-//         };
-//     },
-//     created: function () {
-//         axios.get('http://localhost:5000/persons/' + this.id)
-//             .then(response => {
-//                 console.log(response.data)
-//                 this.title = response.data.data.title;
-//                 console.log(response.data.data.title)
-//                 this.name = response.data.data.name;
-//                 console.log(response.data.data.name)
-//             });
-//     },
-// });
-
 
 </script>
 </html>

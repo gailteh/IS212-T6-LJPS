@@ -5,8 +5,8 @@ from sqlalchemy import ForeignKey, select
 
 app = Flask(__name__)
 # initiate database connection
-# app.config['SQLALCHEMY_DATABASE_URI'] = "mysql+mysqlconnector://root@localhost:3306/is212_spm"
-app.config['SQLALCHEMY_DATABASE_URI'] = "mysql+mysqlconnector://root:root@localhost:8889/is212_spm"
+app.config['SQLALCHEMY_DATABASE_URI'] = "mysql+mysqlconnector://root@localhost:3306/is212_spm"
+# app.config['SQLALCHEMY_DATABASE_URI'] = "mysql+mysqlconnector://root:root@localhost:8889/is212_spm"
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 
 db = SQLAlchemy(app)
@@ -321,38 +321,6 @@ def add_new_course():
             "message": "Initiated Learning Journey for " + role_name + ", course " + course_name + " is added"
         }), 201
 
-# @app.route("/role-skill-course-relation", methods=['GET'])
-# def display_rs_relation():
-#     # get all relation content
-#     relations = db.session.execute(select(role_skill_course_relation)).all()
-
-#     # get role,skill,course rs
-#     relationship = []
-#     for rs in relations:
-#         rs = dict(rs)
-#         role_c = rs['role_code']
-#         skill_c = rs['skill_code']
-#         course_c = rs['course_code']
-#         role_info = db.session.execute(select(Role.role_code,Role.role_name).where(Role.role_code==role_c)).first()
-#         skill_info = db.session.execute(select(Skill.skill_code,Skill.skill_name).where(Skill.skill_code==skill_c)).first()
-#         course_info = db.session.execute(select(Course.course_code,Course.course_name).where(Course.course_code==course_c)).first()
-#         rs_info = {}
-#         rs_info.update(dict(role_info))
-#         rs_info.update(dict(skill_info))
-#         rs_info.update(dict(course_info))
-#         relationship.append(rs_info)
-
-#     if len(relations) > 0:
-#         return {
-#             "code":200,
-#             "relations": relationship,
-#             "message": "All relations displayed."
-#         }
-#     elif relations == None:
-#         return{
-#             "message":"Go check your code!"
-#         }
-
 @app.route("/role-skill-course-relation/<int:role_code>", methods=['GET'])
 def display_course_from_role(role_code):
     relations = db.session.execute(select(role_skill_course_relation)).all()
@@ -388,6 +356,56 @@ def display_course_from_role(role_code):
             "message":"Go check your code!"
         }
 
+@app.route('/del_lj/<int:lj_id>', methods=['DELETE'])
+# deleting 1 learning journey
+def del_lj(lj_id):
+    
+    #  get learning journey rows using lj_id
+    ljs = LearningJourney.query.filter_by(lj_id=lj_id).all()
+
+    # delete
+    try:
+        for lj in ljs:
+            db.session.delete(lj)
+        db.session.commit()
+    except:
+        return jsonify({
+            "code": 500,
+            "data": {
+                "lj_course": [lj.json() for lj in ljs]
+            },
+            "message": "An error occurred while deleting the learning journey"
+        })
+    return jsonify({
+        "code": 200,
+        "data": [lj.json() for lj in ljs],
+        "message": "Learning Journey "+ str(lj_id) + str(ljs) +" had been successfully deleted."
+    })
+
+@app.route('/del_ljc/<int:role_code>/<string:course_code>', methods=['DELETE'])
+# deleting 1 course from existing learning journey
+def del_course(role_code, course_code):
+    
+    #  get learning journey rows using lj_id
+    lj_course = LearningJourney.query.filter_by(role_code=role_code, course_code=course_code).first()
+
+    # delete
+    try:
+        db.session.delete(lj_course)
+        db.session.commit()
+    except:
+        return jsonify({
+            "code": 500,
+            "data": {
+                "lj_course": lj_course.json()
+            },
+            "message": "An error occurred while deleting the course from learning journey"
+        })
+    return jsonify({
+        "code": 200,
+        "data": lj_course.json(),
+        "message": course_code + " on "+ str(role_code) + " had been successfully deleted."
+    })
 
 if __name__ == '__main__':
     app.run(port=4848, debug=True)

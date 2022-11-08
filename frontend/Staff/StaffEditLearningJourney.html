@@ -18,8 +18,6 @@
     <link type="text/css" rel="stylesheet" href="https://unpkg.com/bootstrap-vue@latest/dist/bootstrap-vue.min.css" />
     <!-- vue -->
     <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
-    <!-- vue 
-    <script src="https://cdn.jsdelivr.net/npm/vue@2.6.12/dist/vue.js"></script>-->
 
 </head>
 <body>
@@ -60,15 +58,6 @@
                                             </button>
                                         </td>
                                     </tr>
-                                    
-                                    <tr>
-                                        <!-- <td>COR3302</td>
-                                        <td>yyy and xxx</td>
-                                        <td>COR3301</td>
-                                        <td> -->
-                                            <!-- <button class="btn btn-sm btn-info" @click="added = !added">Add</button> -->
-                                        </td>
-                                    </tr>
                                 </tbody>
                             </table>
                         </form>
@@ -97,14 +86,6 @@
                                 <button class="btn btn-sm btn-danger" @click="del_course(role_code, ljc.course_code)" data-method="Delete">Delete</button>
                             </td>
                         </tr>
-                        <!-- <tr>
-                            <td>COR3301</td>
-                            <td>System Design and xxx</td>
-                            <td>COR3301</td>
-                            <td>
-                                <button class="btn btn-sm btn-danger" @click="deleted = !deleted">Delete</button>
-                            </td>
-                        </tr> -->
                     </tbody>
                 </table>
             </div>
@@ -128,31 +109,13 @@ crossorigin="anonymous"></script>
     const crudapp = new Vue({
         el: "#crudapp",
         data: {
-                // attempt to hard-code data part for testing
                 role_code: 0,
                 lj_id: 0,
                 course_code: '',
                 course_name: '',
                 course_description: '',
                 lj_courses:[],
-                // lj_courses:[{
-                //     "course_code": "COR002",
-                //     "course_name": "Lean Six Sigma Green Belt Certification",
-                //     "course_desc": "Apply Lean Six Sigma methodology and statistical tools such as Minitab to be used in process analytics",
-                //     },
-                //     {
-                //         "course_code": "COR004",
-                //         "course_name": "Service Excellence",
-                //         "course_desc": "The programme provides the learner with the key foundations of what builds customer confidence in the service industr",
-                //     },
-                //     {
-                //         "course_code": "FIN001",
-                //         "course_name": "Data Collection and Analysis",
-                //         "course_desc": "Data is meaningless unless insights and analysis can be drawn to provide useful information for business decision-making. It is imperative that data quality, integrity and security ",
-                //     }
-                // ],
                 avail_courses: [],
-                // avail_courses: [{course_code: "COR3302", course_name: 'yyy and xxx', course_description: 'decription 111'}], 
                 deleted: false,
                 added: false,
                 parameters:0
@@ -201,15 +164,11 @@ crossorigin="anonymous"></script>
                 
                 let parameters = new URLSearchParams(window.location.search);
                 this.parameters = parameters.get('role_code');
-                // console.log(this.parameters);
-                // console.log('http://127.0.0.1:4999/' + this.parameters + '/skills');
 
                 axios.get('http://127.0.0.1:4848/learning_journey/' + this.parameters)
                     .then(response => {
                         
                         this.lj_courses= response.data.data;
-
-
                         console.log(response.data.data);
                     
                     })
@@ -218,7 +177,7 @@ crossorigin="anonymous"></script>
             },
             del_course(role_code, ljc_code){
                 if (window.confirm('Delete this record')) {
-                        axios.delete("http://127.0.0.1:4888/del_ljc/"+role_code+"/"+ljc_code)
+                        axios.delete("http://127.0.0.1:4848/del_ljc/"+role_code+"/"+ljc_code)
                         .then(res => {
                             console.log(res)
                             alert('delete successfully')

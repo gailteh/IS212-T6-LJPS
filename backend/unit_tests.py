@@ -67,18 +67,6 @@ class TestDisplayRole(TestApp):
             },
             "message": "These are the roles available."
         })
-#commented out the skills testing
-##test skills
-#class TestSkill(unittest.TestCase):
- #   def test_json(self):
-      
-  #      skillTest = skill(skill_code=1,skill_name='presentation',skill_desc='Presentation Skills are useful')
-   #     self.assertEqual(skillTest.json(), {
-    #        "skill_code":1, 
-     #       "skill_name":'presentation', 
-      #      "skill_desc":'Presentation Skills are useful'
-       # })
-
 
 if __name__ == '__main__':
     unittest.main()

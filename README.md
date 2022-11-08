@@ -20,6 +20,7 @@ INSTALLATION GUIDE
 	   python -m pip install flask_cors
 	   python -m pip install Flask-SQLAlchemy
 	   python -m pip install mysql-connector-python
+	   python -m pip install Flask-Testing
 
 (5) in the 'backend' directory, run: 
     python role_skill_course.py

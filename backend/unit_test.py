@@ -2,7 +2,7 @@ import unittest
 import flask_testing
 import json
 from role_skill_course import app, db, role, skill, course
-from Learning_Journey_latest import app, db, Learning_Journey
+from lj import app, db, LearningJourney
 
 class TestApp(flask_testing.TestCase):
     app.config['SQLALCHEMY_DATABASE_URI'] = "sqlite://"
@@ -58,7 +58,7 @@ class TestCourse(unittest.TestCase):
 # test Learning Journey
 class TestCourse(unittest.TestCase):
     def test_json(self):
-        LJ_Test = Learning_Journey(lj_id = 1, course_code = 1, role_code = 1)
+        LJ_Test = LearningJourney(lj_id = 1, course_code = 1, role_code = 1)
         self.assertEqual(LJ_Test.json(), {
             "lj_id": 1, 
             "course_code": 1, 
@@ -77,7 +77,7 @@ class TestDisplayRole(TestApp):
         db.session.commit()
 
         response = self.client.get("/role")
-        self.assertEqual(response.json,
+        self.assertEqual(response.json(),
         {
             "code": 200,
             "data": {
@@ -111,7 +111,7 @@ class TestDisplaySkill(TestApp):
         db.session.commit()
 
         response = self.client.get("/skills")
-        self.assertEqual(response.json,
+        self.assertEqual(response.json(),
         {
             "code": 200,
             "data": {
@@ -135,8 +135,8 @@ class TestDisplaySkill(TestApp):
 
 class TestDisplayLearningJourney(TestApp):
     def test_display_LJ(self):
-        lj1 = Learning_Journey(lj_id = 1, course_code = 1, role_code = 1)
-        lj2 = Learning_Journey(lj_id = 1, course_code = 2, role_code = 1)
+        lj1 = LearningJourney(lj_id = 1, course_code = 1, role_code = 1)
+        lj2 = LearningJourney(lj_id = 1, course_code = 2, role_code = 1)
         r1 = role(role_code=1, role_name = "admin", role_desc = "Best job in the world")
         c1 = course(course_code = 1, course_name = "Systems thinking", course_status = "active", course_desc = "Apply system thinking")
         c2 = course(course_code = 2, course_name = "Risk and Compliance Reporting", course_status = "active", course_desc = "reporting")
@@ -150,7 +150,7 @@ class TestDisplayLearningJourney(TestApp):
         db.session.commit()
 
         response = self.client.get("/learning_journey")
-        self.assertEqual(response.json,
+        self.assertEqual(response.json(),
         {
             "code": 200,
             "data": [

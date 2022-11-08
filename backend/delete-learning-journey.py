@@ -49,21 +49,6 @@ class Role(db.Model):
     def json(self):
         return {"role_code":self.role_code, "role_name":self.role_name, "role_desc":self.role_desc}
 
-## not needed for now
-# class Staff(db.Model):
-#     __tablename__ = 'staff'
-
-#     staff_id = db.Column(db.Integer, primary_key=True, nullable=False)
-#     staff_name = db.Column(db.String, nullable=False)
-
-#     def __init__(self, staff_id, staff_name):
-#         self.staff_id = staff_id
-#         self.staff_name = staff_name
-
-#     def json(self):
-#         return {"staff_id": self.staff_id, "staff_name": self.staff_name}
-
-
 class Learning_Journey(db.Model):
     __tablename__ = 'learning_journey'
 
@@ -83,7 +68,7 @@ class Learning_Journey(db.Model):
 
 
 @app.route('/del_lj/<int:lj_id>', methods=['DELETE'])
-# deleting 1 course from learning journey
+# deleting 1 learning journey
 def del_lj(lj_id):
     
     #  get learning journey rows using lj_id

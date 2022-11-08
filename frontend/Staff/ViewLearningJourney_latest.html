@@ -58,7 +58,7 @@
                         <button class="btn btn-sm btn-info" >
                             <a v-bind:href="`StaffEditLearningJourney.html?role_code=${record.role_code}&lj_id=${record.role_code}`">Edit </a>
                         </button>
-                        <button class="btn btn-sm btn-danger" >Delete</button>
+                        <button class="btn btn-sm btn-danger" @click="deleteRecord(record.role_code)">Delete</button>
                     </td>          
                 </tr>
             </tbody>
@@ -82,22 +82,34 @@
 const vm = new Vue({
             el: '#main-container',
             data: {
-                role_course_info: []
+                role_course_info: [],
+
             },
             methods:{
-                deleteRecord(course_code, role_code) {
+                deleteRecord(role_code) {
                     if (window.confirm('Delete this record')) {
-                        axios.delete("http://127.0.0.1:4999/del_ljc/" + lj_id + "/" + String(course_code) + ">")
+                        axios.delete("http://127.0.0.1:4877/del_lj/" + role_code)
                         .then(res => {
                             console.log(res)
                                 alert('delete successfully')
-                                vm.get_role()
+                                vm.get_lj()
                         })
                         .catch(err => {
                             console.log(err)
                         })
                     }
                 },
+                get_lj(){
+                    axios.get('http://127.0.0.1:4848/learning_journey')
+                    .then(response => {
+                        
+                        this.role_course_info = response.data.data;
+                        console.log(response.data.data)
+
+                       
+                    })
+                    .catch(error => alert(error));
+                }
             },
             mounted: function() {
                 axios.get('http://127.0.0.1:4848/learning_journey')

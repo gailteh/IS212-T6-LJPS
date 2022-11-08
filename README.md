@@ -26,4 +26,7 @@ INSTALLATION GUIDE
 (7) open a 3rd terminal. in the 'backend' directory:
     python remove-course-from-learning-journey.py
 
-(6) go to http://localhost/IS212-T6-LJPS/frontend/ where the application should be working!
+(8) open a 4th terminal, in the 'backend' directory:
+	python delete-learning-journey.py
+
+(9) go to http://localhost/IS212-T6-LJPS/frontend/ where the application should be working!
